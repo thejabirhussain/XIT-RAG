@@ -8,6 +8,15 @@ warnings.filterwarnings("ignore", message=".*shadows an attribute.*")
 from dotenv import load_dotenv
 load_dotenv()
 
+
+# ADD LOGGING CONFIGURATION HERE
+import logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 

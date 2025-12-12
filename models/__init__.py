@@ -12,6 +12,20 @@ from .rag_models import (
     ChatResponse,
     AdminStats,
     Source,
+    SourceField,
+    TargetField,
+    TargetGroup,
+    FieldMapping,
+    TargetMappingResult,
+    MappingRequest,
+    MappingResponse,
+    # ERP mapping models
+    ERPMappingRequest,
+    ERPMappingResponse,
+    ERPMappingResult,
+    ScoredCandidate,
+    Weights,
+    Thresholds,
 )
 
 __all__ = [
@@ -26,5 +40,19 @@ __all__ = [
     "ChatResponse",
     "AdminStats",
     "Source",
+    "SourceField",
+    "TargetField",
+    "TargetGroup",
+    "FieldMapping",
+    "TargetMappingResult",
+    "MappingRequest",
+    "MappingResponse",
+    # ERP mapping models 
+    "ERPMappingRequest",
+    "ERPMappingResponse",
+    "ERPMappingResult",
+    "ScoredCandidate",
+    "Weights",
+    "Thresholds",
 ]
 
