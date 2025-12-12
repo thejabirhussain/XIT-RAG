@@ -4,6 +4,7 @@ from .rag_services import (
     QdrantService,
     RetrievalService,
     IngestionService,
+    FieldMappingService
 )
 
 __all__ = [
@@ -12,4 +13,5 @@ __all__ = [
     "QdrantService",
     "RetrievalService",
     "IngestionService",
+    "FieldMappingService"
 ]

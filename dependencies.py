@@ -2,8 +2,11 @@ import os
 from functools import lru_cache
 from dotenv import load_dotenv
 
-from services import EmbeddingService, LLMService, QdrantService, RetrievalService, IngestionService
-from handlers import QueryHandler, IngestionHandler, StatsHandler
+from services import EmbeddingService, LLMService, QdrantService, RetrievalService, IngestionService, FieldMappingService
+from handlers import QueryHandler, IngestionHandler, StatsHandler, MappingHandler
+
+from handlers import ERPMappingHandler
+from services.rag_services import ERPMappingService
 
 load_dotenv()
 
@@ -54,3 +57,15 @@ def get_retrieval_service() -> RetrievalService:
 @lru_cache()
 def get_ingestion_service() -> IngestionService:
     return IngestionService(vector_db_service=get_qdrant_service())
+
+def get_mapping_handler() -> MappingHandler:
+    """Dependency for MappingHandler."""
+    # Pass None - FieldMappingService uses its own SentenceTransformer
+    mapping_service = FieldMappingService(embedding_service=None)
+    return MappingHandler(mapping_service)
+
+
+def get_erp_mapping_handler() -> ERPMappingHandler:
+    """Dependency for ERPMappingHandler."""
+    mapping_service = ERPMappingService()
+    return ERPMappingHandler(mapping_service)

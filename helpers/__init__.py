@@ -1,3 +1,4 @@
+#helpers/__init__.py
 from .rag_helpers import (
     extract_title,
     extract_breadcrumbs,

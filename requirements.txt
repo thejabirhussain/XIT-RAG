@@ -11,7 +11,7 @@ tldextract==5.1.1
 pydantic==2.6.1
 pydantic-settings==2.1.0
 
-qdrant-client==1.11.3
+qdrant-client>=1.7.0
 
 sentence-transformers==2.3.1
 transformers==4.37.2
@@ -23,3 +23,4 @@ python-dotenv==1.0.1
 tenacity==8.2.3
 orjson==3.9.15
 
+rapidfuzz>=3.0.0
