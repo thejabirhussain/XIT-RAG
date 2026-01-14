@@ -2,7 +2,10 @@ import httpx
 import orjson
 from typing import Any, Optional
 
+import google.generativeai as genai
+
 OLLAMA_MODEL = "llama3.1:8b"
+GEMINI_MODEL = "gemini-pro"  # SDK will add 'models/' prefix
 
 RAG_SYSTEM_PROMPT = """SYSTEM:
 You are a factual assistant that answers only from the provided IRS.gov knowledge snippets. You must cite sources and never invent facts.
@@ -34,9 +37,13 @@ ASSISTANT INSTRUCTIONS:
 """
 
 class LLMService:
-    def __init__(self, ollama_host: str):
+    def __init__(self, ollama_host: str, gemini_api_key: Optional[str] = None):
         self.client = httpx.Client(base_url=ollama_host, timeout=120.0)
         self.model_name = OLLAMA_MODEL
+        self.gemini_api_key = gemini_api_key
+        if self.gemini_api_key:
+            genai.configure(api_key=self.gemini_api_key)
+            self.gemini_model = genai.GenerativeModel(GEMINI_MODEL)
 
     def build_rag_prompt(self, chunks: list[dict[str, Any]], user_query: str) -> str:
         ctx_lines = []
@@ -54,7 +61,11 @@ class LLMService:
         ctx_block = "\n".join(ctx_lines)
         return RAG_SYSTEM_PROMPT.format(context=ctx_block, query=user_query)
 
-    def generate(self, prompt: str, **kwargs: Any) -> str:
+    def generate(self, prompt: str, model_choice: str = "slm", **kwargs: Any) -> str:
+        if model_choice == "llm" and self.gemini_api_key:
+            return self._generate_gemini(prompt, **kwargs)
+        
+        # Default to SLM (Ollama)
         response = self.client.post(
             "/api/generate",
             json={
@@ -70,4 +81,18 @@ class LLMService:
         response.raise_for_status()
         result = response.json()
         return result.get("response", "").strip()
+
+    def _generate_gemini(self, prompt: str, **kwargs: Any) -> str:
+        try:
+            generation_config = genai.types.GenerationConfig(
+                temperature=kwargs.get("temperature", 0.0),
+                max_output_tokens=kwargs.get("max_tokens", 500),
+            )
+            response = self.gemini_model.generate_content(
+                prompt,
+                generation_config=generation_config
+            )
+            return response.text
+        except Exception as e:
+            return f"Error generating response from Gemini: {str(e)}"
 

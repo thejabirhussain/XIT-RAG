@@ -28,6 +28,7 @@ class QueryHandler:
         top_k: Optional[int] = None,
         top_n: Optional[int] = None,
         cutoff: Optional[float] = None,
+        model: str = "slm",
     ):
         try:
             query_embedding = self.embedding_provider.get_embedding(query)
@@ -58,7 +59,7 @@ class QueryHandler:
                 chunks = chunks[:top_n]
 
             prompt = self.llm.build_rag_prompt(chunks, query)
-            answer_text = self.llm.generate(prompt, temperature=0.0, max_tokens=200)
+            answer_text = self.llm.generate(prompt, model_choice=model, temperature=0.0, max_tokens=200)
 
             sources = []
             similarities = []
