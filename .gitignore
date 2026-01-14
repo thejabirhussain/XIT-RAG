@@ -1,7 +1,13 @@
 __pycache__/
 .venv
+.venv311
+venv
 .vscode/
 data/
+
+# Test scripts
+test_*.py
+verify_models.py
 
 
 
