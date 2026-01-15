@@ -10,4 +10,4 @@ class ChatRequest(BaseModel):
         None, description="Optional filters for retrieval"
     )
     json: bool = Field(False, description="Return JSON response format")
-    model: str = Field("slm", description="Model selection: 'slm' (Ollama) or 'llm' (Gemini)")
+    model: str = Field("ollama", description="Model selection: 'ollama' or 'gemini'")

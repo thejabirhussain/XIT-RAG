@@ -61,11 +61,11 @@ class LLMService:
         ctx_block = "\n".join(ctx_lines)
         return RAG_SYSTEM_PROMPT.format(context=ctx_block, query=user_query)
 
-    def generate(self, prompt: str, model_choice: str = "slm", **kwargs: Any) -> str:
-        if model_choice == "llm" and self.gemini_api_key:
+    def generate(self, prompt: str, model: str = "ollama", **kwargs: Any) -> str:
+        if model == "gemini" and self.gemini_api_key:
             return self._generate_gemini(prompt, **kwargs)
         
-        # Default to SLM (Ollama)
+        # Default to Ollama (when model == "ollama" or any other value)
         response = self.client.post(
             "/api/generate",
             json={
