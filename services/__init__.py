@@ -5,6 +5,14 @@ from .rag_services import (
     RetrievalService,
     IngestionService,
 )
+from .rag2_services import (
+    RouterService,
+    MSSQLService,
+    Text2SQLService,
+    LLM2Service,
+    SchemaIngestionService,
+    
+)
 
 __all__ = [
     "EmbeddingService",
@@ -12,4 +20,9 @@ __all__ = [
     "QdrantService",
     "RetrievalService",
     "IngestionService",
+    "RouterService",
+    "MSSQLService",
+    "Text2SQLService",
+    "LLM2Service",
+    "SchemaIngestionService",
 ]

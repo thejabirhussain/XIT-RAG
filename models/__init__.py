@@ -13,6 +13,13 @@ from .rag_models import (
     AdminStats,
     Source,
 )
+from .rag2_models import (
+    Rag2ChatRequest,
+    Rag2ChatResponse,
+    SqlResult,
+    VectorSource,
+    SchemaIngestResponse,
+)
 
 __all__ = [
     "Chunk",
@@ -26,5 +33,10 @@ __all__ = [
     "ChatResponse",
     "AdminStats",
     "Source",
+    "Rag2ChatRequest",
+    "Rag2ChatResponse",
+    "SqlResult",
+    "VectorSource",
+    "SchemaIngestResponse",
 ]
 

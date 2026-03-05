@@ -91,3 +91,23 @@ def get_query2_handler() -> Query2Handler:
         embedding_service=get_embedding_service(),   # reuse existing
         retrieval_service=get_retrieval_service(),   # reuse existing
     )
+
+
+# ── Schema Ingestion ───────────────────────────────────────────────────────
+
+# ── Schema Ingestion ───────────────────────────────────────────────────────
+from services.rag2_services import SchemaIngestionService
+from handlers.rag2_handlers import SchemaIngestionHandler
+
+@lru_cache()
+def get_schema_ingestion_service() -> SchemaIngestionService:
+    return SchemaIngestionService(
+        qdrant_service=get_qdrant_service(),       # existing singleton — no new client
+        embedding_service=get_embedding_service(), # existing singleton — no double load
+    )
+
+@lru_cache()
+def get_schema_ingestion_handler() -> SchemaIngestionHandler:
+    return SchemaIngestionHandler(
+        schema_ingestion_service=get_schema_ingestion_service()
+    )

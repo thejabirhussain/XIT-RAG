@@ -4,6 +4,7 @@ __pycache__/
 venv
 .vscode/
 data/
+.env
 
 # Test scripts
 test_*.py

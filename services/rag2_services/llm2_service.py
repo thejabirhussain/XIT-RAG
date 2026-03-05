@@ -5,7 +5,7 @@ from typing import Any, Optional
 import google.generativeai as genai
 
 OLLAMA_MODEL_ANSWER = "llama3.1:8b"   # swap to llama3.1:70b when available
-GEMINI_MODEL = "gemini-pro"
+GEMINI_MODEL = "gemini-2.0-flash"
 
 COMPLIANCE_ANSWER_PROMPT = """SYSTEM:
 You are a compliance management assistant for the Complyia platform.
@@ -43,7 +43,7 @@ class LLM2Service:
         query: str,
         context: str,
         org_id: int,
-        model: str = "gemini",
+        model: str = "ollama",
         max_tokens: int = 800,
     ) -> str:
         prompt = COMPLIANCE_ANSWER_PROMPT.format(

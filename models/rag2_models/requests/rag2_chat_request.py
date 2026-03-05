@@ -6,7 +6,7 @@ class Rag2ChatRequest(BaseModel):
     query: str = Field(..., description="Natural language question about compliance data")
     org_id: int = Field(..., description="Tenant org_id — all SQL queries are scoped to this")
     model: Literal["gemini", "ollama"] = Field(
-        default="gemini",
+        default="ollama",
         description="LLM backend for final answer generation"
     )
     force_route: Optional[Literal["structured", "knowledge", "hybrid"]] = Field(

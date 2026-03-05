@@ -84,7 +84,9 @@ class Query2Handler:
         # ── Step 2b: Knowledge / Vector Path ──────────────────────────────
         if route in ("knowledge", "hybrid"):
             try:
-                query_vec = self.embedder.embed(query)
+                #query_vec = self.embedder.embed(query)
+                # CORRECT — matches EmbeddingService.get_embedding()
+                query_vec = self.embedder.get_embedding(query)
                 chunks = self.retrieval.retrieve(
                     collection=COMPLIANCE_COLLECTION,
                     query_vec=query_vec,

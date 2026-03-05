@@ -1,9 +1,10 @@
 from .requests import Rag2ChatRequest
-from .responses import Rag2ChatResponse, SqlResult, VectorSource
+from .responses import Rag2ChatResponse, SqlResult, VectorSource, SchemaIngestResponse
 
 __all__ = [
     "Rag2ChatRequest",
     "Rag2ChatResponse",
     "SqlResult",
     "VectorSource",
+    "SchemaIngestResponse",
 ]
