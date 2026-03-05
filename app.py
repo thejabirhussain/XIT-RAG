@@ -29,5 +29,7 @@ app.add_middleware(
 
 app.include_router(rag_router)
 
+from controllers.rag2_controller import router as rag2_router
+app.include_router(rag2_router)
 
 
