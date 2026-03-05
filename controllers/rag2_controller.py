@@ -4,7 +4,10 @@ from models.rag2_models import Rag2ChatRequest, Rag2ChatResponse
 from handlers.rag2_handlers import Query2Handler, SchemaIngestionHandler
 from dependencies import get_query2_handler, get_schema_ingestion_handler
 from models.rag2_models.responses.schema_ingest_response import SchemaIngestResponse
+import traceback
+import logging
 
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/rag2", tags=["RAG 2.0 — Compliance SQL+Vector"])
 
@@ -28,6 +31,8 @@ async def rag2_query(
             top_k_docs=request.top_k_docs,
         )
     except Exception as e:
+        logger.error(f"[rag2_query] FAILED: {type(e).__name__}: {e}")
+        logger.error(traceback.format_exc())   # ← full traceback in terminal
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=str(e),

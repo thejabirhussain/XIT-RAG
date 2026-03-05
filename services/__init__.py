@@ -11,7 +11,7 @@ from .rag2_services import (
     Text2SQLService,
     LLM2Service,
     SchemaIngestionService,
-    
+    MySQLService,
 )
 
 __all__ = [
@@ -25,4 +25,5 @@ __all__ = [
     "Text2SQLService",
     "LLM2Service",
     "SchemaIngestionService",
+    "MySQLService",
 ]

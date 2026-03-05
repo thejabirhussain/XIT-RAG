@@ -59,19 +59,31 @@ def get_ingestion_service() -> IngestionService:
 
 # ── RAG 2.0 Dependencies ─────────────────────────────────────────────────
 
-from services.rag2_services import RouterService, MSSQLService, Text2SQLService, LLM2Service
+from services.rag2_services import RouterService, MySQLService, Text2SQLService, LLM2Service
 from handlers.rag2_handlers import Query2Handler
 
-MSSQL_CONNECTION_STRING = os.getenv("MSSQL_CONNECTION_STRING", "")
 TEXT2SQL_MODEL = os.getenv("TEXT2SQL_MODEL", "llama3.1:8b")  # swap to arctic when ready
+
+# With this:
+MYSQL_HOST     = os.getenv("MYSQL_HOST", "sql.freedb.tech")
+MYSQL_PORT     = int(os.getenv("MYSQL_PORT", "3306"))
+MYSQL_USER     = os.getenv("MYSQL_USER", "freedb_maryum")
+MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD", "CWzM8d549E#6WhS")
+MYSQL_DATABASE = os.getenv("MYSQL_DATABASE", "freedb_RAGPOC2")
+
+@lru_cache()
+def get_mssql_service() -> MySQLService:   # keeping function name so rag2 wiring doesn't break
+    return MySQLService(
+        host=MYSQL_HOST,
+        port=MYSQL_PORT,
+        user=MYSQL_USER,
+        password=MYSQL_PASSWORD,
+        database=MYSQL_DATABASE,
+    )
 
 @lru_cache()
 def get_router_service() -> RouterService:
     return RouterService(ollama_host=OLLAMA_HOST)
-
-@lru_cache()
-def get_mssql_service() -> MSSQLService:
-    return MSSQLService(connection_string=MSSQL_CONNECTION_STRING)
 
 @lru_cache()
 def get_text2sql_service() -> Text2SQLService:

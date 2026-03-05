@@ -1,130 +1,122 @@
 import re
 import httpx
-from typing import Optional
 
-# ---------------------------------------------------------------------------
-# Compact MS SQL schema — matches the Complyia compliance_platform schema
-# but with MS SQL syntax (IDENTITY, NVARCHAR, GETDATE, computed column).
-# org_id is present on: organizations, users, policies, audits, risks, tasks
-# ---------------------------------------------------------------------------
-COMPLIANCE_SCHEMA_MSSQL = """
--- MS SQL Server | Complyia Compliance Platform
+COMPLIANCE_SCHEMA_MYSQL = """
+-- MySQL | Complyia Compliance Platform (freedb_RAGPOC2)
 
 organizations (
-  org_id        INT IDENTITY(1,1) PRIMARY KEY,
-  name          NVARCHAR(150) NOT NULL,
-  industry      NVARCHAR(100),
-  country       NVARCHAR(100),
-  created_at    DATETIME DEFAULT GETDATE()
+  org_id      INT AUTO_INCREMENT PRIMARY KEY,
+  name        VARCHAR(150) NOT NULL,
+  industry    VARCHAR(100),
+  country     VARCHAR(100),
+  created_at  DATETIME DEFAULT NOW()
 )
 
 users (
-  user_id       INT IDENTITY(1,1) PRIMARY KEY,
-  org_id        INT NOT NULL REFERENCES organizations(org_id),
-  full_name     NVARCHAR(150) NOT NULL,
-  email         NVARCHAR(150) NOT NULL UNIQUE,
-  role          NVARCHAR(50),   -- admin | auditor | analyst | viewer
-  created_at    DATETIME DEFAULT GETDATE()
+  user_id     INT AUTO_INCREMENT PRIMARY KEY,
+  org_id      INT NOT NULL,
+  full_name   VARCHAR(150) NOT NULL,
+  email       VARCHAR(150) NOT NULL UNIQUE,
+  role        VARCHAR(50),
+  created_at  DATETIME DEFAULT NOW()
 )
 
 frameworks (
-  framework_id  INT IDENTITY(1,1) PRIMARY KEY,
-  name          NVARCHAR(100) NOT NULL,  -- 'ISO 27001' | 'SOC 2' | 'HIPAA'
-  version       NVARCHAR(20),
-  description   NVARCHAR(MAX)
+  framework_id  INT AUTO_INCREMENT PRIMARY KEY,
+  name          VARCHAR(100) NOT NULL,
+  version       VARCHAR(20),
+  description   TEXT
 )
 
 controls (
-  control_id    INT IDENTITY(1,1) PRIMARY KEY,
-  framework_id  INT NOT NULL REFERENCES frameworks(framework_id),
-  control_code  NVARCHAR(30) NOT NULL,  -- e.g. 'ISO-A.5.1', 'SOC-CC6.1'
-  title         NVARCHAR(200) NOT NULL,
-  description   NVARCHAR(MAX),
-  category      NVARCHAR(100)  -- Governance | Asset Management | Access Control | Monitoring | Data Protection
+  control_id    INT AUTO_INCREMENT PRIMARY KEY,
+  framework_id  INT NOT NULL,
+  control_code  VARCHAR(30) NOT NULL,
+  title         VARCHAR(200) NOT NULL,
+  description   TEXT,
+  category      VARCHAR(100)
 )
 
 policies (
-  policy_id     INT IDENTITY(1,1) PRIMARY KEY,
-  org_id        INT NOT NULL REFERENCES organizations(org_id),
-  control_id    INT NOT NULL REFERENCES controls(control_id),
-  title         NVARCHAR(200) NOT NULL,
-  status        NVARCHAR(30),  -- draft | active | retired
-  owner_id      INT REFERENCES users(user_id),
-  review_date   DATE
+  policy_id   INT AUTO_INCREMENT PRIMARY KEY,
+  org_id      INT NOT NULL,
+  control_id  INT NOT NULL,
+  title       VARCHAR(200) NOT NULL,
+  status      VARCHAR(30),
+  owner_id    INT,
+  review_date DATE
 )
 
 audits (
-  audit_id      INT IDENTITY(1,1) PRIMARY KEY,
-  org_id        INT NOT NULL REFERENCES organizations(org_id),
-  framework_id  INT NOT NULL REFERENCES frameworks(framework_id),
-  auditor_id    INT REFERENCES users(user_id),
-  audit_name    NVARCHAR(200),
+  audit_id      INT AUTO_INCREMENT PRIMARY KEY,
+  org_id        INT NOT NULL,
+  framework_id  INT NOT NULL,
+  auditor_id    INT,
+  audit_name    VARCHAR(200),
   start_date    DATE,
   end_date      DATE,
-  status        NVARCHAR(30)   -- planned | in_progress | completed | cancelled
+  status        VARCHAR(30)
 )
 
 audit_findings (
-  finding_id    INT IDENTITY(1,1) PRIMARY KEY,
-  audit_id      INT NOT NULL REFERENCES audits(audit_id),
-  control_id    INT NOT NULL REFERENCES controls(control_id),
-  severity      NVARCHAR(20),  -- low | medium | high | critical
-  title         NVARCHAR(200),
-  description   NVARCHAR(MAX),
-  status        NVARCHAR(30)   -- open | in_remediation | closed
+  finding_id  INT AUTO_INCREMENT PRIMARY KEY,
+  audit_id    INT NOT NULL,
+  control_id  INT NOT NULL,
+  severity    VARCHAR(20),
+  title       VARCHAR(200),
+  description TEXT,
+  status      VARCHAR(30)
 )
--- Note: audit_findings has no direct org_id — always JOIN audits to scope by org_id
 
 risks (
-  risk_id       INT IDENTITY(1,1) PRIMARY KEY,
-  org_id        INT NOT NULL REFERENCES organizations(org_id),
-  control_id    INT REFERENCES controls(control_id),
-  title         NVARCHAR(200),
-  likelihood    INT,           -- 1 to 5
-  impact        INT,           -- 1 to 5
-  risk_score    AS (likelihood * impact) PERSISTED,  -- COMPUTED, READ-ONLY
-  owner_id      INT REFERENCES users(user_id),
-  status        NVARCHAR(30)   -- open | mitigated | accepted | closed
+  risk_id     INT AUTO_INCREMENT PRIMARY KEY,
+  org_id      INT NOT NULL,
+  control_id  INT,
+  title       VARCHAR(200),
+  likelihood  INT,
+  impact      INT,
+  risk_score  INT,
+  owner_id    INT,
+  status      VARCHAR(30)
 )
 
 tasks (
-  task_id       INT IDENTITY(1,1) PRIMARY KEY,
-  org_id        INT NOT NULL REFERENCES organizations(org_id),
-  assigned_to   INT REFERENCES users(user_id),
-  finding_id    INT REFERENCES audit_findings(finding_id),
-  risk_id       INT REFERENCES risks(risk_id),
-  title         NVARCHAR(200),
-  due_date      DATE,
-  priority      NVARCHAR(20),  -- low | medium | high
-  status        NVARCHAR(30)   -- todo | in_progress | done
+  task_id     INT AUTO_INCREMENT PRIMARY KEY,
+  org_id      INT NOT NULL,
+  assigned_to INT,
+  finding_id  INT,
+  risk_id     INT,
+  title       VARCHAR(200),
+  due_date    DATE,
+  priority    VARCHAR(20),
+  status      VARCHAR(30)
 )
 
 evidence (
-  evidence_id   INT IDENTITY(1,1) PRIMARY KEY,
-  task_id       INT REFERENCES tasks(task_id),
-  audit_id      INT REFERENCES audits(audit_id),
-  uploaded_by   INT REFERENCES users(user_id),
-  file_name     NVARCHAR(255),
-  file_type     NVARCHAR(50),
-  description   NVARCHAR(MAX),
-  uploaded_at   DATETIME DEFAULT GETDATE()
+  evidence_id INT AUTO_INCREMENT PRIMARY KEY,
+  task_id     INT,
+  audit_id    INT,
+  uploaded_by INT,
+  file_name   VARCHAR(255),
+  file_type   VARCHAR(50),
+  description TEXT,
+  uploaded_at DATETIME DEFAULT NOW()
 )
 """
 
-TEXT2SQL_PROMPT = """You are an expert MS SQL query generator for the Complyia compliance platform.
+TEXT2SQL_PROMPT = """You are an expert MySQL query generator for the Complyia compliance platform.
 
 DATABASE SCHEMA:
 {schema}
 
-CRITICAL RULES — follow exactly, no exceptions:
+CRITICAL RULES — follow exactly:
 1. Generate ONLY a SELECT statement. Never INSERT, UPDATE, DELETE, DROP, ALTER, EXEC, or MERGE.
-2. ALWAYS scope the query to the tenant: include WHERE org_id = {org_id} directly, or JOIN to a
-   table that has org_id = {org_id}. Every result must belong to this organization.
-3. NEVER include risk_score in an INSERT or UPDATE — it is a PERSISTED computed column.
-4. Use MS SQL syntax: TOP N (not LIMIT), GETDATE() (not NOW()), NVARCHAR (not TEXT/VARCHAR for schema matches).
-5. For date comparisons use: CAST(GETDATE() AS DATE) for today's date.
+2. ALWAYS scope to the tenant: include WHERE org_id = {org_id}, or JOIN to a table with org_id = {org_id}.
+3. NEVER write to risk_score — it is a read-only computed column.
+4. Use MySQL syntax: LIMIT N (not TOP N), NOW() / CURDATE() (not GETDATE()), VARCHAR (not NVARCHAR).
+5. For today's date use: CURDATE()
 6. audit_findings has no org_id — always JOIN audits ON af.audit_id = a.audit_id WHERE a.org_id = {org_id}.
-7. Respond with ONLY the raw SQL query. No explanation, no markdown fences, no backticks.
+7. Respond with ONLY the raw SQL. No explanation, no markdown fences, no backticks.
 
 QUESTION:
 {query}
@@ -134,42 +126,63 @@ SQL:"""
 
 class Text2SQLService:
     def __init__(self, ollama_host: str, model: str = "llama3.1:8b"):
-        """
-        For POC: uses llama3.1:8b (already running on your Ollama).
-        Production swap: change model to "arctic-text2sql-r1:7b" when available on Ollama,
-        or override via TEXT2SQL_MODEL env var.
-        """
-        self.client = httpx.Client(base_url=ollama_host, timeout=60.0)
+        self.client = httpx.Client(base_url=ollama_host, timeout=200.0)
         self.model = model
 
-    def generate_sql(self, query: str, org_id: int) -> str:
-        prompt = TEXT2SQL_PROMPT.format(
-            schema=schema_context,
-            org_id=org_id,
-            query=query,
-        )
+    def generate_sql(self, query: str, org_id: int, schema_context: str) -> str:
+        schema = schema_context.strip()
+
+        system_msg = f"""You are a MySQL query generator. You output ONLY raw SQL. 
+    No explanations. No reasoning. No markdown. No backticks. No commentary.
+    Your entire response must be a single valid SELECT statement and nothing else.
+
+    DATABASE SCHEMA:
+    {schema}
+
+    RULES:
+    1. Output ONLY a SELECT statement. Nothing before it. Nothing after it.
+    2. Always include WHERE org_id = {org_id} or JOIN to a table where org_id = {org_id}.
+    3. audit_findings has no org_id — JOIN audits ON af.audit_id = a.audit_id WHERE a.org_id = {org_id}.
+    4. Use MySQL syntax: LIMIT not TOP, CURDATE() not GETDATE().
+    5. Never write to risk_score."""
+
+        user_msg = f"Question: {query}\n\nSQL:"
+
         response = self.client.post(
-            "/api/generate",
+            "/api/chat",
             json={
                 "model": self.model,
-                "prompt": prompt,
                 "stream": False,
-                "options": {"temperature": 0.0, "num_predict": 400},
+                "messages": [
+                    {"role": "system", "content": system_msg},
+                    {"role": "user",   "content": user_msg},
+                ],
+                "options": {"temperature": 0.0, "num_predict": 200},
             },
         )
         response.raise_for_status()
-        raw_sql = response.json().get("response", "").strip()
-
-        # Strip any accidental markdown fences the model may produce
-        raw_sql = self._clean_sql(raw_sql)
-        return raw_sql
+        raw_sql = response.json()["message"]["content"].strip()
+       # logger.info(f"[Text2SQL] Raw model output: {raw_sql[:300]}")
+        return self._clean_sql(raw_sql)
 
     @staticmethod
     def _clean_sql(text: str) -> str:
-        # Remove ```sql ... ``` or ``` ... ``` fences
+
+        text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL | re.IGNORECASE)
+        text = re.sub(r".*?</think>", "", text, flags=re.DOTALL | re.IGNORECASE)
+
+        # Remove markdown fences
         text = re.sub(r"```(?:sql)?", "", text, flags=re.IGNORECASE)
         text = text.replace("```", "").strip()
-        # Take only the first statement if model returned multiple
+
+       # If model still added reasoning before the SELECT, extract from SELECT onward
+        select_match = re.search(r"\bSELECT\b", text, re.IGNORECASE| re.MULTILINE)
+        if select_match:
+            text = text[select_match.start():]
+
+        # Take only first statement
         if ";" in text:
             text = text.split(";")[0].strip() + ";"
-        return text
+
+        return text.strip()
+
