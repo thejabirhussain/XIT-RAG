@@ -1,26 +1,25 @@
-fastapi==0.109.2
-uvicorn[standard]==0.27.1
-python-multipart==0.0.9
+fastapi
+uvicorn[standard]
+python-multipart
 
-httpx==0.26.0
-beautifulsoup4==4.12.3
-lxml[html_clean]==5.1.0
-readability-lxml==0.8.1
-tldextract==5.1.1
+httpx
+beautifulsoup4
+lxml[html_clean]
+readability-lxml
+tldextract
 
-pydantic==2.6.1
-pydantic-settings==2.1.0
+pydantic
+pydantic-settings
 
 qdrant-client==1.11.3
 
-sentence-transformers==2.3.1
-transformers==4.37.2
+sentence-transformers
+transformers
 
-pymupdf==1.23.26
-pdfminer.six==20221105
+pymupdf
+pdfminer.six
 
-python-dotenv==1.0.1
-tenacity==8.2.3
-orjson==3.9.15
+python-dotenv
+tenacity
+orjson
 google-generativeai
-

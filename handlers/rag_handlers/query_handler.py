@@ -6,7 +6,17 @@ from models import ChatResponse, Source
 from services.rag_services.retrieval_service import TOP_K, TOP_N, SIMILARITY_CUTOFF
 
 COLLECTION_NAME = "irs_rag_v1"
+SCHEMA_COLLECTION = "schema"
 NO_KB_MSG = "I don't have verifiable information in the knowledge base for that query."
+
+SCHEMA_KEYWORDS = [
+    "table", "column", "foreign key", "sql", "schema",
+    "relationship", "compliance", "data model", "query", "database", "risks"
+]
+
+def is_schema_query(query: str) -> bool:
+    q_lower = query.lower()
+    return any(keyword in q_lower for keyword in SCHEMA_KEYWORDS)
 
 
 class QueryHandler:
@@ -37,13 +47,17 @@ class QueryHandler:
             top_n = top_n or TOP_N
             cutoff = cutoff or SIMILARITY_CUTOFF
 
+            target_collection = SCHEMA_COLLECTION if is_schema_query(query) else self.collection_name
+            print(f"Target collection: {target_collection}")
+
             chunks = self.retrieval_service.retrieve(
-                self.collection_name,
+                target_collection,
                 query_embedding,
                 top_k,
                 cutoff,
                 filters,
             )
+            print(f"Found chunks: {len(chunks)}")
 
             if not chunks:
                 return ChatResponse(
@@ -64,11 +78,20 @@ class QueryHandler:
             sources = []
             similarities = []
             for chunk in chunks:
+                section_val = chunk.get("section_heading")
+                if not section_val:
+                    table = chunk.get("table", "")
+                    sec = chunk.get("section", "")
+                    if table or sec:
+                        section_val = f"{table} - {sec}".strip(" -")
+                    else:
+                        section_val = ""
+                        
                 sources.append(
                     {
                         "url": chunk.get("url", ""),
-                        "title": chunk.get("title", ""),
-                        "section": chunk.get("section_heading"),
+                        "title": chunk.get("title", "") or chunk.get("source", ""),
+                        "section": section_val,
                         "snippet": chunk.get("text", "")[:300],
                         "char_start": chunk.get("char_start", 0),
                         "char_end": chunk.get("char_end", 0),
@@ -87,8 +110,8 @@ class QueryHandler:
 
             source_models = [
                 Source(
-                    url=src["url"],
-                    title=src["title"],
+                    url=src["url"] or "https://schema.local/schema_for_vectordb.pdf",
+                    title=src["title"] or "Schema PDF",
                     section=src.get("section"),
                     snippet=src.get("snippet", "")[:300],
                     char_start=src.get("char_start", 0),
@@ -108,6 +131,8 @@ class QueryHandler:
             return response
 
         except Exception as e:
+            import traceback
+            traceback.print_exc()
             return ChatResponse(
                 answer_text=NO_KB_MSG,
                 sources=[],
