@@ -2,7 +2,7 @@ import os
 from functools import lru_cache
 from dotenv import load_dotenv
 
-from services import EmbeddingService, LLMService, QdrantService, RetrievalService, IngestionService
+from services import EmbeddingService, LLMService, QdrantService, RetrievalService, IngestionService, DatabaseService
 from handlers import QueryHandler, IngestionHandler, StatsHandler
 
 load_dotenv()
@@ -20,6 +20,7 @@ def get_query_handler() -> QueryHandler:
         embedding_service=get_embedding_service(),
         llm_service=get_llm_service(),
         retrieval_service=get_retrieval_service(),
+        database_service=get_database_service(),
     )
 
 @lru_cache()
@@ -55,3 +56,7 @@ def get_retrieval_service() -> RetrievalService:
 @lru_cache()
 def get_ingestion_service() -> IngestionService:
     return IngestionService(vector_db_service=get_qdrant_service())
+
+@lru_cache()
+def get_database_service() -> DatabaseService:
+    return DatabaseService()

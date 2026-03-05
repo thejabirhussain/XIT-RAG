@@ -36,6 +36,42 @@ ASSISTANT INSTRUCTIONS:
   "I am not a lawyer; for legal or tax-filing advice consult a qualified tax professional or the IRS."
 """
 
+SQL_GENERATION_PROMPT = """SYSTEM:
+You are an expert MySQL 8.0 Database Developer. Your task is to generate ONLY a valid, syntactically correct SQL SELECT statement based on the user's question and the provided database schema context.
+
+CRITICAL RULES:
+1. ONLY generate a SELECT statement. You must never generate INSERT, UPDATE, DELETE, DROP, ALTER, TRUNCATE, or any other data-mutating command.
+2. ALWAYS scope your queries by `org_id` if the schema context mentions it. Assume the intended organization matches the implicit tenant context. If a user asks a question like "for Acme Corp", resolve their `org_id` via a JOIN or subquery against the organizations table. Example: `WHERE org_id = (SELECT org_id FROM organizations WHERE name = 'Acme Corp')`.
+3. Output ONLY the raw SQL code. Do NOT output markdown code blocks (e.g., ```sql). Do NOT output any accompanying explanation.
+
+SCHEMA CONTEXT:
+{schema_context}
+
+USER QUESTION:
+{query}
+"""
+
+DB_GROUNDED_RAG_PROMPT = """SYSTEM:
+You are a helpful and factual data analyst assistant. Your task is to answer the user's question using the provided database schema documentation and the actual query results retrieved from the live database.
+
+SCHEMA CONTEXT:
+{schema_context}
+
+LIVE DATABASE RESULTS:
+{db_results}
+
+USER QUESTION:
+{query}
+
+ASSISTANT INSTRUCTIONS:
+- Analyze the LIVE DATABASE RESULTS and use them to construct your answer.
+- Refer to the SCHEMA CONTEXT to understand what the data means (e.g., interpreting risk scores, statuses, foreign keys).
+- If the LIVE DATABASE RESULTS contain an error message, explain to the user that there was a technical issue fetching the data, but use the SCHEMA CONTEXT to attempt a general, theoretical answer if possible.
+- If the LIVE DATABASE RESULTS are empty, inform the user that no matching data was found for their query.
+- Use GitHub-Flavored Markdown. Bold key terms and metrics.
+- Be concise, clear, and professional.
+"""
+
 class LLMService:
     def __init__(self, ollama_host: str, gemini_api_key: Optional[str] = None):
         self.client = httpx.Client(base_url=ollama_host, timeout=120.0)
@@ -60,6 +96,33 @@ class LLMService:
 
         ctx_block = "\n".join(ctx_lines)
         return RAG_SYSTEM_PROMPT.format(context=ctx_block, query=user_query)
+
+    def generate_sql_query(self, chunks: list[dict[str, Any]], user_query: str, model: str = "ollama", **kwargs) -> str:
+        ctx_lines = [chunk.get("text", "") for chunk in chunks]
+        ctx_block = "\n\n".join(ctx_lines)
+        prompt = SQL_GENERATION_PROMPT.format(schema_context=ctx_block, query=user_query)
+        sql = self.generate(prompt, model=model, temperature=0.0, max_tokens=300)
+        # Strip potential markdown formatting if the LLM misbehaves
+        sql = sql.replace("```sql", "").replace("```", "").strip()
+        return sql
+
+    def build_db_grounded_rag_prompt(self, chunks: list[dict[str, Any]], db_results: Any, user_query: str) -> str:
+        ctx_lines = [chunk.get("text", "") for chunk in chunks]
+        ctx_block = "\n\n".join(ctx_lines)
+        
+        if isinstance(db_results, dict) and "error" in db_results:
+            db_repr = f"Error executing query: {db_results['error']}"
+        elif isinstance(db_results, dict) and "results" in db_results:
+            rows = db_results["results"]
+            db_repr = orjson.dumps(rows).decode("utf-8") if rows else "No results found."
+        else:
+            db_repr = str(db_results)
+
+        return DB_GROUNDED_RAG_PROMPT.format(
+            schema_context=ctx_block,
+            db_results=db_repr,
+            query=user_query
+        )
 
     def generate(self, prompt: str, model: str = "ollama", **kwargs: Any) -> str:
         if model == "gemini" and self.gemini_api_key:

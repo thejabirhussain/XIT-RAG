@@ -25,10 +25,12 @@ class QueryHandler:
         embedding_service,
         llm_service,
         retrieval_service,
+        database_service,
     ):
         self.embedding_provider = embedding_service
         self.llm = llm_service
         self.retrieval_service = retrieval_service
+        self.database_service = database_service
         self.collection_name = COLLECTION_NAME
 
     def handle_query(
@@ -72,7 +74,25 @@ class QueryHandler:
             else:
                 chunks = chunks[:top_n]
 
-            prompt = self.llm.build_rag_prompt(chunks, query)
+            is_schema = is_schema_query(query)
+            if is_schema:
+                sql_query = self.llm.generate_sql_query(chunks, query, model=model)
+                print(f"Generated SQL: {sql_query}")
+                
+                # Safety guardrail
+                forbidden_keywords = ["INSERT", "UPDATE", "DELETE", "DROP", "ALTER", "TRUNCATE"]
+                sql_upper = sql_query.upper()
+                
+                if any(kw in sql_upper for kw in forbidden_keywords):
+                    db_results = {"error": "Generated SQL contained destructive operations and was blocked."}
+                else:
+                    db_results = self.database_service.execute_query(sql_query)
+                
+                print(f"DB Results: {db_results}")
+                prompt = self.llm.build_db_grounded_rag_prompt(chunks, db_results, query)
+            else:
+                prompt = self.llm.build_rag_prompt(chunks, query)
+
             answer_text = self.llm.generate(prompt, model=model, temperature=0.0, max_tokens=200)
 
             sources = []
