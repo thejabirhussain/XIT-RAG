@@ -185,4 +185,3 @@ class Text2SQLService:
             text = text.split(";")[0].strip() + ";"
 
         return text.strip()
-
