@@ -10,7 +10,9 @@ from sentence_transformers import SentenceTransformer
 COLLECTION_NAME = "schema"
 VECTOR_SIZE = 384
 EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
-QDRANT_URL = "http://localhost:6333"
+QDRANT_URL = "https://f6d63c06-a427-4edb-843d-5f2d616aa56f.europe-west3-0.gcp.cloud.qdrant.io"
+QDRANT_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJtIn0.Mkq8ghHs9bWBcQ0Ogl9iqyGPeghthtv-bbYTsVoObcQ"
+
 
 import re
 
@@ -89,7 +91,7 @@ def setup_collection(client):
             print(f"Note: HNSW update skipped ({e})")
 
 def main():
-    pdf_path = "/Users/shaikmohammedjabirhussain/Downloads/schema_for_vectordb.pdf"
+    pdf_path = r"scripts\schema_for_vectordb.pdf"
     if not os.path.exists(pdf_path):
         print(f"Error: {pdf_path} not found.")
         sys.exit(1)
@@ -101,7 +103,7 @@ def main():
     model = SentenceTransformer(EMBEDDING_MODEL, device="cpu")
     
     print("Connecting to Qdrant...")
-    client = QdrantClient(url=QDRANT_URL)
+    client = QdrantClient(url=QDRANT_URL, api_key=QDRANT_API_KEY)
     setup_collection(client)
     
     points = []
