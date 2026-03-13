@@ -246,3 +246,303 @@ b'{"status":{"error":"Not found: Collection `irs_rag_v1` doesn\'t exist!"},"time
 [2026-03-13 07:31:36] [INFO] [query_handler] [7/7] llm_generate | model=ollama | answer_len=885 | 37332.5ms
 [2026-03-13 07:31:36] [INFO] [query_handler] ✓ handle_query complete | confidence=low | total=60637.0ms
 [2026-03-13 07:31:36] [INFO] [request] ← POST /query | status=200 | total=60645.1ms
+[2026-03-13 12:26:22] [INFO] [request] → POST /query
+[2026-03-13 12:26:29] [INFO] [query_handler] [1/7] sanitize_query | 0.2ms
+[2026-03-13 12:26:29] [INFO] [query_handler] [2/7] get_embedding | 150.5ms
+[2026-03-13 12:26:29] [INFO] [query_handler] route | collection=irs_rag_v1 | schema_path=False
+[2026-03-13 12:26:30] [ERROR] [query_handler] ✗ handle_query failed | total=1078.1ms | error=Unexpected Response: 404 (Not Found)
+Raw response content:
+b'{"status":{"error":"Not found: Collection `irs_rag_v1` doesn\'t exist!"},"time":5.147e-6}'
+Traceback (most recent call last):
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/handlers/rag_handlers/query_handler.py", line 112, in handle_query
+    chunks = self.retrieval_service.retrieve(
+        target_collection,
+    ...<3 lines>...
+        filters,
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/services/rag_services/retrieval_service.py", line 53, in retrieve
+    hits = self.qdrant_service.search(
+        collection_name=collection,
+    ...<3 lines>...
+        query_filter=query_filter,
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/services/rag_services/qdrant_service.py", line 67, in search
+    return self.client.search(
+           ~~~~~~~~~~~~~~~~~~^
+        collection_name=collection_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        query_filter=query_filter,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/qdrant_client.py", line 387, in search
+    return self._client.search(
+           ~~~~~~~~~~~~~~~~~~~^
+        collection_name=collection_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<12 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/qdrant_remote.py", line 563, in search
+    search_result = self.http.points_api.search_points(
+        collection_name=collection_name,
+    ...<12 lines>...
+        ),
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api/points_api.py", line 1616, in search_points
+    return self._build_for_search_points(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        collection_name=collection_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        search_request=search_request,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api/points_api.py", line 750, in _build_for_search_points
+    return self.api_client.request(
+           ~~~~~~~~~~~~~~~~~~~~~~~^
+        type_=m.InlineResponse20016,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+        content=body,
+        ^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api_client.py", line 79, in request
+    return self.send(request, type_)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api_client.py", line 102, in send
+    raise UnexpectedResponse.for_response(response)
+qdrant_client.http.exceptions.UnexpectedResponse: Unexpected Response: 404 (Not Found)
+Raw response content:
+b'{"status":{"error":"Not found: Collection `irs_rag_v1` doesn\'t exist!"},"time":5.147e-6}'
+[2026-03-13 12:26:30] [INFO] [request] ← POST /query | status=200 | total=8441.2ms
+[2026-03-13 12:26:30] [INFO] [request] → POST /query
+[2026-03-13 12:26:30] [INFO] [query_handler] [1/7] sanitize_query | 0.0ms
+[2026-03-13 12:26:30] [INFO] [query_handler] [2/7] get_embedding | 20.3ms
+[2026-03-13 12:26:30] [INFO] [query_handler] route | collection=irs_rag_v1 | schema_path=False
+[2026-03-13 12:26:30] [ERROR] [query_handler] ✗ handle_query failed | total=208.9ms | error=Unexpected Response: 404 (Not Found)
+Raw response content:
+b'{"status":{"error":"Not found: Collection `irs_rag_v1` doesn\'t exist!"},"time":4.589e-6}'
+Traceback (most recent call last):
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/handlers/rag_handlers/query_handler.py", line 112, in handle_query
+    chunks = self.retrieval_service.retrieve(
+        target_collection,
+    ...<3 lines>...
+        filters,
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/services/rag_services/retrieval_service.py", line 53, in retrieve
+    hits = self.qdrant_service.search(
+        collection_name=collection,
+    ...<3 lines>...
+        query_filter=query_filter,
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/services/rag_services/qdrant_service.py", line 67, in search
+    return self.client.search(
+           ~~~~~~~~~~~~~~~~~~^
+        collection_name=collection_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        query_filter=query_filter,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/qdrant_client.py", line 387, in search
+    return self._client.search(
+           ~~~~~~~~~~~~~~~~~~~^
+        collection_name=collection_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<12 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/qdrant_remote.py", line 563, in search
+    search_result = self.http.points_api.search_points(
+        collection_name=collection_name,
+    ...<12 lines>...
+        ),
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api/points_api.py", line 1616, in search_points
+    return self._build_for_search_points(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        collection_name=collection_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        search_request=search_request,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api/points_api.py", line 750, in _build_for_search_points
+    return self.api_client.request(
+           ~~~~~~~~~~~~~~~~~~~~~~~^
+        type_=m.InlineResponse20016,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+        content=body,
+        ^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api_client.py", line 79, in request
+    return self.send(request, type_)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api_client.py", line 102, in send
+    raise UnexpectedResponse.for_response(response)
+qdrant_client.http.exceptions.UnexpectedResponse: Unexpected Response: 404 (Not Found)
+Raw response content:
+b'{"status":{"error":"Not found: Collection `irs_rag_v1` doesn\'t exist!"},"time":4.589e-6}'
+[2026-03-13 12:26:30] [INFO] [request] ← POST /query | status=200 | total=213.5ms
+[2026-03-13 12:26:31] [INFO] [request] → POST /query
+[2026-03-13 12:26:31] [INFO] [query_handler] [1/7] sanitize_query | 0.0ms
+[2026-03-13 12:26:31] [INFO] [query_handler] [2/7] get_embedding | 8.3ms
+[2026-03-13 12:26:31] [INFO] [query_handler] route | collection=irs_rag_v1 | schema_path=False
+[2026-03-13 12:26:31] [ERROR] [query_handler] ✗ handle_query failed | total=198.4ms | error=Unexpected Response: 404 (Not Found)
+Raw response content:
+b'{"status":{"error":"Not found: Collection `irs_rag_v1` doesn\'t exist!"},"time":4.113e-6}'
+Traceback (most recent call last):
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/handlers/rag_handlers/query_handler.py", line 112, in handle_query
+    chunks = self.retrieval_service.retrieve(
+        target_collection,
+    ...<3 lines>...
+        filters,
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/services/rag_services/retrieval_service.py", line 53, in retrieve
+    hits = self.qdrant_service.search(
+        collection_name=collection,
+    ...<3 lines>...
+        query_filter=query_filter,
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/services/rag_services/qdrant_service.py", line 67, in search
+    return self.client.search(
+           ~~~~~~~~~~~~~~~~~~^
+        collection_name=collection_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        query_filter=query_filter,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/qdrant_client.py", line 387, in search
+    return self._client.search(
+           ~~~~~~~~~~~~~~~~~~~^
+        collection_name=collection_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<12 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/qdrant_remote.py", line 563, in search
+    search_result = self.http.points_api.search_points(
+        collection_name=collection_name,
+    ...<12 lines>...
+        ),
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api/points_api.py", line 1616, in search_points
+    return self._build_for_search_points(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        collection_name=collection_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        search_request=search_request,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api/points_api.py", line 750, in _build_for_search_points
+    return self.api_client.request(
+           ~~~~~~~~~~~~~~~~~~~~~~~^
+        type_=m.InlineResponse20016,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+        content=body,
+        ^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api_client.py", line 79, in request
+    return self.send(request, type_)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api_client.py", line 102, in send
+    raise UnexpectedResponse.for_response(response)
+qdrant_client.http.exceptions.UnexpectedResponse: Unexpected Response: 404 (Not Found)
+Raw response content:
+b'{"status":{"error":"Not found: Collection `irs_rag_v1` doesn\'t exist!"},"time":4.113e-6}'
+[2026-03-13 12:26:31] [INFO] [request] ← POST /query | status=200 | total=205.0ms
+[2026-03-13 12:26:31] [INFO] [request] → POST /query
+[2026-03-13 12:26:31] [INFO] [query_handler] [1/7] sanitize_query | 0.0ms
+[2026-03-13 12:26:31] [INFO] [query_handler] [2/7] get_embedding | 10.3ms
+[2026-03-13 12:26:31] [INFO] [query_handler] route | collection=irs_rag_v1 | schema_path=False
+[2026-03-13 12:26:31] [ERROR] [query_handler] ✗ handle_query failed | total=199.3ms | error=Unexpected Response: 404 (Not Found)
+Raw response content:
+b'{"status":{"error":"Not found: Collection `irs_rag_v1` doesn\'t exist!"},"time":4.187e-6}'
+Traceback (most recent call last):
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/handlers/rag_handlers/query_handler.py", line 112, in handle_query
+    chunks = self.retrieval_service.retrieve(
+        target_collection,
+    ...<3 lines>...
+        filters,
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/services/rag_services/retrieval_service.py", line 53, in retrieve
+    hits = self.qdrant_service.search(
+        collection_name=collection,
+    ...<3 lines>...
+        query_filter=query_filter,
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/services/rag_services/qdrant_service.py", line 67, in search
+    return self.client.search(
+           ~~~~~~~~~~~~~~~~~~^
+        collection_name=collection_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        query_filter=query_filter,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/qdrant_client.py", line 387, in search
+    return self._client.search(
+           ~~~~~~~~~~~~~~~~~~~^
+        collection_name=collection_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<12 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/qdrant_remote.py", line 563, in search
+    search_result = self.http.points_api.search_points(
+        collection_name=collection_name,
+    ...<12 lines>...
+        ),
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api/points_api.py", line 1616, in search_points
+    return self._build_for_search_points(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        collection_name=collection_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        search_request=search_request,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api/points_api.py", line 750, in _build_for_search_points
+    return self.api_client.request(
+           ~~~~~~~~~~~~~~~~~~~~~~~^
+        type_=m.InlineResponse20016,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+        content=body,
+        ^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api_client.py", line 79, in request
+    return self.send(request, type_)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api_client.py", line 102, in send
+    raise UnexpectedResponse.for_response(response)
+qdrant_client.http.exceptions.UnexpectedResponse: Unexpected Response: 404 (Not Found)
+Raw response content:
+b'{"status":{"error":"Not found: Collection `irs_rag_v1` doesn\'t exist!"},"time":4.187e-6}'
+[2026-03-13 12:26:31] [INFO] [request] ← POST /query | status=200 | total=205.5ms
