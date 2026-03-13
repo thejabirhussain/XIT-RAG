@@ -24,4 +24,5 @@ tenacity
 orjson
 google-generativeai
 pymysql
-sqlglotSQLAlchemy>=2.0.0
+sqlglot
+SQLAlchemy>=2.0.0

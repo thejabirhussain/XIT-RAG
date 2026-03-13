@@ -76,7 +76,7 @@ USER QUESTION:
 ASSISTANT INSTRUCTIONS:
 - Analyze the LIVE DATABASE RESULTS and use them to construct your answer.
 - Refer to the SCHEMA CONTEXT to understand what the data means (e.g., interpreting risk scores, statuses, foreign keys).
-- If the LIVE DATABASE RESULTS contain an error message, explain to the user that there was a technical issue fetching the data, but use the SCHEMA CONTEXT to attempt a general, theoretical answer if possible.
+- If the LIVE DATABASE RESULTS contain an error message, inform the user that data could not be retrieved due to a technical issue. Describe what the table contains based on the schema, but NEVER suggest, generate, or display any SQL commands — especially not INSERT, UPDATE, DELETE, DROP, ALTER, RENAME, or TRUNCATE.
 - If the LIVE DATABASE RESULTS are empty, inform the user that no matching data was found for their query.
 - Use GitHub-Flavored Markdown. Bold key terms and metrics.
 - Be concise, clear, and professional.

@@ -546,3 +546,51 @@ qdrant_client.http.exceptions.UnexpectedResponse: Unexpected Response: 404 (Not 
 Raw response content:
 b'{"status":{"error":"Not found: Collection `irs_rag_v1` doesn\'t exist!"},"time":4.187e-6}'
 [2026-03-13 12:26:31] [INFO] [request] ← POST /query | status=200 | total=205.5ms
+[2026-03-13 14:41:21] [INFO] [request] → POST /query
+[2026-03-13 14:41:31] [INFO] [query_handler] [1/7] sanitize_query | 0.6ms
+[2026-03-13 14:41:37] [INFO] [query_handler] [2/7] get_embedding | 6215.0ms
+[2026-03-13 14:41:37] [INFO] [query_handler] route | collection=schema | schema_path=True
+[2026-03-13 14:41:37] [INFO] [query_handler] [3/7] retrieve | chunks_found=20 | 643.2ms
+[2026-03-13 14:41:40] [INFO] [query_handler] [4/7] rerank | chunks_after=3 | 2335.8ms
+[2026-03-13 14:42:05] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=36 | 24812.5ms
+[2026-03-13 14:42:05] [INFO] [query_handler] [5/7] generate_sql | sql_preview=SELECT * FROM audits AS audit_backup | 24813.4ms
+[2026-03-13 14:42:24] [ERROR] [services.rag_services.database_service] SQL execution error: (pymysql.err.OperationalError) (2013, 'Lost connection to MySQL server during query ([WinError 10054] An existing connection was forcibly closed by the remote host)')
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2026-03-13 14:42:24] [INFO] [query_handler] [6/7] execute_query | rows=0 | error=True | 19756.0ms
+[2026-03-13 14:42:24] [INFO] [query_handler] [6/7] build_db_prompt | 0.0ms
+[2026-03-13 14:43:11] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=1359 | 46315.5ms
+[2026-03-13 14:43:11] [INFO] [query_handler] [7/7] llm_generate | model=ollama | answer_len=1359 | 46316.3ms
+[2026-03-13 14:43:11] [INFO] [query_handler] ✓ handle_query complete | confidence=low | total=100108.1ms
+[2026-03-13 14:43:11] [INFO] [request] ← POST /query | status=200 | total=110103.4ms
+[2026-03-13 14:51:04] [INFO] [request] → POST /query
+[2026-03-13 14:51:04] [INFO] [query_handler] [1/7] sanitize_query | 0.1ms
+[2026-03-13 14:51:04] [INFO] [query_handler] [2/7] get_embedding | 122.0ms
+[2026-03-13 14:51:04] [INFO] [query_handler] route | collection=schema | schema_path=True
+[2026-03-13 14:51:05] [INFO] [query_handler] [3/7] retrieve | chunks_found=20 | 770.3ms
+[2026-03-13 14:51:07] [INFO] [query_handler] [4/7] rerank | chunks_after=3 | 2257.9ms
+[2026-03-13 14:51:25] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=36 | 17765.4ms
+[2026-03-13 14:51:25] [INFO] [query_handler] [5/7] generate_sql | sql_preview=SELECT * FROM audits AS audit_backup | 17766.3ms
+[2026-03-13 14:51:45] [ERROR] [services.rag_services.database_service] SQL execution error: (pymysql.err.OperationalError) (2013, 'Lost connection to MySQL server during query ([WinError 10054] An existing connection was forcibly closed by the remote host)')
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2026-03-13 14:51:45] [INFO] [query_handler] [6/7] execute_query | rows=0 | error=True | 19737.8ms
+[2026-03-13 14:51:45] [INFO] [query_handler] [6/7] build_db_prompt | 0.1ms
+[2026-03-13 14:52:26] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=1359 | 41353.9ms
+[2026-03-13 14:52:26] [INFO] [query_handler] [7/7] llm_generate | model=ollama | answer_len=1359 | 41407.5ms
+[2026-03-13 14:52:26] [INFO] [query_handler] ✓ handle_query complete | confidence=low | total=82078.5ms
+[2026-03-13 14:52:26] [INFO] [request] ← POST /query | status=200 | total=82108.5ms
+[2026-03-13 15:44:06] [INFO] [request] → POST /query
+[2026-03-13 15:44:06] [INFO] [query_handler] [1/7] sanitize_query | 0.1ms
+[2026-03-13 15:44:06] [INFO] [query_handler] [2/7] get_embedding | 215.0ms
+[2026-03-13 15:44:06] [INFO] [query_handler] route | collection=schema | schema_path=True
+[2026-03-13 15:44:07] [INFO] [query_handler] [3/7] retrieve | chunks_found=20 | 648.9ms
+[2026-03-13 15:44:09] [INFO] [query_handler] [4/7] rerank | chunks_after=3 | 2248.3ms
+[2026-03-13 15:44:28] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=36 | 19038.7ms
+[2026-03-13 15:44:28] [INFO] [query_handler] [5/7] generate_sql | sql_preview=SELECT * FROM audits AS audit_backup | 19041.3ms
+[2026-03-13 15:44:48] [ERROR] [services.rag_services.database_service] SQL execution error: (pymysql.err.OperationalError) (2013, 'Lost connection to MySQL server during query ([WinError 10054] An existing connection was forcibly closed by the remote host)')
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2026-03-13 15:44:48] [INFO] [query_handler] [6/7] execute_query | rows=0 | error=True | 19707.9ms
+[2026-03-13 15:44:48] [INFO] [query_handler] [6/7] build_db_prompt | 1.0ms
+[2026-03-13 15:45:34] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=1359 | 45951.2ms
+[2026-03-13 15:45:34] [INFO] [query_handler] [7/7] llm_generate | model=ollama | answer_len=1359 | 45952.0ms
+[2026-03-13 15:45:34] [INFO] [query_handler] ✓ handle_query complete | confidence=low | total=87840.6ms
+[2026-03-13 15:45:34] [INFO] [request] ← POST /query | status=200 | total=87874.0ms
