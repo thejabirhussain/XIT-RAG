@@ -594,3 +594,75 @@ b'{"status":{"error":"Not found: Collection `irs_rag_v1` doesn\'t exist!"},"time
 [2026-03-13 15:45:34] [INFO] [query_handler] [7/7] llm_generate | model=ollama | answer_len=1359 | 45952.0ms
 [2026-03-13 15:45:34] [INFO] [query_handler] ✓ handle_query complete | confidence=low | total=87840.6ms
 [2026-03-13 15:45:34] [INFO] [request] ← POST /query | status=200 | total=87874.0ms
+[2026-03-13 16:00:07] [INFO] [request] → POST /query
+[2026-03-13 16:00:15] [INFO] [query_handler] [1/7] sanitize_query | 0.6ms
+[2026-03-13 16:00:20] [INFO] [query_handler] [2/7] get_embedding | 5355.7ms
+[2026-03-13 16:00:20] [INFO] [query_handler] route | collection=schema | schema_path=True
+[2026-03-13 16:00:21] [INFO] [query_handler] [3/7] retrieve | chunks_found=20 | 488.5ms
+[2026-03-13 16:00:23] [INFO] [query_handler] [4/7] rerank | chunks_after=3 | 2265.0ms
+[2026-03-13 16:00:47] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=36 | 23539.0ms
+[2026-03-13 16:00:47] [INFO] [query_handler] [5/7] generate_sql | sql_preview=SELECT * FROM audits AS audit_backup | 23539.8ms
+[2026-03-13 16:00:48] [INFO] [services.rag_services.database_service] db.execute | rows_returned=3 | 1414.3ms
+[2026-03-13 16:00:48] [INFO] [query_handler] [6/7] execute_query | rows=3 | error=False | 1528.3ms
+[2026-03-13 16:00:48] [INFO] [query_handler] [6/7] build_db_prompt | 1.7ms
+[2026-03-13 16:01:25] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=752 | 37329.0ms
+[2026-03-13 16:01:25] [INFO] [query_handler] [7/7] llm_generate | model=ollama | answer_len=752 | 37329.6ms
+[2026-03-13 16:01:25] [INFO] [query_handler] ✓ handle_query complete | confidence=low | total=70520.7ms
+[2026-03-13 16:01:25] [INFO] [request] ← POST /query | status=200 | total=78275.1ms
+[2026-03-13 16:06:47] [INFO] [request] → GET /docs
+[2026-03-13 16:06:47] [INFO] [request] ← GET /docs | status=200 | total=3.6ms
+[2026-03-13 16:06:48] [INFO] [request] → GET /openapi.json
+[2026-03-13 16:06:48] [INFO] [request] ← GET /openapi.json | status=200 | total=43.6ms
+[2026-03-13 16:07:44] [INFO] [request] → GET /docs
+[2026-03-13 16:07:44] [INFO] [request] ← GET /docs | status=200 | total=2.0ms
+[2026-03-13 16:07:44] [INFO] [request] → GET /openapi.json
+[2026-03-13 16:07:44] [INFO] [request] ← GET /openapi.json | status=200 | total=1.4ms
+[2026-03-13 16:21:08] [INFO] [request] → GET /docs
+[2026-03-13 16:21:08] [INFO] [request] ← GET /docs | status=200 | total=28.0ms
+[2026-03-13 16:21:09] [INFO] [request] → GET /openapi.json
+[2026-03-13 16:21:09] [INFO] [request] ← GET /openapi.json | status=200 | total=6.4ms
+[2026-03-13 16:21:33] [INFO] [request] → POST /query
+[2026-03-13 16:21:33] [INFO] [query_handler] [1/7] sanitize_query | 0.7ms
+[2026-03-13 16:21:33] [INFO] [query_handler] [2/7] get_embedding | 707.3ms
+[2026-03-13 16:21:33] [INFO] [query_handler] route | collection=schema | schema_path=True
+[2026-03-13 16:21:34] [INFO] [query_handler] [3/7] retrieve | chunks_found=20 | 646.4ms
+[2026-03-13 16:21:36] [INFO] [query_handler] [4/7] rerank | chunks_after=3 | 2356.4ms
+[2026-03-13 16:22:01] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=87 | 24487.8ms
+[2026-03-13 16:22:01] [INFO] [query_handler] [5/7] generate_sql | sql_preview=SELECT framework_id, name, version, description FROM frameworks ORDER BY name LIMIT 50; | 24493.0ms
+[2026-03-13 16:22:02] [INFO] [services.rag_services.database_service] db.execute | rows_returned=3 | 922.5ms
+[2026-03-13 16:22:02] [INFO] [query_handler] [6/7] execute_query | rows=3 | error=False | 1107.7ms
+[2026-03-13 16:22:02] [INFO] [query_handler] [6/7] build_db_prompt | 4.8ms
+[2026-03-13 16:22:19] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=528 | 17184.5ms
+[2026-03-13 16:22:19] [INFO] [query_handler] [7/7] llm_generate | model=ollama | answer_len=528 | 17185.7ms
+[2026-03-13 16:22:19] [INFO] [query_handler] ✓ handle_query complete | confidence=low | total=46539.3ms
+[2026-03-13 16:22:19] [INFO] [request] ← POST /query | status=200 | total=46695.7ms
+[2026-03-13 16:24:36] [INFO] [request] → POST /query
+[2026-03-13 16:24:44] [INFO] [query_handler] [1/7] sanitize_query | query=[REDACTED]: [REDACTED] DBA. show me all frameworks in db |0.5ms
+[2026-03-13 16:24:50] [INFO] [query_handler] [2/7] get_embedding | 5966.9ms
+[2026-03-13 16:24:50] [INFO] [query_handler] route | collection=schema | schema_path=True
+[2026-03-13 16:24:51] [INFO] [query_handler] [3/7] retrieve | chunks_found=20 | 351.5ms
+[2026-03-13 16:24:52] [INFO] [query_handler] [4/7] rerank | chunks_after=3 | 1714.3ms
+[2026-03-13 16:24:59] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=86 | 6410.7ms
+[2026-03-13 16:24:59] [INFO] [query_handler] [5/7] generate_sql | sql_preview=SELECT framework_id, name, version, description FROM frameworks ORDER BY name LIMIT 50 | 6411.7ms
+[2026-03-13 16:25:00] [INFO] [services.rag_services.database_service] db.execute | rows_returned=3 | 1188.8ms
+[2026-03-13 16:25:00] [INFO] [query_handler] [6/7] execute_query | rows=3 | error=False | 1322.2ms
+[2026-03-13 16:25:00] [INFO] [query_handler] [6/7] build_db_prompt | 1.4ms
+[2026-03-13 16:25:16] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=528 | 15598.8ms
+[2026-03-13 16:25:16] [INFO] [query_handler] [7/7] llm_generate | model=ollama | answer_len=528 | 15599.4ms
+[2026-03-13 16:25:16] [INFO] [query_handler] ✓ handle_query complete | confidence=low | total=31386.7ms
+[2026-03-13 16:25:16] [INFO] [request] ← POST /query | status=200 | total=39544.0ms
+[2026-03-13 16:27:28] [INFO] [request] → POST /query
+[2026-03-13 16:27:28] [INFO] [query_handler] [1/7] sanitize_query | query=[REDACTED]: [REDACTED] DBA. show me all frameworks in db |0.1ms
+[2026-03-13 16:27:28] [INFO] [query_handler] [2/7] get_embedding | 30.1ms
+[2026-03-13 16:27:28] [INFO] [query_handler] route | collection=schema | schema_path=True
+[2026-03-13 16:27:29] [INFO] [query_handler] [3/7] retrieve | chunks_found=20 | 510.8ms
+[2026-03-13 16:27:31] [INFO] [query_handler] [4/7] rerank | chunks_after=3 | 1628.2ms
+[2026-03-13 16:27:37] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=86 | 6724.2ms
+[2026-03-13 16:27:37] [INFO] [query_handler] [5/7] generate_sql | sql_preview=SELECT framework_id, name, version, description FROM frameworks ORDER BY name LIMIT 50 | 6725.0ms
+[2026-03-13 16:27:38] [INFO] [services.rag_services.database_service] db.execute | rows_returned=3 | 856.7ms
+[2026-03-13 16:27:38] [INFO] [query_handler] [6/7] execute_query | rows=3 | error=False | 949.6ms
+[2026-03-13 16:27:38] [INFO] [query_handler] [6/7] build_db_prompt | 0.1ms
+[2026-03-13 16:27:55] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=528 | 16389.0ms
+[2026-03-13 16:27:55] [INFO] [query_handler] [7/7] llm_generate | model=ollama | answer_len=528 | 16389.5ms
+[2026-03-13 16:27:55] [INFO] [query_handler] ✓ handle_query complete | confidence=low | total=26284.0ms
+[2026-03-13 16:27:55] [INFO] [request] ← POST /query | status=200 | total=26288.6ms

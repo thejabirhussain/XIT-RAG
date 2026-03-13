@@ -89,7 +89,7 @@ class QueryHandler:
         try:
             t = time.perf_counter()
             query = sanitize_query(query)
-            logger.info("[1/7] sanitize_query | %.1fms", (time.perf_counter() - t) * 1000)
+            logger.info("[1/7] sanitize_query | query=%s |%.1fms", query, (time.perf_counter() - t) * 1000)
 
             if not query:
                 return ChatResponse(answer_text="Invalid query.", sources=[], confidence="low", query_embedding_similarity=[])
