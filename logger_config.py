@@ -11,6 +11,7 @@ def setup_logging():
         level=logging.INFO,
         format=log_format,
         datefmt=date_format,
+        force=True,
         handlers=[
             logging.StreamHandler(sys.stdout),
             logging.FileHandler(f"logs/rag_{datetime.now().strftime('%Y%m%d')}.log", encoding="utf-8"),
