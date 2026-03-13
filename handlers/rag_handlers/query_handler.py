@@ -1,6 +1,10 @@
 from typing import Optional
-
+import time
+import logging
 import numpy as np
+import re
+
+logger = logging.getLogger("query_handler")
 
 from models import ChatResponse, Source
 from services.rag_services.retrieval_service import TOP_K, TOP_N, SIMILARITY_CUTOFF
@@ -10,13 +14,52 @@ SCHEMA_COLLECTION = "schema"
 NO_KB_MSG = "I don't have verifiable information in the knowledge base for that query."
 
 SCHEMA_KEYWORDS = [
-    "table", "column", "foreign key", "sql", "schema",
-    "relationship", "compliance", "data model", "query", "database", "risks"
+    # Count / aggregation intent
+    "how many", "count of", "total number", "number of",
+    # Listing intent
+    "list all", "show all", "show me all", "give me all",
+    "fetch all", "get all", "retrieve all",
+    # DB-referencing phrases
+    "in the db", "in db", "in the database", "from the database",
+    "from database", "in our database", "stored in",
+    # Schema-specific
+    "database schema", "table structure", "column names",
+    "foreign key", "data model", "what tables",
+    "table columns", "sql query", "db query",
+    # Explicit table/record language
+    "what records", "which records", "all records",
+    "all entries", "all rows",
+
+    "show me the table", "list all columns", "database schema",
+    "foreign key", "data model", "sql query for",
+    "what columns does", "how many rows", "count of records",
+    "table structure", "column names",
 ]
+
+# Pattern catches short natural queries that reference data entities
+SCHEMA_PATTERN = re.compile(
+    r"\b(schema|db|audits?|frameworks?|controls?|policies|findings?|users?|organizations?)\b"
+    r".*\b(show|list|get|fetch|count|how many|give|find|retrieve|display)\b"
+    r"|\b(show|list|get|fetch|count|how many|give|find|retrieve|display)\b"
+    r".*\b(audits?|frameworks?|controls?|policies|findings?|users?|organizations?)\b",
+    re.IGNORECASE,
+)
+
+MAX_QUERY_LENGTH = 500
 
 def is_schema_query(query: str) -> bool:
     q_lower = query.lower()
     return any(keyword in q_lower for keyword in SCHEMA_KEYWORDS)
+
+def sanitize_query(query: str) -> str:
+    query = query[:MAX_QUERY_LENGTH]
+    query = re.sub(
+        r"(?i)(ignore previous|forget instructions|system override|"
+        r"you are now|disregard all|act as|maintenance mode|developer mode)",
+        "[REDACTED]",
+        query
+    )
+    return query.strip()
 
 
 class QueryHandler:
@@ -42,16 +85,30 @@ class QueryHandler:
         cutoff: Optional[float] = None,
         model: str = "ollama",
     ):
+        overall_start = time.perf_counter()
         try:
+            t = time.perf_counter()
+            query = sanitize_query(query)
+            logger.info("[1/7] sanitize_query | %.1fms", (time.perf_counter() - t) * 1000)
+
+            if not query:
+                return ChatResponse(answer_text="Invalid query.", sources=[], confidence="low", query_embedding_similarity=[])
+            
+            t = time.perf_counter()
             query_embedding = self.embedding_provider.get_embedding(query)
+            logger.info("[2/7] get_embedding | %.1fms", (time.perf_counter() - t) * 1000)
 
             top_k = top_k or TOP_K
             top_n = top_n or TOP_N
             cutoff = cutoff or SIMILARITY_CUTOFF
+            is_schema = is_schema_query(query)
 
             target_collection = SCHEMA_COLLECTION if is_schema_query(query) else self.collection_name
+            logger.info("route | collection=%s | schema_path=%s", target_collection, is_schema)
             print(f"Target collection: {target_collection}")
 
+
+            t = time.perf_counter()
             chunks = self.retrieval_service.retrieve(
                 target_collection,
                 query_embedding,
@@ -60,6 +117,7 @@ class QueryHandler:
                 filters,
             )
             print(f"Found chunks: {len(chunks)}")
+            logger.info("[3/7] retrieve | chunks_found=%d | %.1fms", len(chunks), (time.perf_counter() - t) * 1000)
 
             if not chunks:
                 return ChatResponse(
@@ -69,31 +127,52 @@ class QueryHandler:
                     query_embedding_similarity=[],
                 )
 
+            t = time.perf_counter()
             if len(chunks) > top_n:
                 chunks = self.retrieval_service.rerank(query, chunks, top_n)
+                logger.info("[4/7] rerank | chunks_after=%d | %.1fms", len(chunks), (time.perf_counter() - t) * 1000)
             else:
                 chunks = chunks[:top_n]
+                logger.info("[4/7] rerank | skipped (chunks <= top_n) | %.1fms", (time.perf_counter() - t) * 1000)
 
-            is_schema = is_schema_query(query)
             if is_schema:
+                t = time.perf_counter()
                 sql_query = self.llm.generate_sql_query(chunks, query, model=model)
                 print(f"Generated SQL: {sql_query}")
+                logger.info("[5/7] generate_sql | sql_preview=%.100s | %.1fms", sql_query, (time.perf_counter() - t) * 1000)
+
                 
                 # Safety guardrail
                 forbidden_keywords = ["INSERT", "UPDATE", "DELETE", "DROP", "ALTER", "TRUNCATE"]
                 sql_upper = sql_query.upper()
                 
-                if any(kw in sql_upper for kw in forbidden_keywords):
-                    db_results = {"error": "Generated SQL contained destructive operations and was blocked."}
+                if not sql_query.strip().upper().startswith("SELECT"):
+                    logger.warning("[5/7] SQL blocked — did not start with SELECT")
+                    db_results = {"error": "Only SELECT queries are permitted."}
                 else:
+                    t = time.perf_counter()
                     db_results = self.database_service.execute_query(sql_query)
+                    row_count = len(db_results.get("results", [])) if "results" in db_results else 0
+                    had_error = "error" in db_results
+                    logger.info("[6/7] execute_query | rows=%d | error=%s | %.1fms", row_count, had_error, (time.perf_counter() - t) * 1000)
+
+                #if any(kw in sql_upper for kw in forbidden_keywords):
+                #    db_results = {"error": "Generated SQL contained destructive operations and was blocked."}
+                #else:
+                #    db_results = self.database_service.execute_query(sql_query)
                 
                 print(f"DB Results: {db_results}")
+                t = time.perf_counter()
                 prompt = self.llm.build_db_grounded_rag_prompt(chunks, db_results, query)
+                logger.info("[6/7] build_db_prompt | %.1fms", (time.perf_counter() - t) * 1000)
             else:
+                t = time.perf_counter()
                 prompt = self.llm.build_rag_prompt(chunks, query)
+                logger.info("[5/7] build_rag_prompt | %.1fms", (time.perf_counter() - t) * 1000)
 
-            answer_text = self.llm.generate(prompt, model=model, temperature=0.0, max_tokens=200)
+            t = time.perf_counter()
+            answer_text = self.llm.generate(prompt, model=model, temperature=0.0, max_tokens=1000)
+            logger.info("[7/7] llm_generate | model=%s | answer_len=%d | %.1fms", model, len(answer_text), (time.perf_counter() - t) * 1000)
 
             sources = []
             similarities = []
@@ -118,7 +197,8 @@ class QueryHandler:
                         "score": chunk.get("score", 0.0),
                     }
                 )
-                similarities.append(chunk.get("score", 0.0))
+                raw_score = chunk.get("score", 0.0)
+                similarities.append(float(min(max(raw_score, 0.0), 1.0)))
 
             avg_similarity = np.mean(similarities) if similarities else 0.0
             if avg_similarity >= 0.8:
@@ -141,6 +221,9 @@ class QueryHandler:
                 for src in sources
             ]
 
+            total_ms = (time.perf_counter() - overall_start) * 1000
+            logger.info("✓ handle_query complete | confidence=%s | total=%.1fms", confidence, total_ms)
+
             response = ChatResponse(
                 answer_text=answer_text,
                 sources=source_models,
@@ -151,6 +234,8 @@ class QueryHandler:
             return response
 
         except Exception as e:
+            total_ms = (time.perf_counter() - overall_start) * 1000
+            logger.exception("✗ handle_query failed | total=%.1fms | error=%s", total_ms, e)
             import traceback
             traceback.print_exc()
             return ChatResponse(

@@ -1,4 +1,8 @@
-from fastapi import APIRouter, HTTPException, status, Depends, BackgroundTasks
+import os
+import logging
+
+from fastapi import APIRouter, HTTPException, status, Depends, BackgroundTasks, Security
+from fastapi.security.api_key import APIKeyHeader
 
 from models import ChatRequest, ChatResponse, AdminStats, IngestionRequest
 from handlers import QueryHandler, IngestionHandler, StatsHandler
