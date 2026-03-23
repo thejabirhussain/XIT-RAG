@@ -15,10 +15,10 @@ NO_KB_MSG = "I don't have verifiable information in the knowledge base for that 
 
 SCHEMA_KEYWORDS = [
     # Count / aggregation intent
-    "how many", "count of", "total number", "number of",
+    "how many", "count of", "total number", "number of", "average", "distribution of",
     # Listing intent
-    "list all", "show all", "show me all", "give me all",
-    "fetch all", "get all", "retrieve all",
+    "list all", "show all", "show me all", "give me all", "show me the",
+    "fetch all", "get all", "retrieve all", "find policies", "find users",
     # DB-referencing phrases
     "in the db", "in db", "in the database", "from the database",
     "from database", "in our database", "stored in",
@@ -28,20 +28,23 @@ SCHEMA_KEYWORDS = [
     "table columns", "sql query", "db query",
     # Explicit table/record language
     "what records", "which records", "all records",
-    "all entries", "all rows",
-
-    "show me the table", "list all columns", "database schema",
-    "foreign key", "data model", "sql query for",
-    "what columns does", "how many rows", "count of records",
-    "table structure", "column names",
+    "all entries", "all rows", "how many rows", "count of records",
 ]
 
-# Pattern catches short natural queries that reference data entities
+# Patterns for specific entities that strongly imply database lookups
+DB_ENTITIES = [
+    r"policy\s+id\b", r"user\s+id\b", r"org\s+id\b", r"organization\s+id\b", r"risk\s+id\b",
+    r"risk\s+score\b", r"\badmin(?:s)\b", r"user\s+roles?\b", r"access\s+level",
+    r"draft\s+polic(?:y|ies)\b", r"mitigated\s+risks?\b", r"open\s+risks?\b",
+    r"which\s+org(?:anization)?\b", r"which\s+user\b"
+]
+
+# Pattern catches natural queries that reference data entities in a question context
 SCHEMA_PATTERN = re.compile(
-    r"\b(schema|db|audits?|frameworks?|controls?|policies|findings?|users?|organizations?)\b"
-    r".*\b(show|list|get|fetch|count|how many|give|find|retrieve|display)\b"
-    r"|\b(show|list|get|fetch|count|how many|give|find|retrieve|display)\b"
-    r".*\b(audits?|frameworks?|controls?|policies|findings?|users?|organizations?)\b",
+    r"\b(schema|db|audits?|frameworks?|controls?|policies|findings?|users?|organizations?|risks?|orgs?)\b"
+    r".*\b(show|list|get|fetch|count|how many|give|find|retrieve|display|what is|are there|who has|which)\b"
+    r"|\b(show|list|get|fetch|count|how many|give|find|retrieve|display|what is|are there|who has|which)\b"
+    r".*\b(audits?|frameworks?|controls?|policies|findings?|users?|organizations?|risks?|orgs?)\b",
     re.IGNORECASE,
 )
 
@@ -49,7 +52,20 @@ MAX_QUERY_LENGTH = 500
 
 def is_schema_query(query: str) -> bool:
     q_lower = query.lower()
-    return any(keyword in q_lower for keyword in SCHEMA_KEYWORDS)
+    
+    # 1. Check strict DB keywords
+    if any(keyword in q_lower for keyword in SCHEMA_KEYWORDS):
+        return True
+        
+    # 2. Check for direct entity references like "policy ID 10", "risk score"
+    if any(re.search(entity_pattern, q_lower) for entity_pattern in DB_ENTITIES):
+        return True
+        
+    # 3. Check combinations of action words + schema entities
+    if SCHEMA_PATTERN.search(q_lower):
+        return True
+        
+    return False
 
 def sanitize_query(query: str) -> str:
     query = query[:MAX_QUERY_LENGTH]
