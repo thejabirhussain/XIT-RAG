@@ -80,7 +80,7 @@ class DatabaseService:
         error = self._validate_sql(query)
         if error:
             logger.warning("Blocked SQL | Reason: %s | Query: %s", error, query[:200])
-            return {"error": error}
+            return {"error": "I couldn't process this query safely. Could you please clarify or rephrase what you're looking for?"}
 
         safe_query = query.strip().rstrip(";")
         if "LIMIT" not in safe_query.upper():
@@ -92,18 +92,16 @@ class DatabaseService:
                 # Use text() to mark safe
                 result = connection.execute(text(safe_query))
                 
-                # Fetch only up to MAX_ROWS (SQLAlchemy allows fetchmany)
-                rows_proxy = result.fetchmany(MAX_ROWS)
-                # Parse Rows back to dictionaries (mimics pymysql.cursors.DictCursor)
-                rows = [dict(row._mapping) for row in rows_proxy]
+                # Fetch up to MAX_ROWS and map directly to dictionaries
+                rows = [dict(row) for row in result.mappings().fetchmany(MAX_ROWS)]
                 
                 logger.info("db.execute | rows_returned=%d | %.1fms", len(rows), (time.perf_counter() - t) * 1000)
                 return {"results": rows}
                 
         except SQLAlchemyError as err:
             logger.error("SQL execution error: %s", err)
-            return {"error": "Query execution failed."}
+            return {"error": "I encountered an issue processing that request. Could you please clarify your query?"}
         except Exception as e:
             logger.error("DB error: %s", e)
-            return {"error": "A database error occurred."}
+            return {"error": "An unexpected issue occurred while retrieving data. Could you please clarify your query?"}
 
