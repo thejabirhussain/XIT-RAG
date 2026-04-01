@@ -1,0 +1,134 @@
+[2026-03-23 21:21:42] [INFO] [request] → GET /docs
+[2026-03-23 21:21:42] [INFO] [request] ← GET /docs | status=200 | total=2.2ms
+[2026-03-23 21:21:44] [INFO] [request] → GET /openapi.json
+[2026-03-23 21:21:44] [INFO] [request] ← GET /openapi.json | status=200 | total=19.4ms
+[2026-03-23 21:25:19] [INFO] [request] → POST /query
+[2026-03-23 21:25:28] [INFO] [query_handler] [1/7] sanitize_query | query=What's the status of the GDPR audit |0.4ms
+[2026-03-23 21:25:32] [INFO] [query_handler] [2/7] get_embedding | 4577.2ms
+[2026-03-23 21:25:32] [INFO] [query_handler] route | collection=schema | schema_path=True
+[2026-03-23 21:25:34] [ERROR] [query_handler] ✗ handle_query failed | total=5929.9ms | error=Unexpected Response: 403 (Forbidden)
+Raw response content:
+b'{"error":"forbidden"}'
+Traceback (most recent call last):
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\handlers\rag_handlers\query_handler.py", line 188, in handle_query
+    chunks = self.retrieval_service.retrieve(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\services\rag_services\retrieval_service.py", line 53, in retrieve
+    hits = self.qdrant_service.search(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\services\rag_services\qdrant_service.py", line 67, in search
+    return self.client.search(
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\qdrant_client.py", line 387, in search
+    return self._client.search(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\qdrant_remote.py", line 563, in search
+    search_result = self.http.points_api.search_points(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api\points_api.py", line 1616, in search_points
+    return self._build_for_search_points(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api\points_api.py", line 750, in _build_for_search_points
+    return self.api_client.request(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 79, in request
+    return self.send(request, type_)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 102, in send
+    raise UnexpectedResponse.for_response(response)
+qdrant_client.http.exceptions.UnexpectedResponse: Unexpected Response: 403 (Forbidden)
+Raw response content:
+b'{"error":"forbidden"}'
+[2026-03-23 21:25:34] [INFO] [request] ← POST /query | status=200 | total=14460.3ms
+[2026-03-23 21:29:58] [INFO] [request] → POST /query
+[2026-03-23 21:29:58] [INFO] [query_handler] [1/7] sanitize_query | query=What's the status of the GDPR audit |0.0ms
+[2026-03-23 21:29:58] [INFO] [query_handler] [2/7] get_embedding | 20.2ms
+[2026-03-23 21:29:58] [INFO] [query_handler] route | collection=schema | schema_path=True
+[2026-03-23 21:29:59] [ERROR] [query_handler] ✗ handle_query failed | total=996.3ms | error=Unexpected Response: 403 (Forbidden)
+Raw response content:
+b'{"error":"forbidden"}'
+Traceback (most recent call last):
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\handlers\rag_handlers\query_handler.py", line 188, in handle_query
+    chunks = self.retrieval_service.retrieve(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\services\rag_services\retrieval_service.py", line 53, in retrieve
+    hits = self.qdrant_service.search(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\services\rag_services\qdrant_service.py", line 67, in search
+    return self.client.search(
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\qdrant_client.py", line 387, in search
+    return self._client.search(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\qdrant_remote.py", line 563, in search
+    search_result = self.http.points_api.search_points(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api\points_api.py", line 1616, in search_points
+    return self._build_for_search_points(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api\points_api.py", line 750, in _build_for_search_points
+    return self.api_client.request(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 79, in request
+    return self.send(request, type_)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 102, in send
+    raise UnexpectedResponse.for_response(response)
+qdrant_client.http.exceptions.UnexpectedResponse: Unexpected Response: 403 (Forbidden)
+Raw response content:
+b'{"error":"forbidden"}'
+[2026-03-23 21:29:59] [INFO] [request] ← POST /query | status=200 | total=1004.3ms
+[2026-03-23 21:46:16] [INFO] [request] → POST /query
+[2026-03-23 21:46:24] [INFO] [query_handler] [1/7] sanitize_query | query=What's the status of the GDPR audit |0.5ms
+[2026-03-23 21:46:28] [INFO] [query_handler] [2/7] get_embedding | 3699.7ms
+[2026-03-23 21:46:28] [INFO] [query_handler] route | collection=schema | schema_path=True
+[2026-03-23 21:46:29] [INFO] [query_handler] [3/7] retrieve | chunks_found=20 | 1376.1ms
+[2026-03-23 21:46:30] [INFO] [query_handler] [4/7] rerank | chunks_after=3 | 1305.7ms
+[2026-03-23 21:46:37] [ERROR] [query_handler] ✗ handle_query failed | total=12887.6ms | error=Server error '500 Internal Server Error' for url 'http://localhost:11434/api/generate'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500
+Traceback (most recent call last):
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\handlers\rag_handlers\query_handler.py", line 216, in handle_query
+    sql_query = self.llm.generate_sql_query(chunks, query, model=model)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\services\rag_services\llm_service.py", line 114, in generate_sql_query
+    sql = self.generate(prompt, model=model, temperature=0.0, max_tokens=300)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\services\rag_services\llm_service.py", line 155, in generate
+    response.raise_for_status()
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_models.py", line 759, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Server error '500 Internal Server Error' for url 'http://localhost:11434/api/generate'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500
+[2026-03-23 21:46:37] [INFO] [request] ← POST /query | status=200 | total=21093.0ms
+[2026-03-23 22:43:57] [INFO] [request] → POST /query
+[2026-03-23 22:44:06] [INFO] [query_handler] [1/7] sanitize_query | query=What's the status of the GDPR audit |0.6ms
+[2026-03-23 22:44:11] [INFO] [query_handler] [2/7] get_embedding | 5196.2ms
+[2026-03-23 22:44:11] [INFO] [query_handler] route | collection=schema | schema_path=True
+[2026-03-23 22:44:13] [INFO] [query_handler] [3/7] retrieve | chunks_found=20 | 1417.8ms
+[2026-03-23 22:44:14] [INFO] [query_handler] [4/7] rerank | chunks_after=3 | 1420.9ms
+[2026-03-23 22:44:39] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=91 | 25015.4ms
+[2026-03-23 22:44:39] [INFO] [query_handler] [5/7] generate_sql | sql_preview=SELECT a.status FROM audits a WHERE a.org_id IS NOT NULL AND a.audit_name = 'GDPR' LIMIT 50 | 25016.6ms
+[2026-03-23 22:44:59] [ERROR] [services.rag_services.database_service] SQL execution error: (pymysql.err.OperationalError) (2013, 'Lost connection to MySQL server during query ([WinError 10054] An existing connection was forcibly closed by the remote host)')
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2026-03-23 22:44:59] [INFO] [query_handler] [6/7] execute_query | rows=0 | error=True | 19922.5ms
+[2026-03-23 22:44:59] [INFO] [query_handler] [6/7] build_db_prompt | 0.1ms
+[2026-03-23 22:45:35] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=944 | 35424.9ms
+[2026-03-23 22:45:35] [INFO] [query_handler] [7/7] llm_generate | model=ollama | answer_len=944 | 35425.6ms
+[2026-03-23 22:45:35] [INFO] [query_handler] ✓ handle_query complete | confidence=low | total=88412.3ms
+[2026-03-23 22:45:35] [INFO] [request] ← POST /query | status=200 | total=97926.9ms
+[2026-03-23 22:53:15] [INFO] [request] → POST /query
+[2026-03-23 22:53:25] [INFO] [query_handler] [1/7] sanitize_query | query=What's the status of the GDPR audit |0.6ms
+[2026-03-23 22:53:29] [INFO] [query_handler] [2/7] get_embedding | 4750.9ms
+[2026-03-23 22:53:29] [INFO] [query_handler] route | collection=schema | schema_path=True
+[2026-03-23 22:53:30] [INFO] [query_handler] [3/7] retrieve | chunks_found=20 | 1104.2ms
+[2026-03-23 22:53:32] [INFO] [query_handler] [4/7] rerank | chunks_after=3 | 1190.4ms
+[2026-03-23 22:53:53] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=91 | 21379.1ms
+[2026-03-23 22:53:53] [INFO] [query_handler] [5/7] generate_sql | sql_preview=SELECT a.status FROM audits a WHERE a.org_id IS NOT NULL AND a.audit_name = 'GDPR' LIMIT 50 | 21382.7ms
+[2026-03-23 22:54:13] [ERROR] [services.rag_services.database_service] SQL execution error: (pymysql.err.OperationalError) (2013, 'Lost connection to MySQL server during query ([WinError 10054] An existing connection was forcibly closed by the remote host)')
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2026-03-23 22:54:13] [INFO] [query_handler] [6/7] execute_query | rows=0 | error=True | 20065.2ms
+[2026-03-23 22:54:13] [INFO] [query_handler] [6/7] build_db_prompt | 0.4ms
+[2026-03-23 22:54:47] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=944 | 34039.1ms
+[2026-03-23 22:54:47] [INFO] [query_handler] [7/7] llm_generate | model=ollama | answer_len=944 | 34039.6ms
+[2026-03-23 22:54:47] [INFO] [query_handler] ✓ handle_query complete | confidence=low | total=82549.4ms
+[2026-03-23 22:54:47] [INFO] [request] ← POST /query | status=200 | total=91753.2ms

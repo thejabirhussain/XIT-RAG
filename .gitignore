@@ -9,6 +9,10 @@ data/
 test_*.py
 verify_models.py
 
+.env
+
+*/.env
+
 
 
 

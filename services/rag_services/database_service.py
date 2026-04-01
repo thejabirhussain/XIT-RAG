@@ -36,7 +36,7 @@ class DatabaseService:
             max_overflow=max_overflow,
             pool_timeout=pool_timeout,
             pool_pre_ping=True,  # Verifies connections before using them
-            pool_recycle=25    # Recycle connections every hour
+            pool_recycle=1800    # Recycle connections every hour
         )
 
     def _validate_sql(self, query: str) -> str | None:

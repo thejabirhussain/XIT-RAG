@@ -9,6 +9,7 @@ logger = logging.getLogger("llm_service")
 
 OLLAMA_MODEL = "llama3.1:8b"
 GEMINI_MODEL = "gemini-pro"  # SDK will add 'models/' prefix
+MAX_SCHEMA_CHUNK_CHARS = 800  # ← ADD THIS
 
 RAG_SYSTEM_PROMPT = """SYSTEM:
 You are a factual assistant that answers only from the provided IRS.gov knowledge snippets. You must cite sources and never invent facts.
@@ -108,7 +109,7 @@ class LLMService:
         return RAG_SYSTEM_PROMPT.format(context=ctx_block, query=user_query)
 
     def generate_sql_query(self, chunks: list[dict[str, Any]], user_query: str, model: str = "ollama", **kwargs) -> str:
-        ctx_lines = [chunk.get("text", "") for chunk in chunks]
+        ctx_lines = [chunk.get("text", "")[:MAX_SCHEMA_CHUNK_CHARS] for chunk in chunks]
         ctx_block = "\n\n".join(ctx_lines)
         prompt = SQL_GENERATION_PROMPT.format(schema_context=ctx_block, query=user_query)
         sql = self.generate(prompt, model=model, temperature=0.0, max_tokens=300)
