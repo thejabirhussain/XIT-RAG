@@ -270,7 +270,7 @@ class QueryHandler:
             logger.info("[1/7] sanitize_query | query=%s |%.1fms", query, (time.perf_counter() - t) * 1000)
 
             if not query:
-                return ChatResponse(answer_text="Invalid query.", sources=[], confidence="low", query_embedding_similarity=[])
+                return ChatResponse(answer_text="The query provided is unclear or empty. Please clarify what you are looking for.", sources=[], confidence="low", query_embedding_similarity=[])
             
             t = time.perf_counter()
             query_embedding = self.embedding_provider.get_embedding(query)
@@ -333,11 +333,11 @@ class QueryHandler:
                 
                 # Safety guardrail
                 forbidden_keywords = ["INSERT", "UPDATE", "DELETE", "DROP", "ALTER", "TRUNCATE"]
-                sql_upper = sql_query.upper()
+                sql_upper = sql_query.strip().upper()
                 
-                if not sql_query.strip().upper().startswith("SELECT"):
-                    logger.warning("[5/7] SQL blocked — did not start with SELECT")
-                    db_results = {"error": "Only SELECT queries are permitted."}
+                if not (sql_upper.startswith("SELECT") or sql_upper.startswith("WITH")):
+                    logger.warning("[5/7] SQL blocked — did not start with SELECT or WITH")
+                    db_results = {"error": "I couldn't safely process this query. Only retrieval queries are permitted."}
                 else:
                     t = time.perf_counter()
                     db_results = self.database_service.execute_query(sql_query)
@@ -363,7 +363,7 @@ class QueryHandler:
             answer_text = self.llm.generate(prompt, model=model, temperature=0.0, max_tokens=1000)
             logger.info("[7/7] llm_generate | model=%s | answer_len=%d | %.1fms", model, len(answer_text), (time.perf_counter() - t) * 1000)
 
-            sources = []
+            source_models = []
             similarities = []
             for chunk in chunks:
                 section_val = chunk.get("section_heading")
@@ -375,19 +375,21 @@ class QueryHandler:
                     else:
                         section_val = ""
                         
-                sources.append(
-                    {
-                        "url": chunk.get("url", ""),
-                        "title": chunk.get("title", "") or chunk.get("source", ""),
-                        "section": section_val,
-                        "snippet": chunk.get("text", "")[:300],
-                        "char_start": chunk.get("char_start", 0),
-                        "char_end": chunk.get("char_end", 0),
-                        "score": chunk.get("score", 0.0),
-                    }
-                )
                 raw_score = chunk.get("score", 0.0)
-                similarities.append(float(min(max(raw_score, 0.0), 1.0)))
+                sim = float(min(max(raw_score, 0.0), 1.0))
+                similarities.append(sim)
+                
+                source_models.append(
+                    Source(
+                        url=chunk.get("url", "") or "https://schema.local/schema_for_vectordb.pdf",
+                        title=chunk.get("title", "") or chunk.get("source", "") or "Schema PDF",
+                        section=section_val,
+                        snippet=chunk.get("text", "")[:300],
+                        char_start=chunk.get("char_start", 0),
+                        char_end=chunk.get("char_end", 0),
+                        score=sim,
+                    )
+                )
 
             avg_similarity = np.mean(similarities) if similarities else 0.0
             if avg_similarity >= 0.8:
@@ -396,19 +398,6 @@ class QueryHandler:
                 confidence = "medium"
             else:
                 confidence = "low"
-
-            source_models = [
-                Source(
-                    url=src["url"] or "https://schema.local/schema_for_vectordb.pdf",
-                    title=src["title"] or "Schema PDF",
-                    section=src.get("section"),
-                    snippet=src.get("snippet", "")[:300],
-                    char_start=src.get("char_start", 0),
-                    char_end=src.get("char_end", 0),
-                    score=min(max(src.get("score", 0.0), 0.0), 1.0),
-                )
-                for src in sources
-            ]
 
             total_ms = (time.perf_counter() - overall_start) * 1000
             logger.info("✓ handle_query complete | confidence=%s | total=%.1fms", confidence, total_ms)
@@ -428,7 +417,7 @@ class QueryHandler:
             import traceback
             traceback.print_exc()
             return ChatResponse(
-                answer_text=NO_KB_MSG,
+                answer_text="An unexpected error occurred while processing your request. Please clarify what you're looking for or try again.",
                 sources=[],
                 confidence="low",
                 query_embedding_similarity=[],
