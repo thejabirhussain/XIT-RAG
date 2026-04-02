@@ -40,6 +40,18 @@ ASSISTANT INSTRUCTIONS:
   "I am not a lawyer; for legal or tax-filing advice consult a qualified tax professional or the IRS."
 """
 
+REWRITE_QUERY_PROMPT = """SYSTEM:
+You are an expert search-query rewriter. Given a conversation history and a follow-up user question, rewrite the follow-up question into a single, standalone question that contains all the necessary context from the history. 
+If the user's question is already fully self-contained or unrelated to the history, return it exactly as is.
+DO NOT answer the question. DO NOT add conversational filler. ONLY OUTPUT THE REWRITTEN QUERY.
+
+CONVERSATION HISTORY:
+{history}
+
+LATEST USER QUESTION:
+{query}
+"""
+
 SQL_GENERATION_PROMPT = """SYSTEM:
 You are a read-only MySQL 8.0 query assistant. Generate ONLY a single valid SELECT statement.
 
@@ -91,6 +103,24 @@ class LLMService:
         if self.gemini_api_key:
             genai.configure(api_key=self.gemini_api_key)
             self.gemini_model = genai.GenerativeModel(GEMINI_MODEL)
+
+    def rewrite_query(self, chat_history: list[dict[str, str]], user_query: str, model: str = "ollama") -> str:
+        if not chat_history:
+            return user_query
+            
+        history_text = ""
+        for msg in chat_history:
+            role = msg.get("role", "user").upper()
+            content = msg.get("content", "")
+            history_text += f"{role}: {content}\n"
+            
+        prompt = REWRITE_QUERY_PROMPT.format(history=history_text.strip(), query=user_query)
+        rewritten = self.generate(prompt, model=model, temperature=0.0, max_tokens=100)
+        
+        # Clean up quotes if the LLM wrapped it in quotes
+        rewritten = rewritten.strip("'\" \n")
+        logger.info("rewrite_query | original=%.100s | rewritten=%.100s", user_query, rewritten)
+        return rewritten if rewritten else user_query
 
     def build_rag_prompt(self, chunks: list[dict[str, Any]], user_query: str) -> str:
         ctx_lines = []
