@@ -110,6 +110,24 @@ SCHEMA_INTENT_SEEDS = [
     "total number of open risks",
     "who are the admins",
     "how many mitigated risks do we have",
+    # ── overdue / deadline / expiry patterns ──
+    "what records are past their deadline",
+    "which entries have expired",
+    "show items that are overdue",
+    "what hasn't been updated in the system",
+    "find entries past their due date",
+    "what is still pending review in the platform",
+    "which items have not been refreshed",
+    "show everything that is out of date",
+    "what has exceeded its review period",
+    "list anything that is past due",
+
+    # ── status-check patterns ──
+    "what is the current status of items",
+    "how many items are still active",
+    "which records are marked as incomplete",
+    "are there any items with no owner assigned",
+    "show all entries with missing data",
 ]
 
 IRS_INTENT_SEEDS = [
@@ -129,8 +147,8 @@ IRS_INTENT_SEEDS = [
 
 # Schema must beat IRS by this margin to trigger schema route.
 # Lower = more aggressive schema routing; raise if over-routing to DB.
-SEMANTIC_SCHEMA_MARGIN = 0.12
-
+SEMANTIC_SCHEMA_MARGIN = 0.08     # slightly relaxed from 0.12
+SEMANTIC_MIN_CONFIDENCE = 0.30    # if both scores are below this, default to schema
 
 class SemanticRouter:
     """
@@ -185,8 +203,14 @@ class SemanticRouter:
             "SemanticRouter | schema_score=%.4f | irs_score=%.4f | margin=%.4f",
             schema_score, irs_score, schema_score - irs_score,
         )
+        if schema_score < SEMANTIC_MIN_CONFIDENCE and irs_score < SEMANTIC_MIN_CONFIDENCE:
+            logger.info("SemanticRouter | low confidence (both < %.2f) → defaulting to schema", SEMANTIC_MIN_CONFIDENCE)
+            route = "schema"
+        elif (schema_score - irs_score) >= SEMANTIC_SCHEMA_MARGIN:
+            route = "schema"
+        else:
+            route = "irs"
 
-        route = "schema" if (schema_score - irs_score) >= SEMANTIC_SCHEMA_MARGIN else "irs"
         return route, schema_score, irs_score
 
 
