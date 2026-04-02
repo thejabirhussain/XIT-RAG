@@ -3,6 +3,8 @@ import time
 import logging
 import numpy as np
 import re
+import uuid
+import httpx
 
 logger = logging.getLogger("query_handler")
 
@@ -257,6 +259,7 @@ class QueryHandler:
     def handle_query(
         self,
         query: str,
+        chat_history: Optional[list[dict[str, str]]] = None,
         filters: Optional[dict] = None,
         top_k: Optional[int] = None,
         top_n: Optional[int] = None,
@@ -264,38 +267,44 @@ class QueryHandler:
         model: str = "ollama",
     ):
         overall_start = time.perf_counter()
+        request_id = uuid.uuid4().hex[:6]
+
         try:
             t = time.perf_counter()
             query = sanitize_query(query)
-            logger.info("[1/7] sanitize_query | query=%s |%.1fms", query, (time.perf_counter() - t) * 1000)
+            logger.info("[%s] [1/8] sanitize_query | query=%s |%.1fms", request_id, query, (time.perf_counter() - t) * 1000)
 
             if not query:
                 return ChatResponse(answer_text="The query provided is unclear or empty. Please clarify what you are looking for.", sources=[], confidence="low", query_embedding_similarity=[])
             
+            # Step 0: Rewrite Query based on chat history
+            if chat_history:
+                t = time.perf_counter()
+                query = self.llm.rewrite_query(chat_history, query, model=model)
+                logger.info("[%s] [1.5/8] rewrite_query | new_query=%s | %.1fms", request_id, query, (time.perf_counter() - t) * 1000)
+
             t = time.perf_counter()
             query_embedding = self.embedding_provider.get_embedding(query)
-            logger.info("[2/7] get_embedding | %.1fms", (time.perf_counter() - t) * 1000)
+            logger.info("[%s] [2/8] get_embedding | %.1fms", request_id, (time.perf_counter() - t) * 1000)
 
             top_k = top_k or TOP_K
             top_n = top_n or TOP_N
             cutoff = cutoff or SIMILARITY_CUTOFF
             is_schema = is_schema_query(query)
+            
             if not is_schema:           
                 sem_route, schema_score, irs_score = self.semantic_router.classify(query_embedding)
                 is_schema = (sem_route == "schema")
                 logger.info(
-                    "semantic_route | route=%s | schema_score=%.4f | irs_score=%.4f",
-                    sem_route, schema_score, irs_score,
+                    "[%s] semantic_route | route=%s | schema_score=%.4f | irs_score=%.4f",
+                    request_id, sem_route, schema_score, irs_score,
                 )
             else:
-                logger.info("keyword_route | schema=True (keyword/regex match)")
+                logger.info("[%s] keyword_route | schema=True (keyword/regex match)", request_id)
             
             target_collection = SCHEMA_COLLECTION if is_schema else self.collection_name
-            logger.info("route | collection=%s | is_schema=%s", target_collection, is_schema)
-            print(f"Target collection: {target_collection}")
-            logger.info("route | collection=%s | schema_path=%s", target_collection, is_schema)
-            print(f"Target collection: {target_collection}")
-
+            logger.info("[%s] route | collection=%s | is_schema=%s", request_id, target_collection, is_schema)
+            print(f"[{request_id}] Target collection: {target_collection}")
 
             t = time.perf_counter()
             chunks = self.retrieval_service.retrieve(
@@ -305,8 +314,8 @@ class QueryHandler:
                 cutoff,
                 filters,
             )
-            print(f"Found chunks: {len(chunks)}")
-            logger.info("[3/7] retrieve | chunks_found=%d | %.1fms", len(chunks), (time.perf_counter() - t) * 1000)
+            print(f"[{request_id}] Found chunks: {len(chunks)}")
+            logger.info("[%s] [3/8] retrieve | chunks_found=%d | %.1fms", request_id, len(chunks), (time.perf_counter() - t) * 1000)
 
             if not chunks:
                 return ChatResponse(
@@ -319,49 +328,41 @@ class QueryHandler:
             t = time.perf_counter()
             if len(chunks) > top_n:
                 chunks = self.retrieval_service.rerank(query, chunks, top_n)
-                logger.info("[4/7] rerank | chunks_after=%d | %.1fms", len(chunks), (time.perf_counter() - t) * 1000)
+                logger.info("[%s] [4/8] rerank | chunks_after=%d | %.1fms", request_id, len(chunks), (time.perf_counter() - t) * 1000)
             else:
                 chunks = chunks[:top_n]
-                logger.info("[4/7] rerank | skipped (chunks <= top_n) | %.1fms", (time.perf_counter() - t) * 1000)
+                logger.info("[%s] [4/8] rerank | skipped (chunks <= top_n) | %.1fms", request_id, (time.perf_counter() - t) * 1000)
 
             if is_schema:
                 t = time.perf_counter()
                 sql_query = self.llm.generate_sql_query(chunks, query, model=model)
-                print(f"Generated SQL: {sql_query}")
-                logger.info("[5/7] generate_sql | sql_preview=%.100s | %.1fms", sql_query, (time.perf_counter() - t) * 1000)
-
+                print(f"[{request_id}] Generated SQL: {sql_query}")
+                logger.info("[%s] [5/8] generate_sql | sql_preview=%.100s | %.1fms", request_id, sql_query, (time.perf_counter() - t) * 1000)
                 
                 # Safety guardrail
-                forbidden_keywords = ["INSERT", "UPDATE", "DELETE", "DROP", "ALTER", "TRUNCATE"]
                 sql_upper = sql_query.strip().upper()
-                
                 if not (sql_upper.startswith("SELECT") or sql_upper.startswith("WITH")):
-                    logger.warning("[5/7] SQL blocked — did not start with SELECT or WITH")
+                    logger.warning("[%s] [5/8] SQL blocked — did not start with SELECT or WITH", request_id)
                     db_results = {"error": "I couldn't safely process this query. Only retrieval queries are permitted."}
                 else:
                     t = time.perf_counter()
                     db_results = self.database_service.execute_query(sql_query)
                     row_count = len(db_results.get("results", [])) if "results" in db_results else 0
                     had_error = "error" in db_results
-                    logger.info("[6/7] execute_query | rows=%d | error=%s | %.1fms", row_count, had_error, (time.perf_counter() - t) * 1000)
-
-                #if any(kw in sql_upper for kw in forbidden_keywords):
-                #    db_results = {"error": "Generated SQL contained destructive operations and was blocked."}
-                #else:
-                #    db_results = self.database_service.execute_query(sql_query)
+                    logger.info("[%s] [6/8] execute_query | rows=%d | error=%s | %.1fms", request_id, row_count, had_error, (time.perf_counter() - t) * 1000)
                 
-                print(f"DB Results: {db_results}")
+                print(f"[{request_id}] DB Results: {db_results}")
                 t = time.perf_counter()
                 prompt = self.llm.build_db_grounded_rag_prompt(chunks, db_results, query)
-                logger.info("[6/7] build_db_prompt | %.1fms", (time.perf_counter() - t) * 1000)
+                logger.info("[%s] [7/8] build_db_prompt | %.1fms", request_id, (time.perf_counter() - t) * 1000)
             else:
                 t = time.perf_counter()
                 prompt = self.llm.build_rag_prompt(chunks, query)
-                logger.info("[5/7] build_rag_prompt | %.1fms", (time.perf_counter() - t) * 1000)
+                logger.info("[%s] [7/8] build_rag_prompt | %.1fms", request_id, (time.perf_counter() - t) * 1000)
 
             t = time.perf_counter()
             answer_text = self.llm.generate(prompt, model=model, temperature=0.0, max_tokens=1000)
-            logger.info("[7/7] llm_generate | model=%s | answer_len=%d | %.1fms", model, len(answer_text), (time.perf_counter() - t) * 1000)
+            logger.info("[%s] [8/8] llm_generate | model=%s | answer_len=%d | %.1fms", request_id, model, len(answer_text), (time.perf_counter() - t) * 1000)
 
             source_models = []
             similarities = []
@@ -400,7 +401,7 @@ class QueryHandler:
                 confidence = "low"
 
             total_ms = (time.perf_counter() - overall_start) * 1000
-            logger.info("✓ handle_query complete | confidence=%s | total=%.1fms", confidence, total_ms)
+            logger.info("[%s] ✓ handle_query complete | confidence=%s | total=%.1fms", request_id, confidence, total_ms)
 
             response = ChatResponse(
                 answer_text=answer_text,
@@ -410,10 +411,30 @@ class QueryHandler:
             )
 
             return response
+            
+        except httpx.RequestError as e:
+            total_ms = (time.perf_counter() - overall_start) * 1000
+            logger.exception("[%s] ✗ handle_query failed (LLM Network Error) | total=%.1fms | error=%s", request_id, total_ms, e)
+            return ChatResponse(
+                answer_text="I am currently experiencing network delays connecting to the language model. Please try again in an moment.",
+                sources=[],
+                confidence="low",
+                query_embedding_similarity=[],
+            )
+            
+        except httpx.HTTPStatusError as e:
+            total_ms = (time.perf_counter() - overall_start) * 1000
+            logger.exception("[%s] ✗ handle_query failed (LLM Endpoint Error) | total=%.1fms | error=%s", request_id, total_ms, e)
+            return ChatResponse(
+                answer_text="The language model returned an error while processing your request. It may be overloaded. Please try again or simplify your query.",
+                sources=[],
+                confidence="low",
+                query_embedding_similarity=[],
+            )
 
         except Exception as e:
             total_ms = (time.perf_counter() - overall_start) * 1000
-            logger.exception("✗ handle_query failed | total=%.1fms | error=%s", total_ms, e)
+            logger.exception("[%s] ✗ handle_query failed (Unknown Error) | total=%.1fms | error=%s", request_id, total_ms, e)
             import traceback
             traceback.print_exc()
             return ChatResponse(

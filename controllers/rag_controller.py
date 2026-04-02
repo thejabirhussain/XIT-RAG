@@ -16,7 +16,12 @@ async def query(
     handler: QueryHandler = Depends(get_query_handler)
 ):
     try:
-        return handler.handle_query(query=request.query, filters=request.filters, model=request.model)
+        return handler.handle_query(
+            query=request.query, 
+            chat_history=request.chat_history,
+            filters=request.filters, 
+            model=request.model
+        )
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
