@@ -57,8 +57,6 @@ All constants in respective files on the top of the code.
 ```bash
 git status
 git add .
-git config user.email "abdulmannan34695@gmail.com"
-git config user.name "AbdulMannan19"
 git commit -m "quick commit"
 git push
 ```

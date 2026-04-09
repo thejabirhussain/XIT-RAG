@@ -8,7 +8,7 @@ import logging
 logger = logging.getLogger("llm_service")
 
 OLLAMA_MODEL = "llama3.1:8b"
-GEMINI_MODEL = "gemini-pro"  # SDK will add 'models/' prefix
+GEMINI_MODEL = "gemini-2.5-flash"  # SDK will add 'models/' prefix
 MAX_SCHEMA_CHUNK_CHARS = 800  # ← ADD THIS
 
 RAG_SYSTEM_PROMPT = """SYSTEM:

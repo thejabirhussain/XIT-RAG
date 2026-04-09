@@ -89,10 +89,7 @@ class DatabaseService:
         try:
             t = time.perf_counter()
             with self.engine.connect() as connection:
-                # Use text() to mark safe
                 result = connection.execute(text(safe_query))
-                
-                # Fetch up to MAX_ROWS and map directly to dictionaries
                 rows = [dict(row) for row in result.mappings().fetchmany(MAX_ROWS)]
                 
                 logger.info("db.execute | rows_returned=%d | %.1fms", len(rows), (time.perf_counter() - t) * 1000)

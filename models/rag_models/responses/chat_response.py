@@ -14,3 +14,6 @@ class ChatResponse(BaseModel):
     )
     generated_sql: Optional[str] = Field(None, description="The SQL statement generated, if any")
     active_collection: Optional[str] = Field(None, description="The schema or collection being accessed/activated")
+    db_results: Optional[list[dict]] = Field(None, description="Raw database query results when record count is below threshold")
+    total_records: Optional[int] = Field(None, description="Total number of records returned by the database query")
+    export_id: Optional[str] = Field(None, description="ID to download CSV via /export/{export_id} when record count exceeds threshold")

@@ -26,3 +26,4 @@ google-generativeai
 pymysql
 sqlglot
 SQLAlchemy>=2.0.0
+pandas

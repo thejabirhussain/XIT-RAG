@@ -1,11 +1,15 @@
 import os
+import io
 import logging
 
 from fastapi import APIRouter, HTTPException, status, Depends, BackgroundTasks, Security
 from fastapi.security.api_key import APIKeyHeader
+from fastapi.responses import StreamingResponse
+import pandas as pd
 
 from models import ChatRequest, ChatResponse, AdminStats, IngestionRequest
 from handlers import QueryHandler, IngestionHandler, StatsHandler
+from handlers.rag_handlers.query_handler import _export_cache
 from dependencies import get_query_handler, get_ingestion_handler, get_stats_handler
 
 router = APIRouter()
@@ -26,6 +30,28 @@ async def query(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
         )
+
+
+@router.get("/export/{export_id}")
+async def export_csv(export_id: str):
+    """Stream cached query results as a CSV file download."""
+    entry = _export_cache.pop(export_id, None)
+    if not entry:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Export not found or has expired. Please re-run the query.",
+        )
+
+    df = pd.DataFrame(entry["rows"])
+    buffer = io.StringIO()
+    df.to_csv(buffer, index=False)
+    buffer.seek(0)
+
+    return StreamingResponse(
+        iter([buffer.getvalue()]),
+        media_type="text/csv",
+        headers={"Content-Disposition": f"attachment; filename=export_{export_id}.csv"},
+    )
 
 
 @router.get("/stats", response_model=AdminStats)

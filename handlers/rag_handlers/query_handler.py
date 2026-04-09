@@ -5,6 +5,7 @@ import numpy as np
 import re
 import uuid
 import httpx
+import pandas as pd
 
 logger = logging.getLogger("query_handler")
 
@@ -14,6 +15,10 @@ from services.rag_services.retrieval_service import TOP_K, TOP_N, SIMILARITY_CUT
 COLLECTION_NAME = "irs_rag_v1"
 SCHEMA_COLLECTION = "schema"
 NO_KB_MSG = "I don't have verifiable information in the knowledge base for that query."
+DB_RESULTS_THRESHOLD = 50  # Records >= this threshold trigger CSV export
+
+# In-memory cache for export results (export_id -> {rows, created_at})
+_export_cache: dict[str, dict] = {}
 
 # ──────────────────────────────────────────────────────────────
 # ERD CONTEXT MAP  —  built from your database ERD
@@ -338,7 +343,6 @@ class QueryHandler:
             if is_schema:
                 t = time.perf_counter()
                 sql_query = self.llm.generate_sql_query(chunks, query, model=model)
-                print(f"[{request_id}] Generated SQL: {sql_query}")
                 logger.info("[%s] [5/8] generate_sql | sql_preview=%.100s | %.1fms", request_id, sql_query, (time.perf_counter() - t) * 1000)
                 
                 # Safety guardrail
@@ -353,7 +357,6 @@ class QueryHandler:
                     had_error = "error" in db_results
                     logger.info("[%s] [6/8] execute_query | rows=%d | error=%s | %.1fms", request_id, row_count, had_error, (time.perf_counter() - t) * 1000)
                 
-                print(f"[{request_id}] DB Results: {db_results}")
                 t = time.perf_counter()
                 prompt = self.llm.build_db_grounded_rag_prompt(chunks, db_results, query)
                 logger.info("[%s] [7/8] build_db_prompt | %.1fms", request_id, (time.perf_counter() - t) * 1000)
@@ -405,6 +408,34 @@ class QueryHandler:
             total_ms = (time.perf_counter() - overall_start) * 1000
             logger.info("[%s] ✓ handle_query complete | confidence=%s | total=%.1fms", request_id, confidence, total_ms)
 
+            # Determine db_results handling for schema queries
+            response_db_results = None
+            response_total_records = None
+            response_export_id = None
+
+            if is_schema and "results" in db_results:
+                rows = db_results["results"]
+                response_total_records = len(rows)
+
+                if response_total_records >= DB_RESULTS_THRESHOLD:
+                    # Store in memory cache for CSV download via /export endpoint
+                    export_id = uuid.uuid4().hex[:10]
+                    _export_cache[export_id] = {
+                        "rows": rows,
+                        "created_at": time.time(),
+                    }
+                    response_export_id = export_id
+                    logger.info("[%s] Export cached | rows=%d | export_id=%s", request_id, response_total_records, export_id)
+                    
+                    # Cleanup expired entries (older than 10 minutes)
+                    now = time.time()
+                    expired = [k for k, v in _export_cache.items() if now - v["created_at"] > 600]
+                    for k in expired:
+                        del _export_cache[k]
+                else:
+                    # Include records directly in response
+                    response_db_results = rows
+
             response = ChatResponse(
                 answer_text=answer_text,
                 sources=source_models,
@@ -412,6 +443,9 @@ class QueryHandler:
                 query_embedding_similarity=similarities,
                 generated_sql=sql_query if is_schema else None,
                 active_collection=target_collection,
+                db_results=response_db_results,
+                total_records=response_total_records,
+                export_id=response_export_id,
             )
 
             return response
