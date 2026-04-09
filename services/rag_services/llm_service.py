@@ -89,6 +89,7 @@ USER QUESTION:
 ASSISTANT INSTRUCTIONS:
 - Analyze the LIVE DATABASE RESULTS and use them to construct your answer.
 - Refer to the SCHEMA CONTEXT to understand what the data means (e.g., interpreting risk scores, statuses, foreign keys).
+- DO NOT output, explain, or mention the SQL query in your answer. The user can already see the generated SQL statement in a separate UI panel. Provide ONLY the natural language answer.
 - If the LIVE DATABASE RESULTS contain an error message, politely ask the user to clarify or rephrase their request, as the system couldn't confidently process it. Do not expose the technical error.
 - If the LIVE DATABASE RESULTS are empty, inform the user that no matching data was found for their query.
 - Use GitHub-Flavored Markdown. Bold key terms and metrics.

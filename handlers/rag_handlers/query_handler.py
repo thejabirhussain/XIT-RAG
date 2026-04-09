@@ -275,7 +275,7 @@ class QueryHandler:
             logger.info("[%s] [1/8] sanitize_query | query=%s |%.1fms", request_id, query, (time.perf_counter() - t) * 1000)
 
             if not query:
-                return ChatResponse(answer_text="The query provided is unclear or empty. Please clarify what you are looking for.", sources=[], confidence="low", query_embedding_similarity=[])
+                return ChatResponse(answer_text="The query provided is unclear or empty. Please clarify what you are looking for.", sources=[], confidence="low", query_embedding_similarity=[], generated_sql=None, active_collection=None)
             
             # Step 0: Rewrite Query based on chat history
             if chat_history:
@@ -323,6 +323,8 @@ class QueryHandler:
                     sources=[],
                     confidence="low",
                     query_embedding_similarity=[],
+                    generated_sql=None,
+                    active_collection=target_collection,
                 )
 
             t = time.perf_counter()
@@ -408,6 +410,8 @@ class QueryHandler:
                 sources=source_models,
                 confidence=confidence,
                 query_embedding_similarity=similarities,
+                generated_sql=sql_query if is_schema else None,
+                active_collection=target_collection,
             )
 
             return response
@@ -420,6 +424,8 @@ class QueryHandler:
                 sources=[],
                 confidence="low",
                 query_embedding_similarity=[],
+                generated_sql=None,
+                active_collection=None,
             )
             
         except httpx.HTTPStatusError as e:
@@ -430,6 +436,8 @@ class QueryHandler:
                 sources=[],
                 confidence="low",
                 query_embedding_similarity=[],
+                generated_sql=None,
+                active_collection=None,
             )
 
         except Exception as e:
@@ -442,6 +450,8 @@ class QueryHandler:
                 sources=[],
                 confidence="low",
                 query_embedding_similarity=[],
+                generated_sql=None,
+                active_collection=None,
             )
 
 

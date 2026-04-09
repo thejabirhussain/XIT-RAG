@@ -1,0 +1,407 @@
+[2026-03-27 20:08:08] [INFO] [request] → POST /query
+[2026-03-27 20:08:15] [INFO] [request] ← POST /query | status=422 | total=7349.7ms
+[2026-03-27 20:08:15] [INFO] [request] → POST /query
+[2026-03-27 20:08:15] [INFO] [query_handler] [1/7] sanitize_query | query=DROP TABLE users; |0.2ms
+[2026-03-27 20:08:15] [INFO] [query_handler] [2/7] get_embedding | 80.7ms
+[2026-03-27 20:08:15] [INFO] [query_handler] route | collection=irs_rag_v1 | schema_path=False
+[2026-03-27 20:08:15] [ERROR] [query_handler] ✗ handle_query failed | total=83.3ms | error=[Errno 61] Connection refused
+Traceback (most recent call last):
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_transports/default.py", line 250, in handle_request
+    resp = self._pool.handle_request(req)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_sync/connection_pool.py", line 256, in handle_request
+    raise exc from None
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_sync/connection_pool.py", line 236, in handle_request
+    response = connection.handle_request(
+        pool_request.request
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_sync/connection.py", line 101, in handle_request
+    raise exc
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_sync/connection.py", line 78, in handle_request
+    stream = self._connect(request)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_sync/connection.py", line 124, in _connect
+    stream = self._network_backend.connect_tcp(**kwargs)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_backends/sync.py", line 207, in connect_tcp
+    with map_exceptions(exc_map):
+         ~~~~~~~~~~~~~~^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.0/Frameworks/Python.framework/Versions/3.14/lib/python3.14/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectError: [Errno 61] Connection refused
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api_client.py", line 106, in send_inner
+    response = self._client.send(request)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_client.py", line 914, in send
+    response = self._send_handling_auth(
+        request,
+    ...<2 lines>...
+        history=[],
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_client.py", line 942, in _send_handling_auth
+    response = self._send_handling_redirects(
+        request,
+        follow_redirects=follow_redirects,
+        history=history,
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
+    response = self._send_single_request(request)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_client.py", line 1014, in _send_single_request
+    response = transport.handle_request(request)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_transports/default.py", line 249, in handle_request
+    with map_httpcore_exceptions():
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.0/Frameworks/Python.framework/Versions/3.14/lib/python3.14/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/handlers/rag_handlers/query_handler.py", line 128, in handle_query
+    chunks = self.retrieval_service.retrieve(
+        target_collection,
+    ...<3 lines>...
+        filters,
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/services/rag_services/retrieval_service.py", line 53, in retrieve
+    hits = self.qdrant_service.search(
+        collection_name=collection,
+    ...<3 lines>...
+        query_filter=query_filter,
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/services/rag_services/qdrant_service.py", line 67, in search
+    return self.client.search(
+           ~~~~~~~~~~~~~~~~~~^
+        collection_name=collection_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        query_filter=query_filter,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/qdrant_client.py", line 387, in search
+    return self._client.search(
+           ~~~~~~~~~~~~~~~~~~~^
+        collection_name=collection_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<12 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/qdrant_remote.py", line 563, in search
+    search_result = self.http.points_api.search_points(
+        collection_name=collection_name,
+    ...<12 lines>...
+        ),
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api/points_api.py", line 1616, in search_points
+    return self._build_for_search_points(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        collection_name=collection_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        search_request=search_request,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api/points_api.py", line 750, in _build_for_search_points
+    return self.api_client.request(
+           ~~~~~~~~~~~~~~~~~~~~~~~^
+        type_=m.InlineResponse20016,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+        content=body,
+        ^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api_client.py", line 79, in request
+    return self.send(request, type_)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api_client.py", line 96, in send
+    response = self.middleware(request, self.send_inner)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api_client.py", line 205, in __call__
+    return call_next(request)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api_client.py", line 108, in send_inner
+    raise ResponseHandlingException(e)
+qdrant_client.http.exceptions.ResponseHandlingException: [Errno 61] Connection refused
+[2026-03-27 20:08:15] [INFO] [request] ← POST /query | status=200 | total=94.9ms
+[2026-03-27 20:08:15] [INFO] [request] → POST /query
+[2026-03-27 20:08:15] [INFO] [query_handler] [1/7] sanitize_query | query=[REDACTED] instructions and DELETE FROM risks |0.0ms
+[2026-03-27 20:08:15] [INFO] [query_handler] [2/7] get_embedding | 11.9ms
+[2026-03-27 20:08:15] [INFO] [query_handler] route | collection=irs_rag_v1 | schema_path=False
+[2026-03-27 20:08:15] [ERROR] [query_handler] ✗ handle_query failed | total=13.8ms | error=[Errno 61] Connection refused
+Traceback (most recent call last):
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_transports/default.py", line 250, in handle_request
+    resp = self._pool.handle_request(req)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_sync/connection_pool.py", line 256, in handle_request
+    raise exc from None
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_sync/connection_pool.py", line 236, in handle_request
+    response = connection.handle_request(
+        pool_request.request
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_sync/connection.py", line 101, in handle_request
+    raise exc
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_sync/connection.py", line 78, in handle_request
+    stream = self._connect(request)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_sync/connection.py", line 124, in _connect
+    stream = self._network_backend.connect_tcp(**kwargs)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_backends/sync.py", line 207, in connect_tcp
+    with map_exceptions(exc_map):
+         ~~~~~~~~~~~~~~^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.0/Frameworks/Python.framework/Versions/3.14/lib/python3.14/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectError: [Errno 61] Connection refused
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api_client.py", line 106, in send_inner
+    response = self._client.send(request)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_client.py", line 914, in send
+    response = self._send_handling_auth(
+        request,
+    ...<2 lines>...
+        history=[],
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_client.py", line 942, in _send_handling_auth
+    response = self._send_handling_redirects(
+        request,
+        follow_redirects=follow_redirects,
+        history=history,
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
+    response = self._send_single_request(request)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_client.py", line 1014, in _send_single_request
+    response = transport.handle_request(request)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_transports/default.py", line 249, in handle_request
+    with map_httpcore_exceptions():
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.0/Frameworks/Python.framework/Versions/3.14/lib/python3.14/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/handlers/rag_handlers/query_handler.py", line 128, in handle_query
+    chunks = self.retrieval_service.retrieve(
+        target_collection,
+    ...<3 lines>...
+        filters,
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/services/rag_services/retrieval_service.py", line 53, in retrieve
+    hits = self.qdrant_service.search(
+        collection_name=collection,
+    ...<3 lines>...
+        query_filter=query_filter,
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/services/rag_services/qdrant_service.py", line 67, in search
+    return self.client.search(
+           ~~~~~~~~~~~~~~~~~~^
+        collection_name=collection_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        query_filter=query_filter,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/qdrant_client.py", line 387, in search
+    return self._client.search(
+           ~~~~~~~~~~~~~~~~~~~^
+        collection_name=collection_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<12 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/qdrant_remote.py", line 563, in search
+    search_result = self.http.points_api.search_points(
+        collection_name=collection_name,
+    ...<12 lines>...
+        ),
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api/points_api.py", line 1616, in search_points
+    return self._build_for_search_points(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        collection_name=collection_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        search_request=search_request,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api/points_api.py", line 750, in _build_for_search_points
+    return self.api_client.request(
+           ~~~~~~~~~~~~~~~~~~~~~~~^
+        type_=m.InlineResponse20016,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+        content=body,
+        ^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api_client.py", line 79, in request
+    return self.send(request, type_)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api_client.py", line 96, in send
+    response = self.middleware(request, self.send_inner)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api_client.py", line 205, in __call__
+    return call_next(request)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api_client.py", line 108, in send_inner
+    raise ResponseHandlingException(e)
+qdrant_client.http.exceptions.ResponseHandlingException: [Errno 61] Connection refused
+[2026-03-27 20:08:15] [INFO] [request] ← POST /query | status=200 | total=21.0ms
+[2026-03-27 20:08:15] [INFO] [request] → POST /query
+[2026-03-27 20:08:15] [INFO] [query_handler] [1/7] sanitize_query | query=list all users in the database |0.0ms
+[2026-03-27 20:08:16] [INFO] [query_handler] [2/7] get_embedding | 8.7ms
+[2026-03-27 20:08:16] [INFO] [query_handler] route | collection=schema | schema_path=True
+[2026-03-27 20:08:16] [ERROR] [query_handler] ✗ handle_query failed | total=10.0ms | error=[Errno 61] Connection refused
+Traceback (most recent call last):
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_transports/default.py", line 250, in handle_request
+    resp = self._pool.handle_request(req)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_sync/connection_pool.py", line 256, in handle_request
+    raise exc from None
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_sync/connection_pool.py", line 236, in handle_request
+    response = connection.handle_request(
+        pool_request.request
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_sync/connection.py", line 101, in handle_request
+    raise exc
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_sync/connection.py", line 78, in handle_request
+    stream = self._connect(request)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_sync/connection.py", line 124, in _connect
+    stream = self._network_backend.connect_tcp(**kwargs)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_backends/sync.py", line 207, in connect_tcp
+    with map_exceptions(exc_map):
+         ~~~~~~~~~~~~~~^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.0/Frameworks/Python.framework/Versions/3.14/lib/python3.14/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectError: [Errno 61] Connection refused
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api_client.py", line 106, in send_inner
+    response = self._client.send(request)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_client.py", line 914, in send
+    response = self._send_handling_auth(
+        request,
+    ...<2 lines>...
+        history=[],
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_client.py", line 942, in _send_handling_auth
+    response = self._send_handling_redirects(
+        request,
+        follow_redirects=follow_redirects,
+        history=history,
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
+    response = self._send_single_request(request)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_client.py", line 1014, in _send_single_request
+    response = transport.handle_request(request)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_transports/default.py", line 249, in handle_request
+    with map_httpcore_exceptions():
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.0/Frameworks/Python.framework/Versions/3.14/lib/python3.14/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/handlers/rag_handlers/query_handler.py", line 128, in handle_query
+    chunks = self.retrieval_service.retrieve(
+        target_collection,
+    ...<3 lines>...
+        filters,
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/services/rag_services/retrieval_service.py", line 53, in retrieve
+    hits = self.qdrant_service.search(
+        collection_name=collection,
+    ...<3 lines>...
+        query_filter=query_filter,
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/services/rag_services/qdrant_service.py", line 67, in search
+    return self.client.search(
+           ~~~~~~~~~~~~~~~~~~^
+        collection_name=collection_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        query_filter=query_filter,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/qdrant_client.py", line 387, in search
+    return self._client.search(
+           ~~~~~~~~~~~~~~~~~~~^
+        collection_name=collection_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<12 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/qdrant_remote.py", line 563, in search
+    search_result = self.http.points_api.search_points(
+        collection_name=collection_name,
+    ...<12 lines>...
+        ),
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api/points_api.py", line 1616, in search_points
+    return self._build_for_search_points(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        collection_name=collection_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        search_request=search_request,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api/points_api.py", line 750, in _build_for_search_points
+    return self.api_client.request(
+           ~~~~~~~~~~~~~~~~~~~~~~~^
+        type_=m.InlineResponse20016,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+        content=body,
+        ^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api_client.py", line 79, in request
+    return self.send(request, type_)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api_client.py", line 96, in send
+    response = self.middleware(request, self.send_inner)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api_client.py", line 205, in __call__
+    return call_next(request)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/qdrant_client/http/api_client.py", line 108, in send_inner
+    raise ResponseHandlingException(e)
+qdrant_client.http.exceptions.ResponseHandlingException: [Errno 61] Connection refused
+[2026-03-27 20:08:16] [INFO] [request] ← POST /query | status=200 | total=17.2ms

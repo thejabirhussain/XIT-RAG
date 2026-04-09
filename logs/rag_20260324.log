@@ -1,0 +1,99 @@
+[2026-03-24 00:32:48] [INFO] [request] → POST /query
+[2026-03-24 00:32:54] [INFO] [query_handler] [1/7] sanitize_query | query=List all admin users who belong to an organization that has more than 5 open risks. |0.2ms
+[2026-03-24 00:32:54] [INFO] [query_handler] [2/7] get_embedding | 120.7ms
+[2026-03-24 00:32:54] [INFO] [query_handler] route | collection=schema | schema_path=True
+[2026-03-24 00:32:54] [INFO] [query_handler] [3/7] retrieve | chunks_found=20 | 8.9ms
+[2026-03-24 00:32:56] [INFO] [query_handler] [4/7] rerank | chunks_after=3 | 1857.2ms
+[2026-03-24 00:34:34] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=217 | 97866.7ms
+[2026-03-24 00:34:34] [INFO] [query_handler] [5/7] generate_sql | sql_preview=SELECT u.full_name AS user FROM users u JOIN organizations o ON u.org_id = o.org_id JOIN risks r ON  | 97870.0ms
+[2026-03-24 00:34:36] [ERROR] [services.rag_services.database_service] SQL execution error: (pymysql.err.OperationalError) (1055, "Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'freedb_RAGPOC2.u.full_name' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by")
+[SQL: SELECT u.full_name AS user FROM users u JOIN organizations o ON u.org_id = o.org_id JOIN risks r ON o.org_id = r.org_id WHERE u.role = 'admin' AND r.status = 'open' GROUP BY o.name HAVING COUNT(r.risk_id) > 5 LIMIT 50]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2026-03-24 00:34:36] [INFO] [query_handler] [6/7] execute_query | rows=0 | error=True | 2920.2ms
+[2026-03-24 00:34:36] [INFO] [query_handler] [6/7] build_db_prompt | 0.1ms
+[2026-03-24 00:36:36] [ERROR] [query_handler] ✗ handle_query failed | total=222788.0ms | error=timed out
+Traceback (most recent call last):
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_transports/default.py", line 250, in handle_request
+    resp = self._pool.handle_request(req)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_sync/connection_pool.py", line 256, in handle_request
+    raise exc from None
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_sync/connection_pool.py", line 236, in handle_request
+    response = connection.handle_request(
+        pool_request.request
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_sync/connection.py", line 103, in handle_request
+    return self._connection.handle_request(request)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_sync/http11.py", line 136, in handle_request
+    raise exc
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_sync/http11.py", line 106, in handle_request
+    ) = self._receive_response_headers(**kwargs)
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_sync/http11.py", line 177, in _receive_response_headers
+    event = self._receive_event(timeout=timeout)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_sync/http11.py", line 217, in _receive_event
+    data = self._network_stream.read(
+        self.READ_NUM_BYTES, timeout=timeout
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_backends/sync.py", line 126, in read
+    with map_exceptions(exc_map):
+         ~~~~~~~~~~~~~~^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.0/Frameworks/Python.framework/Versions/3.14/lib/python3.14/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ReadTimeout: timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/handlers/rag_handlers/query_handler.py", line 190, in handle_query
+    answer_text = self.llm.generate(prompt, model=model, temperature=0.0, max_tokens=1000)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/services/rag_services/llm_service.py", line 143, in generate
+    response = self.client.post(
+        "/api/generate",
+    ...<8 lines>...
+        },
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_client.py", line 1144, in post
+    return self.request(
+           ~~~~~~~~~~~~^
+        "POST",
+        ^^^^^^^
+    ...<11 lines>...
+        extensions=extensions,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_client.py", line 825, in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_client.py", line 914, in send
+    response = self._send_handling_auth(
+        request,
+    ...<2 lines>...
+        history=[],
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_client.py", line 942, in _send_handling_auth
+    response = self._send_handling_redirects(
+        request,
+        follow_redirects=follow_redirects,
+        history=history,
+    )
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
+    response = self._send_single_request(request)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_client.py", line 1014, in _send_single_request
+    response = transport.handle_request(request)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_transports/default.py", line 249, in handle_request
+    with map_httpcore_exceptions():
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.0/Frameworks/Python.framework/Versions/3.14/lib/python3.14/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/.venv/lib/python3.14/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ReadTimeout: timed out
+[2026-03-24 00:36:37] [INFO] [request] ← POST /query | status=200 | total=229077.7ms

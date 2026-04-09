@@ -1,0 +1,522 @@
+[2026-04-09 11:17:52] [INFO] [request] → POST /query
+[2026-04-09 11:18:00] [INFO] [query_handler] [159a7c] [1/8] sanitize_query | query=list users |0.2ms
+[2026-04-09 11:18:00] [INFO] [query_handler] [159a7c] [2/8] get_embedding | 174.7ms
+[2026-04-09 11:18:00] [INFO] [query_handler] [159a7c] keyword_route | schema=True (keyword/regex match)
+[2026-04-09 11:18:00] [INFO] [query_handler] [159a7c] route | collection=schema | is_schema=True
+[2026-04-09 11:18:00] [INFO] [query_handler] [159a7c] [3/8] retrieve | chunks_found=11 | 574.9ms
+[2026-04-09 11:18:01] [INFO] [query_handler] [159a7c] [4/8] rerank | chunks_after=3 | 229.8ms
+[2026-04-09 11:18:18] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=125 | 17175.1ms
+[2026-04-09 11:18:18] [INFO] [query_handler] [159a7c] [5/8] generate_sql | sql_preview=SELECT u.full_name, u.email FROM users u WHERE u.org_id = 3 AND u.role IN ('admin', 'auditor', 'anal | 17176.8ms
+[2026-04-09 11:18:21] [INFO] [services.rag_services.database_service] db.execute | rows_returned=2 | 3611.6ms
+[2026-04-09 11:18:22] [INFO] [query_handler] [159a7c] [6/8] execute_query | rows=2 | error=False | 3828.7ms
+[2026-04-09 11:18:22] [INFO] [query_handler] [159a7c] [7/8] build_db_prompt | 0.1ms
+[2026-04-09 11:18:44] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=276 | 22302.2ms
+[2026-04-09 11:18:44] [INFO] [query_handler] [159a7c] [8/8] llm_generate | model=ollama | answer_len=276 | 22303.0ms
+[2026-04-09 11:18:44] [INFO] [query_handler] [159a7c] ✓ handle_query complete | confidence=low | total=44292.1ms
+[2026-04-09 11:18:44] [INFO] [request] ← POST /query | status=200 | total=51763.6ms
+[2026-04-09 11:25:01] [INFO] [request] → POST /query
+[2026-04-09 11:25:01] [INFO] [query_handler] [21622a] [1/8] sanitize_query | query=How many mitigated risks do we have? |0.1ms
+[2026-04-09 11:25:10] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=66 | 8875.4ms
+[2026-04-09 11:25:10] [INFO] [llm_service] rewrite_query | original=How many mitigated risks do we have? | rewritten=The rewritten query remains:
+
+How many mitigated risks do we have?
+[2026-04-09 11:25:10] [INFO] [query_handler] [21622a] [1.5/8] rewrite_query | new_query=The rewritten query remains:
+
+How many mitigated risks do we have? | 8877.4ms
+[2026-04-09 11:25:10] [INFO] [query_handler] [21622a] [2/8] get_embedding | 142.6ms
+[2026-04-09 11:25:10] [INFO] [query_handler] [21622a] keyword_route | schema=True (keyword/regex match)
+[2026-04-09 11:25:10] [INFO] [query_handler] [21622a] route | collection=schema | is_schema=True
+[2026-04-09 11:25:11] [INFO] [query_handler] [21622a] [3/8] retrieve | chunks_found=20 | 735.7ms
+[2026-04-09 11:25:11] [INFO] [query_handler] [21622a] [4/8] rerank | chunks_after=3 | 408.6ms
+[2026-04-09 11:25:23] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=62 | 11974.3ms
+[2026-04-09 11:25:23] [INFO] [query_handler] [21622a] [5/8] generate_sql | sql_preview=SELECT COUNT(*) FROM risks WHERE status = 'mitigated' LIMIT 50 | 11975.9ms
+[2026-04-09 11:25:24] [INFO] [services.rag_services.database_service] db.execute | rows_returned=1 | 1342.5ms
+[2026-04-09 11:25:25] [INFO] [query_handler] [21622a] [6/8] execute_query | rows=1 | error=False | 1527.1ms
+[2026-04-09 11:25:25] [INFO] [query_handler] [21622a] [7/8] build_db_prompt | 0.2ms
+[2026-04-09 11:25:56] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=604 | 31729.0ms
+[2026-04-09 11:25:56] [INFO] [query_handler] [21622a] [8/8] llm_generate | model=ollama | answer_len=604 | 31730.7ms
+[2026-04-09 11:25:56] [INFO] [query_handler] [21622a] ✓ handle_query complete | confidence=low | total=55403.1ms
+[2026-04-09 11:25:56] [INFO] [request] ← POST /query | status=200 | total=55411.7ms
+[2026-04-09 11:27:03] [INFO] [request] → POST /query
+[2026-04-09 11:27:03] [INFO] [query_handler] [cefba5] [1/8] sanitize_query | query=List all open risks in the database |0.1ms
+[2026-04-09 11:27:09] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=191 | 6547.9ms
+[2026-04-09 11:27:09] [INFO] [llm_service] rewrite_query | original=List all open risks in the database | rewritten=The user's latest question is already fully self-contained and does not require additional context f
+[2026-04-09 11:27:09] [INFO] [query_handler] [cefba5] [1.5/8] rewrite_query | new_query=The user's latest question is already fully self-contained and does not require additional context from the conversation history, so it remains unchanged:
+
+List all open risks in the database | 6548.5ms
+[2026-04-09 11:27:09] [INFO] [query_handler] [cefba5] [2/8] get_embedding | 33.2ms
+[2026-04-09 11:27:09] [INFO] [query_handler] [cefba5] keyword_route | schema=True (keyword/regex match)
+[2026-04-09 11:27:09] [INFO] [query_handler] [cefba5] route | collection=schema | is_schema=True
+[2026-04-09 11:27:10] [INFO] [query_handler] [cefba5] [3/8] retrieve | chunks_found=20 | 552.4ms
+[2026-04-09 11:27:10] [INFO] [query_handler] [cefba5] [4/8] rerank | chunks_after=3 | 346.2ms
+[2026-04-09 11:27:25] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=99 | 14269.4ms
+[2026-04-09 11:27:25] [INFO] [query_handler] [cefba5] [5/8] generate_sql | sql_preview=SELECT r.title, r.risk_score, r.likelihood, r.impact FROM risks r WHERE r.status = 'open' LIMIT 50; | 14270.4ms
+[2026-04-09 11:27:25] [INFO] [services.rag_services.database_service] db.execute | rows_returned=2 | 366.8ms
+[2026-04-09 11:27:25] [INFO] [query_handler] [cefba5] [6/8] execute_query | rows=2 | error=False | 550.6ms
+[2026-04-09 11:27:25] [INFO] [query_handler] [cefba5] [7/8] build_db_prompt | 0.1ms
+[2026-04-09 11:28:06] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=874 | 41075.1ms
+[2026-04-09 11:28:06] [INFO] [query_handler] [cefba5] [8/8] llm_generate | model=ollama | answer_len=874 | 41075.9ms
+[2026-04-09 11:28:06] [INFO] [query_handler] [cefba5] ✓ handle_query complete | confidence=low | total=63379.7ms
+[2026-04-09 11:28:06] [INFO] [request] ← POST /query | status=200 | total=63383.6ms
+[2026-04-09 12:30:31] [INFO] [request] → POST /query
+[2026-04-09 12:30:31] [INFO] [query_handler] [32dd89] [1/8] sanitize_query | query=List all the users who belong to an organization that currently has an open, unmitigated risk |0.1ms
+[2026-04-09 12:30:42] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=93 | 10967.5ms
+[2026-04-09 12:30:42] [INFO] [llm_service] rewrite_query | original=List all the users who belong to an organization that currently has an open, unmitigated risk | rewritten=List all the users who belong to an organization with at least one open and unmitigated risk.
+[2026-04-09 12:30:42] [INFO] [query_handler] [32dd89] [1.5/8] rewrite_query | new_query=List all the users who belong to an organization with at least one open and unmitigated risk. | 10969.9ms
+[2026-04-09 12:30:42] [INFO] [query_handler] [32dd89] [2/8] get_embedding | 116.9ms
+[2026-04-09 12:30:42] [INFO] [query_handler] [32dd89] keyword_route | schema=True (keyword/regex match)
+[2026-04-09 12:30:42] [INFO] [query_handler] [32dd89] route | collection=schema | is_schema=True
+[2026-04-09 12:30:43] [INFO] [query_handler] [32dd89] [3/8] retrieve | chunks_found=20 | 709.4ms
+[2026-04-09 12:30:44] [INFO] [query_handler] [32dd89] [4/8] rerank | chunks_after=3 | 396.8ms
+[2026-04-09 12:31:10] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=403 | 26262.0ms
+[2026-04-09 12:31:10] [INFO] [query_handler] [32dd89] [5/8] generate_sql | sql_preview=WITH org_risks AS (
+  SELECT r.org_id, COUNT(*) AS total_risks, SUM(CASE WHEN r.status='open' THEN 1 | 26264.4ms
+[2026-04-09 12:31:10] [WARNING] [services.rag_services.database_service] Blocked SQL | Reason: Invalid SQL syntax: Invalid expression / Unexpected token. Line 7, Col: 17.
+  e AS owner, o.name AS org 
+FROM users u JOIN organizations o ON u.org_id = o.org_id 
+JOIN org_risks [4mor[0m ON o.org_id = or.org_id WHERE or.open_risks > 0 AND or.highest_score < 25 | Query: WITH org_risks AS (
+  SELECT r.org_id, COUNT(*) AS total_risks, SUM(CASE WHEN r.status='open' THEN 1 ELSE 0 END) AS open_risks,
+  MAX(r.risk_score) AS highest_score FROM risks r GROUP BY r.org_id
+)
+SE
+[2026-04-09 12:31:10] [INFO] [query_handler] [32dd89] [6/8] execute_query | rows=0 | error=True | 6.4ms
+[2026-04-09 12:31:10] [INFO] [query_handler] [32dd89] [7/8] build_db_prompt | 0.1ms
+[2026-04-09 12:31:35] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=535 | 25410.6ms
+[2026-04-09 12:31:35] [INFO] [query_handler] [32dd89] [8/8] llm_generate | model=ollama | answer_len=535 | 25412.1ms
+[2026-04-09 12:31:35] [INFO] [query_handler] [32dd89] ✓ handle_query complete | confidence=low | total=63884.6ms
+[2026-04-09 12:31:35] [INFO] [request] ← POST /query | status=200 | total=63899.8ms
+[2026-04-09 12:38:55] [INFO] [request] → POST /query
+[2026-04-09 12:39:03] [INFO] [query_handler] [4d22fc] [1/8] sanitize_query | query=List the full names and roles of all users who belong to the organization named 'Acme Corp |0.2ms
+[2026-04-09 12:39:14] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=95 | 11405.0ms
+[2026-04-09 12:39:14] [INFO] [llm_service] rewrite_query | original=List the full names and roles of all users who belong to the organization named 'Acme Corp | rewritten=What are the full names and roles of all users belonging to the organization named 'Acme Corp'?
+[2026-04-09 12:39:14] [INFO] [query_handler] [4d22fc] [1.5/8] rewrite_query | new_query=What are the full names and roles of all users belonging to the organization named 'Acme Corp'? | 11408.3ms
+[2026-04-09 12:39:14] [INFO] [query_handler] [4d22fc] [2/8] get_embedding | 98.5ms
+[2026-04-09 12:39:14] [INFO] [query_handler] SemanticRouter | building intent centroids ...
+[2026-04-09 12:39:14] [INFO] [query_handler] SemanticRouter | centroids ready.
+[2026-04-09 12:39:14] [INFO] [query_handler] [4d22fc] semantic_route | route=schema | schema_score=0.3344 | irs_score=0.0645
+[2026-04-09 12:39:14] [INFO] [query_handler] [4d22fc] route | collection=schema | is_schema=True
+[2026-04-09 12:39:15] [INFO] [query_handler] [4d22fc] [3/8] retrieve | chunks_found=20 | 848.1ms
+[2026-04-09 12:39:16] [INFO] [query_handler] [4d22fc] [4/8] rerank | chunks_after=3 | 305.4ms
+[2026-04-09 12:39:28] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=119 | 12567.3ms
+[2026-04-09 12:39:28] [INFO] [query_handler] [4d22fc] [5/8] generate_sql | sql_preview=SELECT u.full_name, u.role FROM users u JOIN organizations o ON u.org_id = o.org_id WHERE o.name = ' | 12569.9ms
+[2026-04-09 12:39:31] [INFO] [services.rag_services.database_service] db.execute | rows_returned=3 | 2559.1ms
+[2026-04-09 12:39:31] [INFO] [query_handler] [4d22fc] [6/8] execute_query | rows=3 | error=False | 2776.9ms
+[2026-04-09 12:39:31] [INFO] [query_handler] [4d22fc] [7/8] build_db_prompt | 1.0ms
+[2026-04-09 12:40:12] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=1035 | 40583.1ms
+[2026-04-09 12:40:12] [INFO] [query_handler] [4d22fc] [8/8] llm_generate | model=ollama | answer_len=1035 | 40585.6ms
+[2026-04-09 12:40:12] [INFO] [query_handler] [4d22fc] ✓ handle_query complete | confidence=medium | total=68752.1ms
+[2026-04-09 12:40:12] [INFO] [request] ← POST /query | status=200 | total=76102.4ms
+[2026-04-09 12:42:11] [INFO] [request] → POST /query
+[2026-04-09 12:42:18] [INFO] [query_handler] [fba178] [1/8] sanitize_query | query=List the full names and roles of all users who belong to the organization named 'Acme Corp' |0.2ms
+[2026-04-09 12:42:25] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=95 | 6654.4ms
+[2026-04-09 12:42:25] [INFO] [llm_service] rewrite_query | original=List the full names and roles of all users who belong to the organization named 'Acme Corp' | rewritten=What are the full names and roles of all users belonging to the organization named 'Acme Corp'?
+[2026-04-09 12:42:25] [INFO] [query_handler] [fba178] [1.5/8] rewrite_query | new_query=What are the full names and roles of all users belonging to the organization named 'Acme Corp'? | 6655.4ms
+[2026-04-09 12:42:25] [INFO] [query_handler] [fba178] [2/8] get_embedding | 138.6ms
+[2026-04-09 12:42:25] [INFO] [query_handler] SemanticRouter | building intent centroids ...
+[2026-04-09 12:42:25] [INFO] [query_handler] SemanticRouter | centroids ready.
+[2026-04-09 12:42:25] [INFO] [query_handler] [fba178] semantic_route | route=schema | schema_score=0.3344 | irs_score=0.0645
+[2026-04-09 12:42:25] [INFO] [query_handler] [fba178] route | collection=schema | is_schema=True
+[2026-04-09 12:42:26] [INFO] [query_handler] [fba178] [3/8] retrieve | chunks_found=20 | 565.1ms
+[2026-04-09 12:42:26] [INFO] [query_handler] [fba178] [4/8] rerank | chunks_after=3 | 352.1ms
+[2026-04-09 12:42:41] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=119 | 14834.5ms
+[2026-04-09 12:42:41] [INFO] [query_handler] [fba178] [5/8] generate_sql | sql_preview=SELECT u.full_name, u.role FROM users u JOIN organizations o ON u.org_id = o.org_id WHERE o.name = ' | 14836.6ms
+[2026-04-09 12:42:44] [INFO] [services.rag_services.database_service] db.execute | rows_returned=3 | 2577.5ms
+[2026-04-09 12:42:44] [INFO] [query_handler] [fba178] [6/8] execute_query | rows=3 | error=False | 2796.8ms
+[2026-04-09 12:42:44] [INFO] [query_handler] [fba178] [7/8] build_db_prompt | 0.2ms
+[2026-04-09 12:43:03] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=308 | 19503.6ms
+[2026-04-09 12:43:03] [INFO] [query_handler] [fba178] [8/8] llm_generate | model=ollama | answer_len=308 | 19505.4ms
+[2026-04-09 12:43:03] [INFO] [query_handler] [fba178] ✓ handle_query complete | confidence=medium | total=45001.4ms
+[2026-04-09 12:43:03] [INFO] [request] ← POST /query | status=200 | total=52396.0ms
+[2026-04-09 12:44:24] [INFO] [request] → POST /query
+[2026-04-09 12:44:24] [INFO] [query_handler] [e6dfda] [1/8] sanitize_query | query=Show me the titles of all active policies along with the full name of the user who owns them. |0.1ms
+[2026-04-09 12:44:30] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=92 | 6250.2ms
+[2026-04-09 12:44:30] [INFO] [llm_service] rewrite_query | original=Show me the titles of all active policies along with the full name of the user who owns them. | rewritten=What are the titles of all active policies owned by Alice Johnson, along with her full name?
+[2026-04-09 12:44:30] [INFO] [query_handler] [e6dfda] [1.5/8] rewrite_query | new_query=What are the titles of all active policies owned by Alice Johnson, along with her full name? | 6250.9ms
+[2026-04-09 12:44:30] [INFO] [query_handler] [e6dfda] [2/8] get_embedding | 30.5ms
+[2026-04-09 12:44:30] [INFO] [query_handler] [e6dfda] semantic_route | route=schema | schema_score=0.3079 | irs_score=0.1376
+[2026-04-09 12:44:30] [INFO] [query_handler] [e6dfda] route | collection=schema | is_schema=True
+[2026-04-09 12:44:31] [INFO] [query_handler] [e6dfda] [3/8] retrieve | chunks_found=20 | 567.1ms
+[2026-04-09 12:44:31] [INFO] [query_handler] [e6dfda] [4/8] rerank | chunks_after=3 | 340.5ms
+[2026-04-09 12:44:49] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=161 | 18025.8ms
+[2026-04-09 12:44:49] [INFO] [query_handler] [e6dfda] [5/8] generate_sql | sql_preview=SELECT p.title, u.full_name AS owner FROM policies p JOIN users u ON p.owner_id = u.user_id WHERE p. | 18027.8ms
+[2026-04-09 12:44:49] [WARNING] [services.rag_services.database_service] Blocked SQL | Reason: Invalid SQL syntax: Invalid expression / Unexpected token. Line 1, Col: 161.
+  sers u ON p.owner_id = u.user_id WHERE p.status = 'active' AND u.full_name = 'Alice Johnson'; LIMIT [4m50[0m | Query: SELECT p.title, u.full_name AS owner FROM policies p JOIN users u ON p.owner_id = u.user_id WHERE p.status = 'active' AND u.full_name = 'Alice Johnson'; LIMIT 50
+[2026-04-09 12:44:49] [INFO] [query_handler] [e6dfda] [6/8] execute_query | rows=0 | error=True | 4.3ms
+[2026-04-09 12:44:49] [INFO] [query_handler] [e6dfda] [7/8] build_db_prompt | 0.1ms
+[2026-04-09 12:45:20] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=494 | 30662.7ms
+[2026-04-09 12:45:20] [INFO] [query_handler] [e6dfda] [8/8] llm_generate | model=ollama | answer_len=494 | 30664.4ms
+[2026-04-09 12:45:20] [INFO] [query_handler] [e6dfda] ✓ handle_query complete | confidence=low | total=55895.6ms
+[2026-04-09 12:45:20] [INFO] [request] ← POST /query | status=200 | total=55904.7ms
+[2026-04-09 12:46:38] [INFO] [request] → POST /query
+[2026-04-09 12:46:38] [INFO] [query_handler] [99c6e6] [1/8] sanitize_query | query=How many mitigated risks do we have? |0.1ms
+[2026-04-09 12:46:42] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=66 | 4063.7ms
+[2026-04-09 12:46:42] [INFO] [llm_service] rewrite_query | original=How many mitigated risks do we have? | rewritten=The rewritten query remains:
+
+How many mitigated risks do we have?
+[2026-04-09 12:46:42] [INFO] [query_handler] [99c6e6] [1.5/8] rewrite_query | new_query=The rewritten query remains:
+
+How many mitigated risks do we have? | 4064.2ms
+[2026-04-09 12:46:42] [INFO] [query_handler] [99c6e6] [2/8] get_embedding | 159.3ms
+[2026-04-09 12:46:42] [INFO] [query_handler] [99c6e6] keyword_route | schema=True (keyword/regex match)
+[2026-04-09 12:46:42] [INFO] [query_handler] [99c6e6] route | collection=schema | is_schema=True
+[2026-04-09 12:46:43] [INFO] [query_handler] [99c6e6] [3/8] retrieve | chunks_found=20 | 813.7ms
+[2026-04-09 12:46:43] [INFO] [query_handler] [99c6e6] [4/8] rerank | chunks_after=3 | 404.5ms
+[2026-04-09 12:46:55] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=62 | 11510.5ms
+[2026-04-09 12:46:55] [INFO] [query_handler] [99c6e6] [5/8] generate_sql | sql_preview=SELECT COUNT(*) FROM risks WHERE status = 'mitigated' LIMIT 50 | 11511.5ms
+[2026-04-09 12:46:55] [INFO] [services.rag_services.database_service] db.execute | rows_returned=1 | 403.6ms
+[2026-04-09 12:46:56] [INFO] [query_handler] [99c6e6] [6/8] execute_query | rows=1 | error=False | 603.4ms
+[2026-04-09 12:46:56] [INFO] [query_handler] [99c6e6] [7/8] build_db_prompt | 1.6ms
+[2026-04-09 12:47:18] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=370 | 22615.0ms
+[2026-04-09 12:47:18] [INFO] [query_handler] [99c6e6] [8/8] llm_generate | model=ollama | answer_len=370 | 22616.0ms
+[2026-04-09 12:47:18] [INFO] [query_handler] [99c6e6] ✓ handle_query complete | confidence=low | total=40186.1ms
+[2026-04-09 12:47:18] [INFO] [request] ← POST /query | status=200 | total=40194.1ms
+[2026-04-09 12:48:11] [INFO] [request] → POST /query
+[2026-04-09 12:48:11] [INFO] [query_handler] [0639ca] [1/8] sanitize_query | query=What is the average risk score for each organization, ordered from highest to lowest? |0.0ms
+[2026-04-09 12:48:17] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=108 | 5058.7ms
+[2026-04-09 12:48:17] [INFO] [llm_service] rewrite_query | original=What is the average risk score for each organization, ordered from highest to lowest? | rewritten=The rewritten query is:
+
+What are the average risk scores for all organizations, listed in descendin
+[2026-04-09 12:48:17] [INFO] [query_handler] [0639ca] [1.5/8] rewrite_query | new_query=The rewritten query is:
+
+What are the average risk scores for all organizations, listed in descending order? | 5059.3ms
+[2026-04-09 12:48:17] [INFO] [query_handler] [0639ca] [2/8] get_embedding | 30.6ms
+[2026-04-09 12:48:17] [INFO] [query_handler] [0639ca] keyword_route | schema=True (keyword/regex match)
+[2026-04-09 12:48:17] [INFO] [query_handler] [0639ca] route | collection=schema | is_schema=True
+[2026-04-09 12:48:17] [INFO] [query_handler] [0639ca] [3/8] retrieve | chunks_found=20 | 669.9ms
+[2026-04-09 12:48:18] [INFO] [query_handler] [0639ca] [4/8] rerank | chunks_after=3 | 334.8ms
+[2026-04-09 12:48:34] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=153 | 16250.0ms
+[2026-04-09 12:48:34] [INFO] [query_handler] [0639ca] [5/8] generate_sql | sql_preview=SELECT AVG(r.risk_score) AS avg_risk_score FROM risks r JOIN organizations o ON r.org_id = o.org_id  | 16251.0ms
+[2026-04-09 12:48:34] [INFO] [services.rag_services.database_service] db.execute | rows_returned=3 | 402.5ms
+[2026-04-09 12:48:34] [INFO] [query_handler] [0639ca] [6/8] execute_query | rows=3 | error=False | 603.6ms
+[2026-04-09 12:48:34] [ERROR] [query_handler] [0639ca] ✗ handle_query failed (Unknown Error) | total=22954.5ms | error=Type is not JSON serializable: decimal.Decimal
+Traceback (most recent call last):
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/handlers/rag_handlers/query_handler.py", line 358, in handle_query
+    prompt = self.llm.build_db_grounded_rag_prompt(chunks, db_results, query)
+  File "/Users/shaikmohammedjabirhussain/Desktop/XIT-RAG/services/rag_services/llm_service.py", line 159, in build_db_grounded_rag_prompt
+    db_repr = orjson.dumps(rows).decode("utf-8") if rows else "No results found."
+              ~~~~~~~~~~~~^^^^^^
+TypeError: Type is not JSON serializable: decimal.Decimal
+[2026-04-09 12:48:34] [INFO] [request] ← POST /query | status=200 | total=22965.8ms
+[2026-04-09 12:48:55] [INFO] [request] → GET /docs
+[2026-04-09 12:48:55] [INFO] [request] ← GET /docs | status=200 | total=1.7ms
+[2026-04-09 12:48:55] [INFO] [request] → GET /openapi.json
+[2026-04-09 12:48:55] [INFO] [request] ← GET /openapi.json | status=200 | total=34.2ms
+[2026-04-09 19:53:47] [INFO] [request] → POST /query
+[2026-04-09 19:53:54] [INFO] [query_handler] [830bc9] [1/8] sanitize_query | query=Display all the frameworks available, including their version. |0.2ms
+[2026-04-09 19:54:18] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=83 | 24134.4ms
+[2026-04-09 19:54:18] [INFO] [llm_service] rewrite_query | original=Display all the frameworks available, including their version. | rewritten=Display all the previously listed frameworks, along with their respective versions.
+[2026-04-09 19:54:18] [INFO] [query_handler] [830bc9] [1.5/8] rewrite_query | new_query=Display all the previously listed frameworks, along with their respective versions. | 24138.2ms
+[2026-04-09 19:54:19] [INFO] [query_handler] [830bc9] [2/8] get_embedding | 146.5ms
+[2026-04-09 19:54:19] [INFO] [query_handler] [830bc9] keyword_route | schema=True (keyword/regex match)
+[2026-04-09 19:54:19] [INFO] [query_handler] [830bc9] route | collection=schema | is_schema=True
+[2026-04-09 19:54:19] [INFO] [query_handler] [830bc9] [3/8] retrieve | chunks_found=7 | 596.6ms
+[2026-04-09 19:54:19] [INFO] [query_handler] [830bc9] [4/8] rerank | chunks_after=3 | 210.6ms
+[2026-04-09 19:54:30] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=74 | 10908.2ms
+[2026-04-09 19:54:30] [INFO] [query_handler] [830bc9] [5/8] generate_sql | sql_preview=SELECT framework_id, name, version FROM frameworks ORDER BY name LIMIT 50; | 10909.0ms
+[2026-04-09 19:54:33] [INFO] [services.rag_services.database_service] db.execute | rows_returned=3 | 2703.5ms
+[2026-04-09 19:54:33] [INFO] [query_handler] [830bc9] [6/8] execute_query | rows=3 | error=False | 2931.9ms
+[2026-04-09 19:54:33] [INFO] [query_handler] [830bc9] [7/8] build_db_prompt | 1.3ms
+[2026-04-09 19:54:58] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=576 | 24713.6ms
+[2026-04-09 19:54:58] [INFO] [query_handler] [830bc9] [8/8] llm_generate | model=ollama | answer_len=576 | 24714.2ms
+[2026-04-09 19:54:58] [INFO] [query_handler] [830bc9] ✓ handle_query complete | confidence=low | total=63661.9ms
+[2026-04-09 19:54:58] [INFO] [request] ← POST /query | status=200 | total=71441.3ms
+[2026-04-09 19:57:00] [INFO] [request] → POST /query
+[2026-04-09 19:57:00] [INFO] [query_handler] [a94725] [1/8] sanitize_query | query=Show me all policies that are in the 'published' status |0.1ms
+[2026-04-09 19:57:07] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=94 | 7023.7ms
+[2026-04-09 19:57:07] [INFO] [llm_service] rewrite_query | original=Show me all policies that are in the 'published' status | rewritten=What policies, including their framework and version, are currently in the 'published' status?
+[2026-04-09 19:57:07] [INFO] [query_handler] [a94725] [1.5/8] rewrite_query | new_query=What policies, including their framework and version, are currently in the 'published' status? | 7024.7ms
+[2026-04-09 19:57:07] [INFO] [query_handler] [a94725] [2/8] get_embedding | 32.0ms
+[2026-04-09 19:57:07] [INFO] [query_handler] SemanticRouter | building intent centroids ...
+[2026-04-09 19:57:07] [INFO] [query_handler] SemanticRouter | centroids ready.
+[2026-04-09 19:57:07] [INFO] [query_handler] [a94725] semantic_route | route=schema | schema_score=0.3101 | irs_score=0.1558
+[2026-04-09 19:57:07] [INFO] [query_handler] [a94725] route | collection=schema | is_schema=True
+[2026-04-09 19:57:07] [INFO] [query_handler] [a94725] [3/8] retrieve | chunks_found=20 | 576.4ms
+[2026-04-09 19:57:08] [INFO] [query_handler] [a94725] [4/8] rerank | chunks_after=3 | 366.8ms
+[2026-04-09 19:57:24] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=129 | 16671.2ms
+[2026-04-09 19:57:24] [INFO] [query_handler] [a94725] [5/8] generate_sql | sql_preview=SELECT p.*, f.framework_name, f.version FROM policies p 
+JOIN frameworks f ON p.framework_id = f.id  | 16672.7ms
+[2026-04-09 19:57:25] [ERROR] [services.rag_services.database_service] SQL execution error: (pymysql.err.OperationalError) (1054, "Unknown column 'f.framework_name' in 'field list'")
+[SQL: SELECT p.*, f.framework_name, f.version FROM policies p 
+JOIN frameworks f ON p.framework_id = f.id WHERE p.status = 'published' LIMIT 50]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2026-04-09 19:57:25] [INFO] [query_handler] [a94725] [6/8] execute_query | rows=0 | error=True | 570.4ms
+[2026-04-09 19:57:25] [INFO] [query_handler] [a94725] [7/8] build_db_prompt | 0.1ms
+[2026-04-09 19:57:56] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=483 | 31272.2ms
+[2026-04-09 19:57:56] [INFO] [query_handler] [a94725] [8/8] llm_generate | model=ollama | answer_len=483 | 31272.5ms
+[2026-04-09 19:57:56] [INFO] [query_handler] [a94725] ✓ handle_query complete | confidence=low | total=56671.6ms
+[2026-04-09 19:57:56] [INFO] [request] ← POST /query | status=200 | total=56677.5ms
+[2026-04-09 19:59:13] [INFO] [request] → POST /query
+[2026-04-09 19:59:13] [INFO] [query_handler] [6d38a4] [1/8] sanitize_query | query=What risks have a likelihood score of exactly 5? |0.1ms
+[2026-04-09 19:59:23] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=109 | 9970.2ms
+[2026-04-09 19:59:23] [INFO] [llm_service] rewrite_query | original=What risks have a likelihood score of exactly 5? | rewritten=What risks, within the compliance frameworks (HIPAA, ISO 27001, SOC 2), have a likelihood score of e
+[2026-04-09 19:59:23] [INFO] [query_handler] [6d38a4] [1.5/8] rewrite_query | new_query=What risks, within the compliance frameworks (HIPAA, ISO 27001, SOC 2), have a likelihood score of exactly 5? | 9971.0ms
+[2026-04-09 19:59:23] [INFO] [query_handler] [6d38a4] [2/8] get_embedding | 29.4ms
+[2026-04-09 19:59:23] [INFO] [query_handler] [6d38a4] semantic_route | route=schema | schema_score=0.3296 | irs_score=0.1616
+[2026-04-09 19:59:23] [INFO] [query_handler] [6d38a4] route | collection=schema | is_schema=True
+[2026-04-09 19:59:23] [INFO] [query_handler] [6d38a4] [3/8] retrieve | chunks_found=20 | 874.4ms
+[2026-04-09 19:59:24] [INFO] [query_handler] [6d38a4] [4/8] rerank | chunks_after=3 | 406.9ms
+[2026-04-09 19:59:41] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=106 | 16870.8ms
+[2026-04-09 19:59:41] [INFO] [query_handler] [6d38a4] [5/8] generate_sql | sql_preview=SELECT *
+FROM risks
+WHERE org_id = ? AND likelihood = 5;
+
+
+Note: I added LIMIT 50 as per rule 5. | 16871.5ms
+[2026-04-09 19:59:41] [WARNING] [services.rag_services.database_service] Blocked SQL | Reason: Invalid SQL syntax: Invalid expression / Unexpected token. Line 6, Col: 13.
+  SELECT *
+FROM risks
+WHERE org_id = ? AND likelihood = 5;
+
+
+Note: I [4madded[0m LIMIT 50 as per rule 5. | Query: SELECT *
+FROM risks
+WHERE org_id = ? AND likelihood = 5;
+
+
+Note: I added LIMIT 50 as per rule 5.
+[2026-04-09 19:59:41] [INFO] [query_handler] [6d38a4] [6/8] execute_query | rows=0 | error=True | 2.0ms
+[2026-04-09 19:59:41] [INFO] [query_handler] [6d38a4] [7/8] build_db_prompt | 0.0ms
+[2026-04-09 20:00:26] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=787 | 45580.8ms
+[2026-04-09 20:00:26] [INFO] [query_handler] [6d38a4] [8/8] llm_generate | model=ollama | answer_len=787 | 45581.2ms
+[2026-04-09 20:00:26] [INFO] [query_handler] [6d38a4] ✓ handle_query complete | confidence=low | total=73739.0ms
+[2026-04-09 20:00:26] [INFO] [request] ← POST /query | status=200 | total=73742.7ms
+[2026-04-09 20:02:38] [INFO] [request] → POST /query
+[2026-04-09 20:02:38] [INFO] [query_handler] [3dcb1d] [1/8] sanitize_query | query=Count the total number of users who belong to the 'Finance' organization. |0.0ms
+[2026-04-09 20:02:52] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=171 | 13644.0ms
+[2026-04-09 20:02:52] [INFO] [llm_service] rewrite_query | original=Count the total number of users who belong to the 'Finance' organization. | rewritten=What is the count of users that belong to the 'Finance' organization, considering only those organiz
+[2026-04-09 20:02:52] [INFO] [query_handler] [3dcb1d] [1.5/8] rewrite_query | new_query=What is the count of users that belong to the 'Finance' organization, considering only those organizations associated with compliance frameworks (HIPAA, ISO 27001, SOC 2)? | 13644.8ms
+[2026-04-09 20:02:52] [INFO] [query_handler] [3dcb1d] [2/8] get_embedding | 24.8ms
+[2026-04-09 20:02:52] [INFO] [query_handler] [3dcb1d] keyword_route | schema=True (keyword/regex match)
+[2026-04-09 20:02:52] [INFO] [query_handler] [3dcb1d] route | collection=schema | is_schema=True
+[2026-04-09 20:02:52] [INFO] [query_handler] [3dcb1d] [3/8] retrieve | chunks_found=20 | 606.5ms
+[2026-04-09 20:02:53] [INFO] [query_handler] [3dcb1d] [4/8] rerank | chunks_after=3 | 345.3ms
+[2026-04-09 20:03:09] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=180 | 15802.4ms
+[2026-04-09 20:03:09] [INFO] [query_handler] [3dcb1d] [5/8] generate_sql | sql_preview=SELECT COUNT(*) FROM users WHERE org_id IN ( SELECT org_id FROM organizations WHERE industry = 'Fina | 15803.3ms
+[2026-04-09 20:03:10] [INFO] [services.rag_services.database_service] db.execute | rows_returned=1 | 1380.6ms
+[2026-04-09 20:03:10] [INFO] [query_handler] [3dcb1d] [6/8] execute_query | rows=1 | error=False | 1571.1ms
+[2026-04-09 20:03:10] [INFO] [query_handler] [3dcb1d] [7/8] build_db_prompt | 0.1ms
+[2026-04-09 20:03:42] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=491 | 32353.2ms
+[2026-04-09 20:03:42] [INFO] [query_handler] [3dcb1d] [8/8] llm_generate | model=ollama | answer_len=491 | 32353.8ms
+[2026-04-09 20:03:42] [INFO] [query_handler] [3dcb1d] ✓ handle_query complete | confidence=low | total=64352.7ms
+[2026-04-09 20:03:42] [INFO] [request] ← POST /query | status=200 | total=64355.8ms
+[2026-04-09 20:06:56] [INFO] [request] → POST /query
+[2026-04-09 20:06:56] [INFO] [query_handler] [23dfcd] [1/8] sanitize_query | query=What is the average risk score across all the risks in our database? |0.0ms
+[2026-04-09 20:07:10] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=121 | 13963.8ms
+[2026-04-09 20:07:10] [INFO] [llm_service] rewrite_query | original=What is the average risk score across all the risks in our database? | rewritten=What is the average likelihood score of all risks within compliance frameworks (HIPAA, ISO 27001, SO
+[2026-04-09 20:07:10] [INFO] [query_handler] [23dfcd] [1.5/8] rewrite_query | new_query=What is the average likelihood score of all risks within compliance frameworks (HIPAA, ISO 27001, SOC 2) in our database? | 13964.9ms
+[2026-04-09 20:07:10] [INFO] [query_handler] [23dfcd] [2/8] get_embedding | 21.9ms
+[2026-04-09 20:07:10] [INFO] [query_handler] [23dfcd] keyword_route | schema=True (keyword/regex match)
+[2026-04-09 20:07:10] [INFO] [query_handler] [23dfcd] route | collection=schema | is_schema=True
+[2026-04-09 20:07:11] [INFO] [query_handler] [23dfcd] [3/8] retrieve | chunks_found=20 | 914.4ms
+[2026-04-09 20:07:11] [INFO] [query_handler] [23dfcd] [4/8] rerank | chunks_after=3 | 408.1ms
+[2026-04-09 20:07:29] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=163 | 17715.7ms
+[2026-04-09 20:07:29] [INFO] [query_handler] [23dfcd] [5/8] generate_sql | sql_preview=SELECT AVG(r.likelihood) FROM risks r JOIN controls c ON r.control_id = c.control_id WHERE c.framewo | 17716.5ms
+[2026-04-09 20:07:29] [ERROR] [services.rag_services.database_service] SQL execution error: (pymysql.err.ProgrammingError) (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '? LIMIT 50' at line 1")
+[SQL: SELECT AVG(r.likelihood) FROM risks r JOIN controls c ON r.control_id = c.control_id WHERE c.framework IN ('HIPAA', 'ISO 27001', 'SOC 2') AND r.org_id = ? LIMIT 50]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+[2026-04-09 20:07:29] [INFO] [query_handler] [23dfcd] [6/8] execute_query | rows=0 | error=True | 613.5ms
+[2026-04-09 20:07:29] [INFO] [query_handler] [23dfcd] [7/8] build_db_prompt | 0.1ms
+[2026-04-09 20:08:19] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=710 | 49394.8ms
+[2026-04-09 20:08:19] [INFO] [query_handler] [23dfcd] [8/8] llm_generate | model=ollama | answer_len=710 | 49395.5ms
+[2026-04-09 20:08:19] [INFO] [query_handler] [23dfcd] ✓ handle_query complete | confidence=medium | total=83039.0ms
+[2026-04-09 20:08:19] [INFO] [request] ← POST /query | status=200 | total=83043.1ms
+[2026-04-09 20:09:57] [INFO] [request] → POST /query
+[2026-04-09 20:09:57] [INFO] [query_handler] [03c481] [1/8] sanitize_query | query=How many audit findings do we have, grouped by their severity level? |0.1ms
+[2026-04-09 20:10:14] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=124 | 16827.2ms
+[2026-04-09 20:10:14] [INFO] [llm_service] rewrite_query | original=How many audit findings do we have, grouped by their severity level? | rewritten=What is the count of audit findings within compliance frameworks (HIPAA, ISO 27001, SOC 2), grouped 
+[2026-04-09 20:10:14] [INFO] [query_handler] [03c481] [1.5/8] rewrite_query | new_query=What is the count of audit findings within compliance frameworks (HIPAA, ISO 27001, SOC 2), grouped by their severity level? | 16828.3ms
+[2026-04-09 20:10:14] [INFO] [query_handler] [03c481] [2/8] get_embedding | 22.0ms
+[2026-04-09 20:10:14] [INFO] [query_handler] [03c481] keyword_route | schema=True (keyword/regex match)
+[2026-04-09 20:10:14] [INFO] [query_handler] [03c481] route | collection=schema | is_schema=True
+[2026-04-09 20:10:16] [INFO] [query_handler] [03c481] [3/8] retrieve | chunks_found=20 | 2013.7ms
+[2026-04-09 20:10:16] [INFO] [query_handler] [03c481] [4/8] rerank | chunks_after=3 | 435.1ms
+[2026-04-09 20:10:37] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=226 | 21028.4ms
+[2026-04-09 20:10:37] [INFO] [query_handler] [03c481] [5/8] generate_sql | sql_preview=SELECT af.severity, COUNT(*) AS count FROM audit_findings af JOIN audits a ON af.audit_id = a.audit_ | 21028.8ms
+[2026-04-09 20:10:38] [ERROR] [services.rag_services.database_service] SQL execution error: (pymysql.err.ProgrammingError) (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '? AND a.audit_name IN ('HIPAA', 'ISO 27001', 'SOC 2') GROUP BY af.severity ORDER' at line 1")
+[SQL: SELECT af.severity, COUNT(*) AS count FROM audit_findings af JOIN audits a ON af.audit_id = a.audit_id WHERE a.org_id = ? AND a.audit_name IN ('HIPAA', 'ISO 27001', 'SOC 2') GROUP BY af.severity ORDER BY COUNT(*) DESC LIMIT 50]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+[2026-04-09 20:10:38] [INFO] [query_handler] [03c481] [6/8] execute_query | rows=0 | error=True | 620.0ms
+[2026-04-09 20:10:38] [INFO] [query_handler] [03c481] [7/8] build_db_prompt | 0.1ms
+[2026-04-09 20:11:15] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=566 | 37233.5ms
+[2026-04-09 20:11:15] [INFO] [query_handler] [03c481] [8/8] llm_generate | model=ollama | answer_len=566 | 37234.2ms
+[2026-04-09 20:11:15] [INFO] [query_handler] [03c481] ✓ handle_query complete | confidence=high | total=78184.3ms
+[2026-04-09 20:11:15] [INFO] [request] ← POST /query | status=200 | total=78189.1ms
+[2026-04-09 20:12:57] [INFO] [request] → POST /query
+[2026-04-09 20:12:57] [INFO] [query_handler] [43a0a9] [1/8] sanitize_query | query=Show me the names of all the controls mapped to the 'SOC 2' framework. |0.0ms
+[2026-04-09 20:13:15] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=101 | 18346.8ms
+[2026-04-09 20:13:15] [INFO] [llm_service] rewrite_query | original=Show me the names of all the controls mapped to the 'SOC 2' framework. | rewritten=What are the names of all the controls that are mapped to the 'SOC 2 (Type II)' compliance framework
+[2026-04-09 20:13:15] [INFO] [query_handler] [43a0a9] [1.5/8] rewrite_query | new_query=What are the names of all the controls that are mapped to the 'SOC 2 (Type II)' compliance framework? | 18348.5ms
+[2026-04-09 20:13:15] [INFO] [query_handler] [43a0a9] [2/8] get_embedding | 17.9ms
+[2026-04-09 20:13:15] [INFO] [query_handler] [43a0a9] semantic_route | route=schema | schema_score=0.2668 | irs_score=0.0617
+[2026-04-09 20:13:15] [INFO] [query_handler] [43a0a9] route | collection=schema | is_schema=True
+[2026-04-09 20:13:16] [INFO] [query_handler] [43a0a9] [3/8] retrieve | chunks_found=20 | 573.9ms
+[2026-04-09 20:13:16] [INFO] [query_handler] [43a0a9] [4/8] rerank | chunks_after=3 | 321.5ms
+[2026-04-09 20:13:37] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=365 | 21178.4ms
+[2026-04-09 20:13:37] [INFO] [query_handler] [43a0a9] [5/8] generate_sql | sql_preview=WITH org_controls AS (
+  SELECT c.control_id, f.name AS framework_name
+  FROM controls c
+  JOIN fram | 21178.8ms
+[2026-04-09 20:13:38] [ERROR] [services.rag_services.database_service] SQL execution error: (pymysql.err.OperationalError) (1054, "Unknown column 'c.org_id' in 'where clause'")
+[SQL: WITH org_controls AS (
+  SELECT c.control_id, f.name AS framework_name
+  FROM controls c
+  JOIN frameworks f ON c.framework_id = f.framework_id
+  WHERE f.name = 'SOC 2' AND c.org_id IS NOT NULL
+)
+SELECT oc.control_id, c.name AS control_name
+FROM org_controls oc
+JOIN controls c ON oc.control_id = c.control_id
+WHERE oc.framework_name = 'SOC 2 (Type II)' LIMIT 50]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2026-04-09 20:13:38] [INFO] [query_handler] [43a0a9] [6/8] execute_query | rows=0 | error=True | 885.2ms
+[2026-04-09 20:13:38] [INFO] [query_handler] [43a0a9] [7/8] build_db_prompt | 0.0ms
+[2026-04-09 20:14:12] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=771 | 33887.2ms
+[2026-04-09 20:14:12] [INFO] [query_handler] [43a0a9] [8/8] llm_generate | model=ollama | answer_len=771 | 33888.6ms
+[2026-04-09 20:14:12] [INFO] [query_handler] [43a0a9] ✓ handle_query complete | confidence=high | total=75216.5ms
+[2026-04-09 20:14:12] [INFO] [request] ← POST /query | status=200 | total=75219.9ms
+[2026-04-09 20:15:42] [INFO] [request] → POST /query
+[2026-04-09 20:15:42] [INFO] [query_handler] [fc852a] [1/8] sanitize_query | query=List all the tasks that are currently marked as 'In Progress' and group them by their priority |0.0ms
+[2026-04-09 20:16:04] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=133 | 22552.2ms
+[2026-04-09 20:16:04] [INFO] [llm_service] rewrite_query | original=List all the tasks that are currently marked as 'In Progress' and group them by their priority | rewritten=What tasks, within compliance frameworks (HIPAA, ISO 27001, SOC 2), are currently marked as 'In Prog
+[2026-04-09 20:16:04] [INFO] [query_handler] [fc852a] [1.5/8] rewrite_query | new_query=What tasks, within compliance frameworks (HIPAA, ISO 27001, SOC 2), are currently marked as 'In Progress', grouped by their priority? | 22553.7ms
+[2026-04-09 20:16:04] [INFO] [query_handler] [fc852a] [2/8] get_embedding | 23.0ms
+[2026-04-09 20:16:04] [INFO] [query_handler] [fc852a] semantic_route | route=irs | schema_score=0.2721 | irs_score=0.1626
+[2026-04-09 20:16:04] [INFO] [query_handler] [fc852a] route | collection=irs_rag_v1 | is_schema=False
+[2026-04-09 20:16:05] [INFO] [query_handler] [fc852a] [3/8] retrieve | chunks_found=0 | 576.4ms
+[2026-04-09 20:16:05] [INFO] [request] ← POST /query | status=200 | total=23158.0ms
+[2026-04-09 20:18:16] [INFO] [request] → POST /query
+[2026-04-09 20:18:16] [INFO] [query_handler] [785534] [1/8] sanitize_query | query=List the titles of all active policies along with the full name and email of the user who owns them |0.1ms
+[2026-04-09 20:18:23] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=144 | 6456.5ms
+[2026-04-09 20:18:23] [INFO] [llm_service] rewrite_query | original=List the titles of all active policies along with the full name and email of the user who owns them | rewritten=What are the titles of all active policies, including their owner's full name and email, within comp
+[2026-04-09 20:18:23] [INFO] [query_handler] [785534] [1.5/8] rewrite_query | new_query=What are the titles of all active policies, including their owner's full name and email, within compliance frameworks (HIPAA, ISO 27001, SOC 2)? | 6457.2ms
+[2026-04-09 20:18:23] [INFO] [query_handler] [785534] [2/8] get_embedding | 22.3ms
+[2026-04-09 20:18:23] [INFO] [query_handler] [785534] semantic_route | route=schema | schema_score=0.4163 | irs_score=0.2501
+[2026-04-09 20:18:23] [INFO] [query_handler] [785534] route | collection=schema | is_schema=True
+[2026-04-09 20:18:23] [INFO] [query_handler] [785534] [3/8] retrieve | chunks_found=20 | 620.4ms
+[2026-04-09 20:18:24] [INFO] [query_handler] [785534] [4/8] rerank | chunks_after=3 | 338.3ms
+[2026-04-09 20:18:48] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=281 | 24578.7ms
+[2026-04-09 20:18:48] [INFO] [query_handler] [785534] [5/8] generate_sql | sql_preview=SELECT 
+    p.title,
+    u.full_name,
+    u.email
+FROM 
+    policies p
+JOIN 
+    users u ON p.owner_ | 24579.5ms
+[2026-04-09 20:18:50] [INFO] [services.rag_services.database_service] db.execute | rows_returned=0 | 1676.1ms
+[2026-04-09 20:18:50] [INFO] [query_handler] [785534] [6/8] execute_query | rows=0 | error=False | 1910.5ms
+[2026-04-09 20:18:50] [INFO] [query_handler] [785534] [7/8] build_db_prompt | 0.1ms
+[2026-04-09 20:19:24] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=445 | 33633.0ms
+[2026-04-09 20:19:24] [INFO] [query_handler] [785534] [8/8] llm_generate | model=ollama | answer_len=445 | 33634.3ms
+[2026-04-09 20:19:24] [INFO] [query_handler] [785534] ✓ handle_query complete | confidence=low | total=67565.7ms
+[2026-04-09 20:19:24] [INFO] [request] ← POST /query | status=200 | total=67568.6ms
+[2026-04-09 20:21:19] [INFO] [request] → POST /query
+[2026-04-09 20:21:19] [INFO] [query_handler] [17f4f9] [1/8] sanitize_query | query=Which organization has the highest total number of 'High' severity audit findings? |0.0ms
+[2026-04-09 20:21:43] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=150 | 24799.2ms
+[2026-04-09 20:21:43] [INFO] [llm_service] rewrite_query | original=Which organization has the highest total number of 'High' severity audit findings? | rewritten=What is the organization with the highest count of audit findings in the 'High' severity level withi
+[2026-04-09 20:21:43] [INFO] [query_handler] [17f4f9] [1.5/8] rewrite_query | new_query=What is the organization with the highest count of audit findings in the 'High' severity level within compliance frameworks (HIPAA, ISO 27001, SOC 2)? | 24800.0ms
+[2026-04-09 20:21:44] [INFO] [query_handler] [17f4f9] [2/8] get_embedding | 23.2ms
+[2026-04-09 20:21:44] [INFO] [query_handler] [17f4f9] keyword_route | schema=True (keyword/regex match)
+[2026-04-09 20:21:44] [INFO] [query_handler] [17f4f9] route | collection=schema | is_schema=True
+[2026-04-09 20:21:44] [INFO] [query_handler] [17f4f9] [3/8] retrieve | chunks_found=20 | 945.6ms
+[2026-04-09 20:21:45] [INFO] [query_handler] [17f4f9] [4/8] rerank | chunks_after=3 | 411.6ms
+[2026-04-09 20:22:06] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=247 | 20780.9ms
+[2026-04-09 20:22:06] [INFO] [query_handler] [17f4f9] [5/8] generate_sql | sql_preview=SELECT o.name AS org, COUNT(*) AS count FROM audit_findings af JOIN audits a ON af.audit_id = a.audi | 20781.7ms
+[2026-04-09 20:22:06] [INFO] [services.rag_services.database_service] db.execute | rows_returned=1 | 386.6ms
+[2026-04-09 20:22:06] [INFO] [query_handler] [17f4f9] [6/8] execute_query | rows=1 | error=False | 581.6ms
+[2026-04-09 20:22:06] [INFO] [query_handler] [17f4f9] [7/8] build_db_prompt | 0.1ms
+[2026-04-09 20:22:36] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=350 | 29934.2ms
+[2026-04-09 20:22:36] [INFO] [query_handler] [17f4f9] [8/8] llm_generate | model=ollama | answer_len=350 | 29935.0ms
+[2026-04-09 20:22:36] [INFO] [query_handler] [17f4f9] ✓ handle_query complete | confidence=low | total=77481.4ms
+[2026-04-09 20:22:36] [INFO] [request] ← POST /query | status=200 | total=77484.6ms
+[2026-04-09 20:41:26] [INFO] [request] → POST /query
+[2026-04-09 20:41:26] [INFO] [query_handler] [5e1a6b] [1/8] sanitize_query | query=Show me the file names of all evidence uploaded for audits that ended before January 1st, 2024. |0.0ms
+[2026-04-09 20:41:54] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=151 | 27713.2ms
+[2026-04-09 20:41:54] [INFO] [llm_service] rewrite_query | original=Show me the file names of all evidence uploaded for audits that ended before January 1st, 2024. | rewritten=What are the file names of all evidence uploaded for audits within compliance frameworks (HIPAA, ISO
+[2026-04-09 20:41:54] [INFO] [query_handler] [5e1a6b] [1.5/8] rewrite_query | new_query=What are the file names of all evidence uploaded for audits within compliance frameworks (HIPAA, ISO 27001, SOC 2) that ended before January 1st, 2024? | 27714.1ms
+[2026-04-09 20:41:54] [INFO] [query_handler] [5e1a6b] [2/8] get_embedding | 27.7ms
+[2026-04-09 20:41:54] [INFO] [query_handler] [5e1a6b] semantic_route | route=irs | schema_score=0.3469 | irs_score=0.3136
+[2026-04-09 20:41:54] [INFO] [query_handler] [5e1a6b] route | collection=irs_rag_v1 | is_schema=False
+[2026-04-09 20:41:54] [INFO] [query_handler] [5e1a6b] [3/8] retrieve | chunks_found=0 | 645.5ms
+[2026-04-09 20:41:54] [INFO] [request] ← POST /query | status=200 | total=28394.0ms
+[2026-04-09 20:42:13] [INFO] [request] → POST /query
+[2026-04-09 20:42:13] [INFO] [query_handler] [38bde0] [1/8] sanitize_query | query=Get me a list of all 'Critical' and 'High' priority tasks, along with the full name of the user assigned to them and the name of their organization |0.0ms
+[2026-04-09 20:42:20] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=159 | 7538.5ms
+[2026-04-09 20:42:20] [INFO] [llm_service] rewrite_query | original=Get me a list of all 'Critical' and 'High' priority tasks, along with the full name of the user assi | rewritten=What are the titles of all active policies within compliance frameworks (HIPAA, ISO 27001, SOC 2) al
+[2026-04-09 20:42:20] [INFO] [query_handler] [38bde0] [1.5/8] rewrite_query | new_query=What are the titles of all active policies within compliance frameworks (HIPAA, ISO 27001, SOC 2) along with the full name and email of the user who owns them? | 7539.0ms
+[2026-04-09 20:42:20] [INFO] [query_handler] [38bde0] [2/8] get_embedding | 22.5ms
+[2026-04-09 20:42:20] [INFO] [query_handler] [38bde0] semantic_route | route=schema | schema_score=0.4318 | irs_score=0.2359
+[2026-04-09 20:42:20] [INFO] [query_handler] [38bde0] route | collection=schema | is_schema=True
+[2026-04-09 20:42:21] [INFO] [query_handler] [38bde0] [3/8] retrieve | chunks_found=20 | 589.5ms
+[2026-04-09 20:42:21] [INFO] [query_handler] [38bde0] [4/8] rerank | chunks_after=3 | 335.1ms
+[2026-04-09 20:42:52] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=498 | 30587.5ms
+[2026-04-09 20:42:52] [INFO] [query_handler] [38bde0] [5/8] generate_sql | sql_preview=WITH framework_titles AS (
+  SELECT f.framework_id, f.title 
+  FROM frameworks f 
+  WHERE f.framewor | 30588.2ms
+[2026-04-09 20:42:53] [ERROR] [services.rag_services.database_service] SQL execution error: (pymysql.err.ProgrammingError) (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '? LIMIT 50' at line 15")
+[SQL: WITH framework_titles AS (
+  SELECT f.framework_id, f.title 
+  FROM frameworks f 
+  WHERE f.framework IN ('ISO 27001', 'SOC 2', 'HIPAA')
+),
+policy_titles AS (
+  SELECT c.control_code, p.title 
+  FROM controls c 
+  JOIN policies p ON c.control_id = p.control_id 
+  JOIN framework_titles ft ON c.framework_id = ft.framework_id
+)
+SELECT pt.title, u.full_name, u.email 
+FROM policy_titles pt 
+JOIN users u ON pt.control_code = u.user_id 
+WHERE pt.title IS NOT NULL AND u.org_id = ? LIMIT 50]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+[2026-04-09 20:42:53] [INFO] [query_handler] [38bde0] [6/8] execute_query | rows=0 | error=True | 1771.8ms
+[2026-04-09 20:42:53] [INFO] [query_handler] [38bde0] [7/8] build_db_prompt | 0.1ms
+[2026-04-09 20:43:31] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=595 | 37228.7ms
+[2026-04-09 20:43:31] [INFO] [query_handler] [38bde0] [8/8] llm_generate | model=ollama | answer_len=595 | 37229.1ms
+[2026-04-09 20:43:31] [INFO] [query_handler] [38bde0] ✓ handle_query complete | confidence=high | total=78077.6ms
+[2026-04-09 20:43:31] [INFO] [request] ← POST /query | status=200 | total=78080.7ms
+[2026-04-09 20:44:12] [INFO] [request] → POST /query
+[2026-04-09 20:44:12] [INFO] [query_handler] [2489d0] [1/8] sanitize_query | query=Identify any organizations that have zero published policies but have at least one open risk with an impact score greater than 3 |0.0ms
+[2026-04-09 20:44:46] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=231 | 33617.2ms
+[2026-04-09 20:44:46] [INFO] [llm_service] rewrite_query | original=Identify any organizations that have zero published policies but have at least one open risk with an | rewritten=What are the names of all organizations that have no published policies within compliance frameworks
+[2026-04-09 20:44:46] [INFO] [query_handler] [2489d0] [1.5/8] rewrite_query | new_query=What are the names of all organizations that have no published policies within compliance frameworks (HIPAA, ISO 27001, SOC 2) but have at least one open risk with a likelihood score of exactly 5 and an impact score greater than 3? | 33617.5ms
+[2026-04-09 20:44:46] [INFO] [query_handler] [2489d0] [2/8] get_embedding | 27.2ms
+[2026-04-09 20:44:46] [INFO] [query_handler] [2489d0] keyword_route | schema=True (keyword/regex match)
+[2026-04-09 20:44:46] [INFO] [query_handler] [2489d0] route | collection=schema | is_schema=True
+[2026-04-09 20:44:47] [INFO] [query_handler] [2489d0] [3/8] retrieve | chunks_found=20 | 932.1ms
+[2026-04-09 20:44:47] [INFO] [query_handler] [2489d0] [4/8] rerank | chunks_after=3 | 380.5ms
+[2026-04-09 20:45:24] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=560 | 36532.8ms
+[2026-04-09 20:45:24] [INFO] [query_handler] [2489d0] [5/8] generate_sql | sql_preview=WITH orgs AS (
+  SELECT org_id 
+  FROM controls c 
+  JOIN frameworks f ON c.framework = f.name 
+  WH | 36533.6ms
+[2026-04-09 20:45:25] [ERROR] [services.rag_services.database_service] SQL execution error: (pymysql.err.OperationalError) (1054, "Unknown column 'org_id' in 'field list'")
+[SQL: WITH orgs AS (
+  SELECT org_id 
+  FROM controls c 
+  JOIN frameworks f ON c.framework = f.name 
+  WHERE f.name IN ('HIPAA', 'ISO 27001', 'SOC 2') 
+    AND NOT EXISTS (SELECT 1 FROM policies p WHERE p.org_id = c.org_id AND p.published = TRUE) 
+    AND EXISTS (
+      SELECT 1 
+      FROM risks r 
+      JOIN controls co ON r.control_id = co.control_id 
+      WHERE r.org_id = c.org_id 
+        AND r.likelihood_score = 5 
+        AND r.impact_score > 3
+    )
+)
+SELECT DISTINCT o.name 
+FROM orgs o 
+JOIN organizations o2 ON o.org_id = o2.id 
+LIMIT 50]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2026-04-09 20:45:25] [INFO] [query_handler] [2489d0] [6/8] execute_query | rows=0 | error=True | 617.1ms
+[2026-04-09 20:45:25] [INFO] [query_handler] [2489d0] [7/8] build_db_prompt | 0.1ms
+[2026-04-09 20:46:02] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=619 | 37755.3ms
+[2026-04-09 20:46:02] [INFO] [query_handler] [2489d0] [8/8] llm_generate | model=ollama | answer_len=619 | 37755.6ms
+[2026-04-09 20:46:02] [INFO] [query_handler] [2489d0] ✓ handle_query complete | confidence=medium | total=109865.5ms
+[2026-04-09 20:46:02] [INFO] [request] ← POST /query | status=200 | total=109868.1ms
