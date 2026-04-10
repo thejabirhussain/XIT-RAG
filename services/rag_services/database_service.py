@@ -39,43 +39,79 @@ class DatabaseService:
             pool_recycle=1800    # Recycle connections every hour
         )
 
+    # def _validate_sql(self, query: str) -> str | None:
+    #     stripped = query.strip().rstrip(";")
+    #     if not stripped:
+    #         return "Empty query."
+    #     try:
+    #         statements = sqlglot.parse(stripped, dialect="mysql")
+    #     except sqlglot.errors.ParseError as e:
+    #         return f"Invalid SQL syntax: {e}"
+
+    #     if len(statements) != 1:
+    #         return "Only a single statement is allowed."
+
+    #     stmt = statements[0]
+
+    #     if not isinstance(stmt, exp.Select):
+    #         return f"Only SELECT is permitted. Got: {type(stmt).__name__}."
+
+    #     _candidates = [
+    #         "Insert", "Update", "Delete", "Drop", "Alter", "Create",
+    #         "Rename", "RenameTable", "AlterTable",
+    #         "TruncateTable", "Truncate",
+    #         "Grant", "Revoke",
+    #         "Command", "Use",
+    #     ]
+    #     FORBIDDEN_NODES = tuple(
+    #         getattr(exp, name) for name in _candidates if hasattr(exp, name)
+    #     )
+    #     for node in stmt.walk():
+    #         if isinstance(node, FORBIDDEN_NODES):
+    #             return f"Forbidden operation in query: {type(node).__name__}."
+
+    #     for table in stmt.find_all(exp.Table):
+    #         if (table.db or "").lower() == "information_schema":
+    #             return "Access to information_schema is not permitted."
+
+    #     return None
+
+    FORBIDDEN_KEYWORDS = [
+        "INSERT", "UPDATE", "DELETE", "DROP", "ALTER", "CREATE",
+        "TRUNCATE", "RENAME", "GRANT", "REVOKE", "USE",
+        "EXEC", "EXECUTE", "CALL", "MERGE", "REPLACE",
+        "LOAD", "HANDLER", "LOCK", "UNLOCK",
+    ]
+
     def _validate_sql(self, query: str) -> str | None:
         stripped = query.strip().rstrip(";")
+        
         if not stripped:
             return "Empty query."
-        try:
-            statements = sqlglot.parse(stripped, dialect="mysql")
-        except sqlglot.errors.ParseError as e:
-            return f"Invalid SQL syntax: {e}"
+    
+        # Strip inline comments (-- ...) and block comments (/* ... */)
+        cleaned = re.sub(r"--[^\n]*", " ", stripped)
+        cleaned = re.sub(r"/\*.*?\*/", " ", cleaned, flags=re.DOTALL)
+        normalized = " ".join(cleaned.split()).upper()
+    
+        # Must start with SELECT or WITH (CTEs)
+        if not (normalized.startswith("SELECT") or normalized.startswith("WITH")):
+            return f"Only SELECT is permitted."
+    
+        # Block forbidden keywords as whole words
+        for kw in FORBIDDEN_KEYWORDS:
+            if re.search(rf"\b{kw}\b", normalized):
+                return f"Forbidden keyword in query: {kw}."
 
-        if len(statements) != 1:
+        # Block multiple statements
+        if ";" in stripped:
             return "Only a single statement is allowed."
 
-        stmt = statements[0]
-
-        if not isinstance(stmt, exp.Select):
-            return f"Only SELECT is permitted. Got: {type(stmt).__name__}."
-
-        _candidates = [
-            "Insert", "Update", "Delete", "Drop", "Alter", "Create",
-            "Rename", "RenameTable", "AlterTable",
-            "TruncateTable", "Truncate",
-            "Grant", "Revoke",
-            "Command", "Use",
-        ]
-        FORBIDDEN_NODES = tuple(
-            getattr(exp, name) for name in _candidates if hasattr(exp, name)
-        )
-        for node in stmt.walk():
-            if isinstance(node, FORBIDDEN_NODES):
-                return f"Forbidden operation in query: {type(node).__name__}."
-
-        for table in stmt.find_all(exp.Table):
-            if (table.db or "").lower() == "information_schema":
-                return "Access to information_schema is not permitted."
+    # Block information_schema access
+        if "INFORMATION_SCHEMA" in normalized:
+            return "Access to information_schema is not permitted."
 
         return None
-
     def execute_query(self, query: str) -> dict:
         error = self._validate_sql(query)
         if error:

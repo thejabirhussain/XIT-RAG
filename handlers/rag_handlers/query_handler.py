@@ -123,7 +123,6 @@ SCHEMA_INTENT_SEEDS = [
     "show everything that is out of date",
     "what has exceeded its review period",
     "list anything that is past due",
-
     # ── status-check patterns ──
     "what is the current status of items",
     "how many items are still active",
@@ -149,7 +148,7 @@ IRS_INTENT_SEEDS = [
 
 # Schema must beat IRS by this margin to trigger schema route.
 # Lower = more aggressive schema routing; raise if over-routing to DB.
-SEMANTIC_SCHEMA_MARGIN = 0.08     # slightly relaxed from 0.12
+SEMANTIC_SCHEMA_MARGIN = 0.08     
 SEMANTIC_MIN_CONFIDENCE = 0.30    # if both scores are below this, default to schema
 
 class SemanticRouter:
