@@ -1,6 +1,7 @@
 import logging
 import os
 import time
+import re
 import sqlglot
 import sqlglot.expressions as exp
 from sqlalchemy import create_engine, text
@@ -9,7 +10,12 @@ from urllib.parse import quote_plus
 
 logger = logging.getLogger(__name__)
 MAX_ROWS = 50
-
+FORBIDDEN_KEYWORDS = [
+        "INSERT", "UPDATE", "DELETE", "DROP", "ALTER", "CREATE",
+        "TRUNCATE", "RENAME", "GRANT", "REVOKE", "USE",
+        "EXEC", "EXECUTE", "CALL", "MERGE", "REPLACE",
+        "LOAD", "HANDLER", "LOCK", "UNLOCK",
+    ]
 class DatabaseService:
     def __init__(self):
         self.host = os.getenv("MYSQL_HOST", "sql.freedb.tech")
@@ -76,12 +82,7 @@ class DatabaseService:
 
     #     return None
 
-    FORBIDDEN_KEYWORDS = [
-        "INSERT", "UPDATE", "DELETE", "DROP", "ALTER", "CREATE",
-        "TRUNCATE", "RENAME", "GRANT", "REVOKE", "USE",
-        "EXEC", "EXECUTE", "CALL", "MERGE", "REPLACE",
-        "LOAD", "HANDLER", "LOCK", "UNLOCK",
-    ]
+    
 
     def _validate_sql(self, query: str) -> str | None:
         stripped = query.strip().rstrip(";")
