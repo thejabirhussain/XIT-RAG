@@ -3,6 +3,7 @@ from .chunkers import chunk_page
 from .crawlers import WebCrawler, SitemapFetcher
 from .parsers import HtmlParser, PdfParser
 from .storage import StorageManager
+from .utils import compute_content_hash
 
 __all__ = [
     "extract_title",
@@ -17,4 +18,5 @@ __all__ = [
     "HtmlParser",
     "PdfParser",
     "StorageManager",
+    "compute_content_hash",
 ]

@@ -1,18 +1,15 @@
 __pycache__/
 .venv
-.venv311
-venv
-.vscode/
-data/
+.vscode
 
-# Test scripts
-test_*.py
-verify_models.py
+logs/
 
+node_modules
+.dist
+.DS_Store
 .env
-
-*/.env
-
+.vscode
+.idea
 
 
 

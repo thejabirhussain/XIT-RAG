@@ -7,10 +7,18 @@ from handlers import QueryHandler, IngestionHandler, StatsHandler
 
 load_dotenv()
 
+# Qdrant Configuration
 QDRANT_URL = os.getenv("QDRANT_URL")
 QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
+
+# LLM Configuration
 OLLAMA_HOST = os.getenv("OLLAMA_HOST", "http://localhost:11434")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+# Supabase Configuration
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 # Handlers
 
