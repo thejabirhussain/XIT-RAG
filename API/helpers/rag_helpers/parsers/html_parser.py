@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 from readability import Document
 
 from models import CrawledPage
-from utils import normalize_text
+from helpers.rag_helpers.utils.utils import normalize_text
 from helpers.rag_helpers.extractors import extract_title
 
 

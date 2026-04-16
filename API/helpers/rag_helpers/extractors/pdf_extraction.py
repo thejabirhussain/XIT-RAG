@@ -2,7 +2,7 @@ from io import BytesIO
 
 import fitz
 
-from utils import normalize_text
+from helpers.rag_helpers.utils.utils import normalize_text
 
 
 def extract_pdf_text(pdf_bytes: bytes) -> tuple[str, dict]:

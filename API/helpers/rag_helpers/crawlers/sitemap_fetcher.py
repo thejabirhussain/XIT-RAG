@@ -1,7 +1,7 @@
 from typing import Optional
 
 from .sitemap_helpers import parse_sitemap_xml, discover_sitemap_locations, parse_robots_for_sitemaps
-from utils import normalize_url
+from helpers.rag_helpers.utils.utils import normalize_url
 
 
 class SitemapFetcher:

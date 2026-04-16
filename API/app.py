@@ -1,6 +1,7 @@
 import warnings
 import os
-from logger_config import setup_logging
+import sys
+from datetime import datetime
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from controllers.rag_controller import router as rag_router
@@ -9,13 +10,34 @@ import logging
 from fastapi import Request
 import uvicorn
 
+log_format = "[%(asctime)s] [%(levelname)s] [%(name)s] %(message)s"
+date_format = "%Y-%m-%d %H:%M:%S"
+
+os.makedirs("logs", exist_ok=True)
+
+logging.basicConfig(
+    level=logging.INFO,
+    format=log_format,
+    datefmt=date_format,
+    force=True,
+    handlers=[
+        logging.StreamHandler(sys.stdout),
+        logging.FileHandler(f"logs/rag_{datetime.now().strftime('%Y%m%d')}.log", encoding="utf-8"),
+    ],
+)
+
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("httpcore").setLevel(logging.WARNING)
+logging.getLogger("sentence_transformers").setLevel(logging.WARNING)
+logging.getLogger("transformers").setLevel(logging.WARNING)
+logging.getLogger("qdrant_client").setLevel(logging.WARNING)
+
 warnings.filterwarnings("ignore", category=FutureWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
 warnings.filterwarnings("ignore", message=".*XMLParsedAsHTMLWarning.*")
 warnings.filterwarnings("ignore", message=".*resume_download.*")
 warnings.filterwarnings("ignore", message=".*shadows an attribute.*")
 
-setup_logging()
 request_logger = logging.getLogger("request")
 
 app = FastAPI(

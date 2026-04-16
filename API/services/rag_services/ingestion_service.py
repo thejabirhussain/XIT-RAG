@@ -1,6 +1,6 @@
 from qdrant_client.models import PointStruct
 
-from utils import compute_content_hash
+from helpers.rag_helpers.utils.utils import compute_content_hash
 
 EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 

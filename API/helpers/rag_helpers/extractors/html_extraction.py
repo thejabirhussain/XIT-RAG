@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-from utils import normalize_text
+from helpers.rag_helpers.utils.utils import normalize_text
 
 
 def extract_title(html: str) -> str:

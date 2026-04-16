@@ -5,7 +5,7 @@ from helpers.rag_helpers.crawlers import WebCrawler, SitemapFetcher
 from helpers.rag_helpers.storage import StorageManager
 from helpers.rag_helpers.parsers import HtmlParser, PdfParser
 from helpers.rag_helpers.chunkers import chunk_page
-from utils import compute_content_hash
+from helpers.rag_helpers.utils.utils import compute_content_hash
 
 COLLECTION_NAME = "irs_rag_v1"
 RATE_LIMIT_RPS = 0.5
