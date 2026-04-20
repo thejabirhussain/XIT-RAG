@@ -1,36 +1,35 @@
 import logging
-import re
 import os
 import time
+import re
 import sqlglot
 import sqlglot.expressions as exp
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
-from urllib.parse import quote_plus
 
 logger = logging.getLogger(__name__)
 MAX_ROWS = 50
+FORBIDDEN_KEYWORDS = [
+    "INSERT", "UPDATE", "DELETE", "DROP", "ALTER", "CREATE",
+    "TRUNCATE", "RENAME", "GRANT", "REVOKE", "USE",
+    "EXEC", "EXECUTE", "CALL", "MERGE", "REPLACE",
+    "LOAD", "HANDLER", "LOCK", "UNLOCK",
+]
 
 class DatabaseService:
     def __init__(self):
-        self.host = os.getenv("MYSQL_HOST", "sql.freedb.tech")
-        self.port = int(os.getenv("MYSQL_PORT", 3306))
-        self.user = os.getenv("MYSQL_USER", "freedb_maryum")
-        self.password = os.getenv("MYSQL_PASSWORD", "CWzM8d549E#6WhS")
-        self.database = os.getenv("MYSQL_DB", "freedb_RAGPOC2")
+        # Use DATABASE_URL for Supabase PostgreSQL connection
+        self.db_url = os.getenv("DATABASE_URL")
         
-        # Connect to MySQL using PyMySQL driver via SQLAlchemy
-        # Ensure password containing special characters is handled correctly by SQLAlchemy url encoding
-        safe_password = quote_plus(str(self.password))
+        if not self.db_url:
+            raise ValueError("DATABASE_URL environment variable not set. Please configure Supabase connection.")
         
-        self.db_url = f"mysql+pymysql://{self.user}:{safe_password}@{self.host}:{self.port}/{self.database}"
-        
-        # Connection pool configurations mapped securely
+        # Connection pool configurations
         pool_size = int(os.getenv("DB_POOL_SIZE", "5"))
         max_overflow = int(os.getenv("DB_MAX_OVERFLOW", "10"))
         pool_timeout = int(os.getenv("DB_CONNECTION_TIMEOUT", "30"))
 
-        # Initialize the persistent engine connection pool
+        # Initialize the persistent engine connection pool for PostgreSQL
         self.engine = create_engine(
             self.db_url,
             pool_size=pool_size,
@@ -39,50 +38,8 @@ class DatabaseService:
             pool_pre_ping=True,  # Verifies connections before using them
             pool_recycle=1800    # Recycle connections every hour
         )
-
-    # def _validate_sql(self, query: str) -> str | None:
-    #     stripped = query.strip().rstrip(";")
-    #     if not stripped:
-    #         return "Empty query."
-    #     try:
-    #         statements = sqlglot.parse(stripped, dialect="mysql")
-    #     except sqlglot.errors.ParseError as e:
-    #         return f"Invalid SQL syntax: {e}"
-
-    #     if len(statements) != 1:
-    #         return "Only a single statement is allowed."
-
-    #     stmt = statements[0]
-
-    #     if not isinstance(stmt, exp.Select):
-    #         return f"Only SELECT is permitted. Got: {type(stmt).__name__}."
-
-    #     _candidates = [
-    #         "Insert", "Update", "Delete", "Drop", "Alter", "Create",
-    #         "Rename", "RenameTable", "AlterTable",
-    #         "TruncateTable", "Truncate",
-    #         "Grant", "Revoke",
-    #         "Command", "Use",
-    #     ]
-    #     FORBIDDEN_NODES = tuple(
-    #         getattr(exp, name) for name in _candidates if hasattr(exp, name)
-    #     )
-    #     for node in stmt.walk():
-    #         if isinstance(node, FORBIDDEN_NODES):
-    #             return f"Forbidden operation in query: {type(node).__name__}."
-
-    #     for table in stmt.find_all(exp.Table):
-    #         if (table.db or "").lower() == "information_schema":
-    #             return "Access to information_schema is not permitted."
-
-    #     return None
-
-    FORBIDDEN_KEYWORDS = [
-        "INSERT", "UPDATE", "DELETE", "DROP", "ALTER", "CREATE",
-        "TRUNCATE", "RENAME", "GRANT", "REVOKE", "USE",
-        "EXEC", "EXECUTE", "CALL", "MERGE", "REPLACE",
-        "LOAD", "HANDLER", "LOCK", "UNLOCK",
-    ]
+        
+        logger.info("DatabaseService initialized with Supabase PostgreSQL")
 
     def _validate_sql(self, query: str) -> str | None:
         stripped = query.strip().rstrip(";")
@@ -100,7 +57,7 @@ class DatabaseService:
             return f"Only SELECT is permitted."
     
         # Block forbidden keywords as whole words
-        for kw in self.FORBIDDEN_KEYWORDS:
+        for kw in FORBIDDEN_KEYWORDS:
             if re.search(rf"\b{kw}\b", normalized):
                 return f"Forbidden keyword in query: {kw}."
 
@@ -108,11 +65,12 @@ class DatabaseService:
         if ";" in stripped:
             return "Only a single statement is allowed."
 
-    # Block information_schema access
+        # Block information_schema access
         if "INFORMATION_SCHEMA" in normalized:
             return "Access to information_schema is not permitted."
 
         return None
+
     def execute_query(self, query: str) -> dict:
         error = self._validate_sql(query)
         if error:
@@ -129,7 +87,8 @@ class DatabaseService:
                 result = connection.execute(text(safe_query))
                 rows = [dict(row) for row in result.mappings().fetchmany(MAX_ROWS)]
                 
-                logger.info("db.execute | rows_returned=%d | %.1fms", len(rows), (time.perf_counter() - t) * 1000)
+                elapsed = (time.perf_counter() - t) * 1000
+                logger.info("db.execute | rows_returned=%d | %.1fms", len(rows), elapsed)
                 return {"results": rows}
                 
         except SQLAlchemyError as err:
@@ -138,4 +97,3 @@ class DatabaseService:
         except Exception as e:
             logger.error("DB error: %s", e)
             return {"error": "An unexpected issue occurred while retrieving data. Could you please clarify your query?"}
-

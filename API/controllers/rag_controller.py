@@ -34,7 +34,6 @@ async def query(
 
 @router.get("/export/{export_id}")
 async def export_csv(export_id: str):
-    """Stream cached query results as a CSV file download."""
     entry = _export_cache.pop(export_id, None)
     if not entry:
         raise HTTPException(
@@ -65,11 +64,9 @@ async def get_stats(handler: StatsHandler = Depends(get_stats_handler)):
 
 
 def _run_ingestion(handler: IngestionHandler, request: IngestionRequest):
-    """Wrapper function to run ingestion in background"""
     try:
         return handler.handle_ingestion(request)
     except Exception as e:
-        # Log error but don't raise - background task
         print(f"Ingestion error: {str(e)}")
         import traceback
         traceback.print_exc()
@@ -82,10 +79,8 @@ async def trigger_ingest(
     handler: IngestionHandler = Depends(get_ingestion_handler)
 ):
     try:
-        # Add ingestion task to background - FastAPI will run it after response is sent
         background_tasks.add_task(_run_ingestion, handler, request)
         
-        # Return immediately with acceptance message
         return {
             "status": "accepted",
             "message": "Ingestion started in background",
@@ -98,15 +93,3 @@ async def trigger_ingest(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
         )
-
-
-@router.get("/cost-stats")
-async def cost_stats():
-    """Returns LLM call count and estimated Gemini cost since last server restart."""
-    from services.rag_services.llm_service import get_cost_summary
-    summary = get_cost_summary()
-    return {
-        "total_llm_calls": int(summary["total_calls"]),
-        "estimated_gemini_cost_usd": round(summary["total_usd"], 6),
-        "note": "Ollama (local) has no token cost. Gemini cost is estimated at ~$0.15/1M input + $0.60/1M output tokens.",
-    }

@@ -1,14 +1,20 @@
-#!/bin/bash
+# IRS RAG Ingestion Commands
 
-# IRS RAG Ingestion Scripts
-# Usage: Run each command individually or execute the entire script
-# Make sure your API server is running on http://localhost:8000 (or update the URL)
+This document contains all the ingestion commands for the IRS RAG application. 
 
-API_URL="http://localhost:8000/ingest"
+**Important Notes:**
+1. **Remove any comments from JSON** - JSON does not support comments
+2. **Don't use placeholder values** - Never use `"string"` as a value. Use `null` or omit optional fields
+3. **Base URL:** Update `http://localhost:8000` to your actual API URL (e.g., `https://complyia-ai-api.azurewebsites.net/api`)
 
-# PDF Forms (First Batch)
-echo "Starting PDF Forms (First Batch) ingestion..."
-curl -X POST "$API_URL" \
+**Common Error:** If you see `[Errno 2] No such file or directory: 'string'`, you're using placeholder values. See `INGESTION_EXAMPLES.md` for correct usage.
+
+---
+
+## PDF Forms (First Batch)
+
+```bash
+curl -X POST http://localhost:8000/ingest \
   -H "Content-Type: application/json" \
   -d '{
     "seed_url": "https://www.irs.gov",
@@ -20,12 +26,12 @@ curl -X POST "$API_URL" \
     "max_pages": 500,
     "concurrency": 4
   }'
+```
 
-echo -e "\n\n"
+## PDF Forms (Second Batch – Extended List)
 
-# PDF Forms (Second Batch – Extended List)
-echo "Starting PDF Forms (Second Batch – Extended List) ingestion..."
-curl -X POST "$API_URL" \
+```bash
+curl -X POST http://localhost:8000/ingest \
   -H "Content-Type: application/json" \
   -d '{
     "seed_url": "https://www.irs.gov",
@@ -37,12 +43,12 @@ curl -X POST "$API_URL" \
     "max_pages": 500,
     "concurrency": 4
   }'
+```
 
-echo -e "\n\n"
+## Help / ITA / FAQs (HTML)
 
-# Help / ITA / FAQs (HTML)
-echo "Starting Help / ITA / FAQs (HTML) ingestion..."
-curl -X POST "$API_URL" \
+```bash
+curl -X POST http://localhost:8000/ingest \
   -H "Content-Type: application/json" \
   -d '{
     "seed_url": "https://www.irs.gov/help",
@@ -53,12 +59,12 @@ curl -X POST "$API_URL" \
     "max_pages": 3000,
     "concurrency": 6
   }'
+```
 
-echo -e "\n\n"
+## Tax Topics (HTML)
 
-# Tax Topics (HTML)
-echo "Starting Tax Topics (HTML) ingestion..."
-curl -X POST "$API_URL" \
+```bash
+curl -X POST http://localhost:8000/ingest \
   -H "Content-Type: application/json" \
   -d '{
     "seed_url": "https://www.irs.gov/taxtopics",
@@ -69,12 +75,12 @@ curl -X POST "$API_URL" \
     "max_pages": 2000,
     "concurrency": 6
   }'
+```
 
-echo -e "\n\n"
+## Publications (HTML)
 
-# Publications (HTML)
-echo "Starting Publications (HTML) ingestion..."
-curl -X POST "$API_URL" \
+```bash
+curl -X POST http://localhost:8000/ingest \
   -H "Content-Type: application/json" \
   -d '{
     "seed_url": "https://www.irs.gov/publications",
@@ -85,12 +91,12 @@ curl -X POST "$API_URL" \
     "max_pages": 3000,
     "concurrency": 6
   }'
+```
 
-echo -e "\n\n"
+## Forms & Instructions (HTML Hub)
 
-# Forms & Instructions (HTML Hub)
-echo "Starting Forms & Instructions (HTML Hub) ingestion..."
-curl -X POST "$API_URL" \
+```bash
+curl -X POST http://localhost:8000/ingest \
   -H "Content-Type: application/json" \
   -d '{
     "seed_url": "https://www.irs.gov/forms-instructions",
@@ -101,12 +107,12 @@ curl -X POST "$API_URL" \
     "max_pages": 1200,
     "concurrency": 6
   }'
+```
 
-echo -e "\n\n"
+## IRB (HTML)
 
-# IRB (HTML)
-echo "Starting IRB (HTML) ingestion..."
-curl -X POST "$API_URL" \
+```bash
+curl -X POST http://localhost:8000/ingest \
   -H "Content-Type: application/json" \
   -d '{
     "seed_url": "https://www.irs.gov/irb",
@@ -117,12 +123,12 @@ curl -X POST "$API_URL" \
     "max_pages": 2000,
     "concurrency": 6
   }'
+```
 
-echo -e "\n\n"
+## Credits & Deductions (HTML)
 
-# Credits & Deductions (HTML)
-echo "Starting Credits & Deductions (HTML) ingestion..."
-curl -X POST "$API_URL" \
+```bash
+curl -X POST http://localhost:8000/ingest \
   -H "Content-Type: application/json" \
   -d '{
     "seed_url": "https://www.irs.gov/credits-deductions",
@@ -133,12 +139,12 @@ curl -X POST "$API_URL" \
     "max_pages": 2000,
     "concurrency": 6
   }'
+```
 
-echo -e "\n\n"
+## Core Hubs - Individuals
 
-# Core Hubs - Individuals
-echo "Starting Core Hubs - Individuals ingestion..."
-curl -X POST "$API_URL" \
+```bash
+curl -X POST http://localhost:8000/ingest \
   -H "Content-Type: application/json" \
   -d '{
     "seed_url": "https://www.irs.gov/individuals",
@@ -149,12 +155,12 @@ curl -X POST "$API_URL" \
     "max_pages": 4000,
     "concurrency": 6
   }'
+```
 
-echo -e "\n\n"
+## Core Hubs - Businesses
 
-# Core Hubs - Businesses
-echo "Starting Core Hubs - Businesses ingestion..."
-curl -X POST "$API_URL" \
+```bash
+curl -X POST http://localhost:8000/ingest \
   -H "Content-Type: application/json" \
   -d '{
     "seed_url": "https://www.irs.gov/businesses",
@@ -165,12 +171,12 @@ curl -X POST "$API_URL" \
     "max_pages": 4000,
     "concurrency": 6
   }'
+```
 
-echo -e "\n\n"
+## Newsroom (Broad)
 
-# Newsroom (Broad)
-echo "Starting Newsroom (Broad) ingestion..."
-curl -X POST "$API_URL" \
+```bash
+curl -X POST http://localhost:8000/ingest \
   -H "Content-Type: application/json" \
   -d '{
     "seed_url": "https://www.irs.gov/newsroom",
@@ -181,12 +187,12 @@ curl -X POST "$API_URL" \
     "max_pages": 4000,
     "concurrency": 6
   }'
+```
 
-echo -e "\n\n"
+## Publications / Forms PDFs (Deep Sweep)
 
-# Publications / Forms PDFs (Deep Sweep)
-echo "Starting Publications / Forms PDFs (Deep Sweep) ingestion..."
-curl -X POST "$API_URL" \
+```bash
+curl -X POST http://localhost:8000/ingest \
   -H "Content-Type: application/json" \
   -d '{
     "seed_url": "https://www.irs.gov/forms-instructions",
@@ -197,7 +203,24 @@ curl -X POST "$API_URL" \
     "max_pages": 10000,
     "concurrency": 4
   }'
+```
 
-echo -e "\n\n"
-echo "All ingestion scripts completed!"
+---
+
+## Usage Notes
+
+1. **Update the API URL:** Replace `http://localhost:8000` with your actual API endpoint (e.g., `https://complyia-ai-api.azurewebsites.net/api`)
+
+2. **Run scripts individually:** Each command can be run independently. Wait for one to complete before starting the next.
+
+3. **Monitor progress:** Check the response JSON for ingestion statistics including:
+   - `pages_processed`: Number of pages successfully processed
+   - `total_chunks`: Total chunks created and stored
+   - `target_urls_found`: Number of URLs discovered
+
+4. **Using the shell script:** You can also run all commands at once using:
+   ```bash
+   chmod +x ingestion_scripts.sh
+   ./ingestion_scripts.sh
+   ```
 

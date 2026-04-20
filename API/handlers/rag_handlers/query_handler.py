@@ -319,15 +319,7 @@ class QueryHandler:
             top_n = top_n or TOP_N
             cutoff = cutoff or SIMILARITY_CUTOFF
             is_schema = is_schema_query(query)
-
-            # ── Adaptive Query Path (Task 2) ──────────────────────────────
-            # Schema queries benefit from wider candidate retrieval.
-            # IRS queries stay at default TOP_K=20 for speed.
-            if is_schema and top_k == TOP_K:
-                from services.rag_services.retrieval_service import SCHEMA_TOP_K
-                top_k = SCHEMA_TOP_K
-                logger.info("[%s] adaptive_top_k | schema=True | top_k=%d", request_id, top_k)
-
+            
             if not is_schema:           
                 sem_route, schema_score, irs_score = self.semantic_router.classify(query_embedding)
                 is_schema = (sem_route == "schema")
@@ -518,3 +510,6 @@ class QueryHandler:
                 generated_sql=None,
                 active_collection=None,
             )
+
+
+
