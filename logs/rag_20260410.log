@@ -1,0 +1,43 @@
+[2026-04-10 12:59:57] [INFO] [request] → GET /docs
+[2026-04-10 12:59:57] [INFO] [request] ← GET /docs | status=200 | total=1.0ms
+[2026-04-10 12:59:58] [INFO] [request] → GET /openapi.json
+[2026-04-10 12:59:58] [INFO] [request] ← GET /openapi.json | status=200 | total=31.0ms
+[2026-04-10 13:01:39] [INFO] [request] → GET /docs
+[2026-04-10 13:01:39] [INFO] [request] ← GET /docs | status=200 | total=0.7ms
+[2026-04-10 13:01:39] [INFO] [request] → GET /openapi.json
+[2026-04-10 13:01:39] [INFO] [request] ← GET /openapi.json | status=200 | total=44.7ms
+[2026-04-10 13:02:37] [INFO] [request] → GET /cost-stats
+[2026-04-10 13:02:37] [INFO] [request] ← GET /cost-stats | status=200 | total=2.8ms
+[2026-04-10 13:02:37] [INFO] [request] → GET /favicon.ico
+[2026-04-10 13:02:37] [INFO] [request] ← GET /favicon.ico | status=404 | total=0.6ms
+[2026-04-10 13:03:29] [INFO] [request] → POST /query
+[2026-04-10 13:03:30] [WARNING] [huggingface_hub.utils._http] Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[2026-04-10 13:03:37] [INFO] [query_handler] [5bbbd2] [1/8] sanitize_query | query=what is the standard deduction |0.2ms
+[2026-04-10 13:04:33] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | input_tokens~130 | output_tokens~17 | 55973.4ms
+[2026-04-10 13:04:33] [INFO] [llm_service] rewrite_query | original=what is the standard deduction | rewritten=What is the standard deduction for a single person filing their taxes?
+[2026-04-10 13:04:33] [INFO] [query_handler] [5bbbd2] [1.5/8] rewrite_query | new_query=What is the standard deduction for a single person filing their taxes? | 55974.0ms
+[2026-04-10 13:04:33] [INFO] [query_handler] [5bbbd2] [2/8] get_embedding | 79.7ms
+[2026-04-10 13:04:33] [INFO] [query_handler] SemanticRouter | building intent centroids ...
+[2026-04-10 13:04:33] [INFO] [query_handler] SemanticRouter | centroids ready.
+[2026-04-10 13:04:33] [INFO] [query_handler] [5bbbd2] semantic_route | route=irs | schema_score=0.0901 | irs_score=0.6772
+[2026-04-10 13:04:33] [INFO] [query_handler] [5bbbd2] route | collection=irs_rag_v1 | is_schema=False
+[2026-04-10 13:04:34] [INFO] [query_handler] [5bbbd2] [3/8] retrieve | chunks_found=0 | 635.6ms
+[2026-04-10 13:04:34] [INFO] [request] ← POST /query | status=200 | total=64488.7ms
+[2026-04-10 13:06:01] [INFO] [request] → POST /query
+[2026-04-10 13:06:01] [INFO] [query_handler] [d77db9] [1/8] sanitize_query | query=what is the standard deduction |0.0ms
+[2026-04-10 13:06:01] [INFO] [query_handler] [d77db9] [2/8] get_embedding | 12.2ms
+[2026-04-10 13:06:01] [INFO] [query_handler] [d77db9] semantic_route | route=irs | schema_score=0.1653 | irs_score=0.6838
+[2026-04-10 13:06:01] [INFO] [query_handler] [d77db9] route | collection=irs_rag_v1 | is_schema=False
+[2026-04-10 13:06:02] [INFO] [query_handler] [d77db9] [3/8] retrieve | chunks_found=0 | 708.7ms
+[2026-04-10 13:06:02] [INFO] [request] ← POST /query | status=200 | total=725.1ms
+[2026-04-10 13:06:31] [INFO] [request] → GET /cost-stats
+[2026-04-10 13:06:31] [INFO] [request] ← GET /cost-stats | status=200 | total=1.4ms
+[2026-04-10 13:07:38] [INFO] [request] → POST /query
+[2026-04-10 13:07:38] [INFO] [query_handler] [e9a079] [1/8] sanitize_query | query=what is the standard deduction |0.0ms
+[2026-04-10 13:07:38] [INFO] [query_handler] [e9a079] [2/8] get_embedding | 21.4ms
+[2026-04-10 13:07:38] [INFO] [query_handler] [e9a079] semantic_route | route=irs | schema_score=0.1653 | irs_score=0.6838
+[2026-04-10 13:07:38] [INFO] [query_handler] [e9a079] route | collection=irs_rag_v1 | is_schema=False
+[2026-04-10 13:07:39] [INFO] [query_handler] [e9a079] [3/8] retrieve | chunks_found=0 | 716.5ms
+[2026-04-10 13:07:39] [INFO] [request] ← POST /query | status=200 | total=741.2ms
+[2026-04-10 13:08:29] [INFO] [request] → GET /cost-stats
+[2026-04-10 13:08:29] [INFO] [request] ← GET /cost-stats | status=200 | total=1.4ms
