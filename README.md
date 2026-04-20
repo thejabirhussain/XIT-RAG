@@ -61,3 +61,10 @@ git commit -m "quick commit"
 git push
 ```
 
+
+## UI setup
+
+```bash
+npm install
+npm run dev
+```
