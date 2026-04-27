@@ -14,6 +14,8 @@ HNSW_EF_CONSTRUCTION = 128
 
 class QdrantService:
     def __init__(self, url: str, api_key: Optional[str] = None):
+        print(f"[DEBUG] Qdrant URL: '{url}'")   # add this
+        print(f"[DEBUG] API Key starts with: '{api_key[:10] if api_key else None}'")
         self.url = url
         self.api_key = api_key
         self.client = QdrantClient(url=self.url, api_key=self.api_key)

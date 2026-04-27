@@ -1,0 +1,91 @@
+[2026-04-27 22:17:48] [INFO] [request] → POST /query
+[2026-04-27 22:17:59] [INFO] [services.rag_services.database_service] DatabaseService initialized with Supabase PostgreSQL
+[2026-04-27 22:17:59] [INFO] [query_handler] [27c1b9] [1/8] sanitize_query | query=List all open risks in the database |0.4ms
+[2026-04-27 22:18:05] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=35 | 5906.3ms
+[2026-04-27 22:18:05] [INFO] [llm_service] rewrite_query | original=List all open risks in the database | rewritten=List all open risks in the database
+[2026-04-27 22:18:05] [INFO] [query_handler] [27c1b9] [1.5/8] rewrite_query | new_query=List all open risks in the database | 5907.6ms
+[2026-04-27 22:18:11] [INFO] [query_handler] [27c1b9] [2/8] get_embedding | 5559.3ms
+[2026-04-27 22:18:11] [INFO] [query_handler] [27c1b9] keyword_route | schema=True (keyword/regex match)
+[2026-04-27 22:18:11] [INFO] [query_handler] [27c1b9] route | collection=schema | is_schema=True
+[2026-04-27 22:18:12] [INFO] [query_handler] [27c1b9] [3/8] retrieve | chunks_found=20 | 1167.9ms
+[2026-04-27 22:18:16] [INFO] [query_handler] [27c1b9] [4/8] rerank | chunks_after=3 | 4017.1ms
+[2026-04-27 22:18:51] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=251 | 34800.3ms
+[2026-04-27 22:18:51] [INFO] [query_handler] [27c1b9] [5/8] generate_sql | sql_preview=SELECT r.title, r.risk_score, r.likelihood, r.impact, u.full_name AS owner, o.name AS org 
+FROM risk | 34801.0ms
+[2026-04-27 22:19:11] [ERROR] [services.rag_services.database_service] SQL execution error: (psycopg2.OperationalError) connection to server at "aws-1-us-east-2.pooler.supabase.com" (13.58.13.125), port 5432 failed: server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2026-04-27 22:19:11] [INFO] [query_handler] [27c1b9] [6/8] execute_query | rows=0 | error=True | 19976.5ms
+[2026-04-27 22:19:11] [INFO] [query_handler] [27c1b9] [7/8] build_db_prompt | 0.0ms
+[2026-04-27 22:19:23] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=42 | 12549.8ms
+[2026-04-27 22:19:23] [INFO] [query_handler] [27c1b9] [8/8] llm_generate | model=ollama | answer_len=42 | 12550.4ms
+[2026-04-27 22:19:23] [INFO] [query_handler] [27c1b9] ✓ handle_query complete | confidence=high | total=83994.8ms
+[2026-04-27 22:19:23] [INFO] [request] ← POST /query | status=200 | total=95096.9ms
+[2026-04-27 22:21:40] [INFO] [request] → POST /query
+[2026-04-27 22:21:51] [INFO] [query_handler] [5ede1c] [1/8] sanitize_query | query=List all open risks in the database |0.5ms
+[2026-04-27 22:21:57] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=35 | 5786.2ms
+[2026-04-27 22:21:57] [INFO] [llm_service] rewrite_query | original=List all open risks in the database | rewritten=List all open risks in the database
+[2026-04-27 22:21:57] [INFO] [query_handler] [5ede1c] [1.5/8] rewrite_query | new_query=List all open risks in the database | 5787.4ms
+[2026-04-27 22:22:00] [INFO] [query_handler] [5ede1c] [2/8] get_embedding | 3539.1ms
+[2026-04-27 22:22:00] [INFO] [query_handler] [5ede1c] keyword_route | schema=True (keyword/regex match)
+[2026-04-27 22:22:00] [INFO] [query_handler] [5ede1c] route | collection=schema | is_schema=True
+[2026-04-27 22:22:01] [INFO] [query_handler] [5ede1c] [3/8] retrieve | chunks_found=20 | 771.6ms
+[2026-04-27 22:22:03] [INFO] [query_handler] [5ede1c] [4/8] rerank | chunks_after=3 | 2394.1ms
+[2026-04-27 22:22:34] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=251 | 30497.1ms
+[2026-04-27 22:22:34] [INFO] [query_handler] [5ede1c] [5/8] generate_sql | sql_preview=SELECT r.title, r.risk_score, r.likelihood, r.impact, u.full_name AS owner, o.name AS org 
+FROM risk | 30497.7ms
+[2026-04-27 22:22:34] [ERROR] [services.rag_services.database_service] SQL execution error: (psycopg2.OperationalError) could not translate host name "db.brfsaqbjafutjpmurfwj.supabase.co" to address: Name or service not known
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2026-04-27 22:22:34] [INFO] [query_handler] [5ede1c] [6/8] execute_query | rows=0 | error=True | 131.1ms
+[2026-04-27 22:22:34] [INFO] [query_handler] [5ede1c] [7/8] build_db_prompt | 0.0ms
+[2026-04-27 22:22:49] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=42 | 15230.9ms
+[2026-04-27 22:22:49] [INFO] [query_handler] [5ede1c] [8/8] llm_generate | model=ollama | answer_len=42 | 15231.5ms
+[2026-04-27 22:22:49] [INFO] [query_handler] [5ede1c] ✓ handle_query complete | confidence=high | total=58359.7ms
+[2026-04-27 22:22:49] [INFO] [request] ← POST /query | status=200 | total=68668.0ms
+[2026-04-28 01:54:29] [INFO] [request] → POST /query
+[2026-04-28 01:54:29] [INFO] [query_handler] [438e81] [1/8] sanitize_query | query=List all open risks in the database |0.9ms
+[2026-04-28 01:55:04] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=35 | 34570.6ms
+[2026-04-28 01:55:04] [INFO] [llm_service] rewrite_query | original=List all open risks in the database | rewritten=List all open risks in the database
+[2026-04-28 01:55:04] [INFO] [query_handler] [438e81] [1.5/8] rewrite_query | new_query=List all open risks in the database | 34579.9ms
+[2026-04-28 01:55:05] [INFO] [query_handler] [438e81] [2/8] get_embedding | 1303.5ms
+[2026-04-28 01:55:05] [INFO] [query_handler] [438e81] keyword_route | schema=True (keyword/regex match)
+[2026-04-28 01:55:05] [INFO] [query_handler] [438e81] route | collection=schema | is_schema=True
+[2026-04-28 01:55:06] [INFO] [query_handler] [438e81] [3/8] retrieve | chunks_found=20 | 1328.8ms
+[2026-04-28 01:55:11] [INFO] [query_handler] [438e81] [4/8] rerank | chunks_after=3 | 4347.9ms
+[2026-04-28 01:55:46] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=251 | 35122.9ms
+[2026-04-28 01:55:46] [INFO] [query_handler] [438e81] [5/8] generate_sql | sql_preview=SELECT r.title, r.risk_score, r.likelihood, r.impact, u.full_name AS owner, o.name AS org 
+FROM risk | 35127.2ms
+[2026-04-28 01:55:46] [ERROR] [services.rag_services.database_service] SQL execution error: (psycopg2.OperationalError) could not translate host name "db.brfsaqbjafutjpmurfwj.supabase.co" to address: Name or service not known
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2026-04-28 01:55:46] [INFO] [query_handler] [438e81] [6/8] execute_query | rows=0 | error=True | 256.4ms
+[2026-04-28 01:55:46] [INFO] [query_handler] [438e81] [7/8] build_db_prompt | 1.9ms
+[2026-04-28 01:55:58] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=42 | 11621.3ms
+[2026-04-28 01:55:58] [INFO] [query_handler] [438e81] [8/8] llm_generate | model=ollama | answer_len=42 | 11622.1ms
+[2026-04-28 01:55:58] [INFO] [query_handler] [438e81] ✓ handle_query complete | confidence=high | total=88655.3ms
+[2026-04-28 01:55:58] [INFO] [request] ← POST /query | status=200 | total=88729.8ms
+[2026-04-28 01:59:00] [INFO] [request] → POST /query
+[2026-04-28 01:59:00] [INFO] [query_handler] [166f18] [1/8] sanitize_query | query=List all open risks in the database |0.0ms
+[2026-04-28 01:59:07] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=35 | 6137.3ms
+[2026-04-28 01:59:07] [INFO] [llm_service] rewrite_query | original=List all open risks in the database | rewritten=List all open risks in the database
+[2026-04-28 01:59:07] [INFO] [query_handler] [166f18] [1.5/8] rewrite_query | new_query=List all open risks in the database | 6139.4ms
+[2026-04-28 01:59:07] [INFO] [query_handler] [166f18] [2/8] get_embedding | 36.0ms
+[2026-04-28 01:59:07] [INFO] [query_handler] [166f18] keyword_route | schema=True (keyword/regex match)
+[2026-04-28 01:59:07] [INFO] [query_handler] [166f18] route | collection=schema | is_schema=True
+[2026-04-28 01:59:07] [INFO] [query_handler] [166f18] [3/8] retrieve | chunks_found=20 | 718.2ms
+[2026-04-28 01:59:10] [INFO] [query_handler] [166f18] [4/8] rerank | chunks_after=3 | 2352.6ms
+[2026-04-28 01:59:42] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=251 | 32009.2ms
+[2026-04-28 01:59:42] [INFO] [query_handler] [166f18] [5/8] generate_sql | sql_preview=SELECT r.title, r.risk_score, r.likelihood, r.impact, u.full_name AS owner, o.name AS org 
+FROM risk | 32023.6ms
+[2026-04-28 01:59:42] [ERROR] [services.rag_services.database_service] SQL execution error: (psycopg2.OperationalError) could not translate host name "db.brfsaqbjafutjpmurfwj.supabase.co" to address: Name or service not known
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2026-04-28 01:59:42] [INFO] [query_handler] [166f18] [6/8] execute_query | rows=0 | error=True | 140.1ms
+[2026-04-28 01:59:42] [INFO] [query_handler] [166f18] [7/8] build_db_prompt | 0.0ms
+[2026-04-28 01:59:53] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=42 | 11528.4ms
+[2026-04-28 01:59:53] [INFO] [query_handler] [166f18] [8/8] llm_generate | model=ollama | answer_len=42 | 11594.5ms
+[2026-04-28 01:59:53] [INFO] [query_handler] [166f18] ✓ handle_query complete | confidence=high | total=53017.7ms
+[2026-04-28 01:59:53] [INFO] [request] ← POST /query | status=200 | total=53037.3ms

@@ -13,8 +13,9 @@ verify_models.py
 
 */.env
 
+/Uitility_Items
 
-
+/Uitility_Items/*
 
 
 

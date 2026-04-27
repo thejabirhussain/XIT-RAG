@@ -7,7 +7,7 @@ import time
 import logging
 logger = logging.getLogger("llm_service")
 
-OLLAMA_MODEL = "llama3.1:8b"
+OLLAMA_MODEL = "qwen2.5:14b"
 GEMINI_MODEL = "gemini-2.5-flash"  # SDK will add 'models/' prefix
 MAX_SCHEMA_CHUNK_CHARS = 800  # ← ADD THIS
 

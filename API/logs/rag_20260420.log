@@ -1,0 +1,230 @@
+[2026-04-20 21:26:53] [INFO] [request] → POST /query
+[2026-04-20 21:26:58] [INFO] [services.rag_services.database_service] DatabaseService initialized with Supabase PostgreSQL
+[2026-04-20 21:26:58] [INFO] [query_handler] [2907d0] [1/8] sanitize_query | query=How many mitigated risks do we have? |0.6ms
+[2026-04-20 21:27:19] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=146 | 21221.2ms
+[2026-04-20 21:27:19] [INFO] [llm_service] rewrite_query | original=How many mitigated risks do we have? | rewritten=What are the results of our previous attempts to retrieve the count of mitigated risks, and can you 
+[2026-04-20 21:27:19] [INFO] [query_handler] [2907d0] [1.5/8] rewrite_query | new_query=What are the results of our previous attempts to retrieve the count of mitigated risks, and can you provide the current number of mitigated risks? | 21222.9ms
+[2026-04-20 21:27:25] [INFO] [query_handler] [2907d0] [2/8] get_embedding | 5328.5ms
+[2026-04-20 21:27:25] [INFO] [query_handler] [2907d0] keyword_route | schema=True (keyword/regex match)
+[2026-04-20 21:27:25] [INFO] [query_handler] [2907d0] route | collection=schema | is_schema=True
+[2026-04-20 21:27:26] [ERROR] [query_handler] [2907d0] ✗ handle_query failed (Unknown Error) | total=27895.7ms | error=Unexpected Response: 404 (Not Found)
+Raw response content:
+b'404 page not found\n'
+Traceback (most recent call last):
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\API\handlers\rag_handlers\query_handler.py", line 338, in handle_query
+    chunks = self.retrieval_service.retrieve(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\API\services\rag_services\retrieval_service.py", line 53, in retrieve
+    hits = self.qdrant_service.search(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\API\services\rag_services\qdrant_service.py", line 67, in search
+    return self.client.search(
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\qdrant_client.py", line 387, in search
+    return self._client.search(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\qdrant_remote.py", line 563, in search
+    search_result = self.http.points_api.search_points(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api\points_api.py", line 1616, in search_points
+    return self._build_for_search_points(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api\points_api.py", line 750, in _build_for_search_points
+    return self.api_client.request(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 79, in request
+    return self.send(request, type_)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 102, in send
+    raise UnexpectedResponse.for_response(response)
+qdrant_client.http.exceptions.UnexpectedResponse: Unexpected Response: 404 (Not Found)
+Raw response content:
+b'404 page not found\n'
+[2026-04-20 21:27:26] [INFO] [request] ← POST /query | status=200 | total=33596.5ms
+[2026-04-20 21:32:45] [INFO] [request] → POST /query
+[2026-04-20 21:32:51] [INFO] [services.rag_services.database_service] DatabaseService initialized with Supabase PostgreSQL
+[2026-04-20 21:32:51] [INFO] [query_handler] [72b1f4] [1/8] sanitize_query | query=How many mitigated risks do we have? |0.6ms
+[2026-04-20 21:33:11] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=133 | 19960.0ms
+[2026-04-20 21:33:11] [INFO] [llm_service] rewrite_query | original=How many mitigated risks do we have? | rewritten=What is the current count of mitigated risks despite repeated attempts to retrieve this information 
+[2026-04-20 21:33:11] [INFO] [query_handler] [72b1f4] [1.5/8] rewrite_query | new_query=What is the current count of mitigated risks despite repeated attempts to retrieve this information resulting in an unexpected error? | 19961.4ms
+[2026-04-20 21:33:20] [INFO] [query_handler] [72b1f4] [2/8] get_embedding | 8987.6ms
+[2026-04-20 21:33:20] [INFO] [query_handler] [72b1f4] keyword_route | schema=True (keyword/regex match)
+[2026-04-20 21:33:20] [INFO] [query_handler] [72b1f4] route | collection=schema | is_schema=True
+[2026-04-20 21:33:21] [ERROR] [query_handler] [72b1f4] ✗ handle_query failed (Unknown Error) | total=29817.9ms | error=Unexpected Response: 404 (Not Found)
+Raw response content:
+b'404 page not found\n'
+Traceback (most recent call last):
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\API\handlers\rag_handlers\query_handler.py", line 338, in handle_query
+    chunks = self.retrieval_service.retrieve(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\API\services\rag_services\retrieval_service.py", line 53, in retrieve
+    hits = self.qdrant_service.search(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\API\services\rag_services\qdrant_service.py", line 69, in search
+    return self.client.search(
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\qdrant_client.py", line 387, in search
+    return self._client.search(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\qdrant_remote.py", line 563, in search
+    search_result = self.http.points_api.search_points(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api\points_api.py", line 1616, in search_points
+    return self._build_for_search_points(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api\points_api.py", line 750, in _build_for_search_points
+    return self.api_client.request(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 79, in request
+    return self.send(request, type_)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 102, in send
+    raise UnexpectedResponse.for_response(response)
+qdrant_client.http.exceptions.UnexpectedResponse: Unexpected Response: 404 (Not Found)
+Raw response content:
+b'404 page not found\n'
+[2026-04-20 21:33:21] [INFO] [request] ← POST /query | status=200 | total=36238.1ms
+[2026-04-20 21:42:30] [INFO] [request] → POST /query
+[2026-04-20 21:42:36] [INFO] [services.rag_services.database_service] DatabaseService initialized with Supabase PostgreSQL
+[2026-04-20 21:42:36] [INFO] [query_handler] [d7fa64] [1/8] sanitize_query | query=How many mitigated risks do we have? |0.5ms
+[2026-04-20 21:43:00] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=192 | 23352.9ms
+[2026-04-20 21:43:00] [INFO] [llm_service] rewrite_query | original=How many mitigated risks do we have? | rewritten=Despite multiple attempts, an unexpected error has occurred while processing the request to retrieve
+[2026-04-20 21:43:00] [INFO] [query_handler] [d7fa64] [1.5/8] rewrite_query | new_query=Despite multiple attempts, an unexpected error has occurred while processing the request to retrieve the number of mitigated risks. Can you please clarify what you're looking for or try again? | 23354.6ms
+[2026-04-20 21:43:07] [INFO] [query_handler] [d7fa64] [2/8] get_embedding | 7395.8ms
+[2026-04-20 21:43:07] [INFO] [query_handler] [d7fa64] keyword_route | schema=True (keyword/regex match)
+[2026-04-20 21:43:07] [INFO] [query_handler] [d7fa64] route | collection=schema | is_schema=True
+[2026-04-20 21:43:08] [ERROR] [query_handler] [d7fa64] ✗ handle_query failed (Unknown Error) | total=32003.9ms | error=Unexpected Response: 404 (Not Found)
+Raw response content:
+b'404 page not found\n'
+Traceback (most recent call last):
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\API\handlers\rag_handlers\query_handler.py", line 338, in handle_query
+    chunks = self.retrieval_service.retrieve(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\API\services\rag_services\retrieval_service.py", line 53, in retrieve
+    hits = self.qdrant_service.search(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\API\services\rag_services\qdrant_service.py", line 69, in search
+    return self.client.search(
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\qdrant_client.py", line 387, in search
+    return self._client.search(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\qdrant_remote.py", line 563, in search
+    search_result = self.http.points_api.search_points(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api\points_api.py", line 1616, in search_points
+    return self._build_for_search_points(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api\points_api.py", line 750, in _build_for_search_points
+    return self.api_client.request(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 79, in request
+    return self.send(request, type_)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 102, in send
+    raise UnexpectedResponse.for_response(response)
+qdrant_client.http.exceptions.UnexpectedResponse: Unexpected Response: 404 (Not Found)
+Raw response content:
+b'404 page not found\n'
+[2026-04-20 21:43:08] [INFO] [request] ← POST /query | status=200 | total=38235.1ms
+[2026-04-20 21:49:03] [INFO] [request] → POST /query
+[2026-04-20 21:49:09] [INFO] [services.rag_services.database_service] DatabaseService initialized with Supabase PostgreSQL
+[2026-04-20 21:49:09] [INFO] [query_handler] [8ae951] [1/8] sanitize_query | query=How many mitigated risks do we have? |0.6ms
+[2026-04-20 21:49:29] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=133 | 19653.5ms
+[2026-04-20 21:49:29] [INFO] [llm_service] rewrite_query | original=How many mitigated risks do we have? | rewritten=What is the current count of mitigated risks despite repeated attempts to retrieve this information 
+[2026-04-20 21:49:29] [INFO] [query_handler] [8ae951] [1.5/8] rewrite_query | new_query=What is the current count of mitigated risks despite repeated attempts to retrieve this information resulting in an unexpected error? | 19654.9ms
+[2026-04-20 21:49:36] [INFO] [query_handler] [8ae951] [2/8] get_embedding | 7427.6ms
+[2026-04-20 21:49:36] [INFO] [query_handler] [8ae951] keyword_route | schema=True (keyword/regex match)
+[2026-04-20 21:49:36] [INFO] [query_handler] [8ae951] route | collection=schema | is_schema=True
+[2026-04-20 21:49:37] [INFO] [query_handler] [8ae951] [3/8] retrieve | chunks_found=20 | 406.6ms
+[2026-04-20 21:49:38] [INFO] [query_handler] [8ae951] [4/8] rerank | chunks_after=3 | 1687.8ms
+[2026-04-20 21:49:50] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=77 | 11821.5ms
+[2026-04-20 21:49:50] [INFO] [query_handler] [8ae951] [5/8] generate_sql | sql_preview=SELECT COUNT(*) FROM risks WHERE status = 'mitigated' AND org_id = 1 LIMIT 50 | 11822.2ms
+[2026-04-20 21:49:50] [ERROR] [services.rag_services.database_service] SQL execution error: (psycopg2.OperationalError) could not translate host name "db.brfsaqbjafutjpmurfwj.supabase.co" to address: Name or service not known
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2026-04-20 21:49:50] [INFO] [query_handler] [8ae951] [6/8] execute_query | rows=0 | error=True | 32.0ms
+[2026-04-20 21:49:50] [INFO] [query_handler] [8ae951] [7/8] build_db_prompt | 0.0ms
+[2026-04-20 21:50:11] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=319 | 20244.1ms
+[2026-04-20 21:50:11] [INFO] [query_handler] [8ae951] [8/8] llm_generate | model=ollama | answer_len=319 | 20244.7ms
+[2026-04-20 21:50:11] [INFO] [query_handler] [8ae951] ✓ handle_query complete | confidence=low | total=61291.7ms
+[2026-04-20 21:50:11] [INFO] [request] ← POST /query | status=200 | total=67758.1ms
+[2026-04-20 21:52:51] [INFO] [request] → POST /query
+[2026-04-20 21:52:51] [INFO] [query_handler] [cacf7c] [1/8] sanitize_query | query=what are the open risks right now? |0.0ms
+[2026-04-20 21:52:58] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=40 | 7052.9ms
+[2026-04-20 21:52:58] [INFO] [llm_service] rewrite_query | original=what are the open risks right now? | rewritten=What is the current count of open risks?
+[2026-04-20 21:52:58] [INFO] [query_handler] [cacf7c] [1.5/8] rewrite_query | new_query=What is the current count of open risks? | 7054.1ms
+[2026-04-20 21:52:58] [INFO] [query_handler] [cacf7c] [2/8] get_embedding | 39.3ms
+[2026-04-20 21:52:58] [INFO] [query_handler] [cacf7c] keyword_route | schema=True (keyword/regex match)
+[2026-04-20 21:52:58] [INFO] [query_handler] [cacf7c] route | collection=schema | is_schema=True
+[2026-04-20 21:52:58] [INFO] [query_handler] [cacf7c] [3/8] retrieve | chunks_found=20 | 424.0ms
+[2026-04-20 21:53:01] [INFO] [query_handler] [cacf7c] [4/8] rerank | chunks_after=3 | 2496.0ms
+[2026-04-20 21:53:10] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=78 | 9748.1ms
+[2026-04-20 21:53:10] [INFO] [query_handler] [cacf7c] [5/8] generate_sql | sql_preview=SELECT COUNT(*) AS total_open_risks FROM risks WHERE status = 'open' LIMIT 50; | 9748.8ms
+[2026-04-20 21:53:10] [ERROR] [services.rag_services.database_service] SQL execution error: (psycopg2.OperationalError) could not translate host name "db.brfsaqbjafutjpmurfwj.supabase.co" to address: Name or service not known
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2026-04-20 21:53:10] [INFO] [query_handler] [cacf7c] [6/8] execute_query | rows=0 | error=True | 17.1ms
+[2026-04-20 21:53:10] [INFO] [query_handler] [cacf7c] [7/8] build_db_prompt | 0.0ms
+[2026-04-20 21:53:21] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=46 | 10362.1ms
+[2026-04-20 21:53:21] [INFO] [query_handler] [cacf7c] [8/8] llm_generate | model=ollama | answer_len=46 | 10362.9ms
+[2026-04-20 21:53:21] [INFO] [query_handler] [cacf7c] ✓ handle_query complete | confidence=low | total=30149.5ms
+[2026-04-20 21:53:21] [INFO] [request] ← POST /query | status=200 | total=30154.0ms
+[2026-04-20 22:01:15] [INFO] [request] → POST /query
+[2026-04-20 22:01:22] [INFO] [services.rag_services.database_service] DatabaseService initialized with Supabase PostgreSQL
+[2026-04-20 22:01:22] [INFO] [query_handler] [b81be2] [1/8] sanitize_query | query=How many mitigated risks do we have? |0.6ms
+[2026-04-20 22:01:44] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=116 | 21796.7ms
+[2026-04-20 22:01:44] [INFO] [llm_service] rewrite_query | original=How many mitigated risks do we have? | rewritten=What is the current count of mitigated risks, considering that no matching data was previously found
+[2026-04-20 22:01:44] [INFO] [query_handler] [b81be2] [1.5/8] rewrite_query | new_query=What is the current count of mitigated risks, considering that no matching data was previously found for this query? | 21798.6ms
+[2026-04-20 22:01:51] [INFO] [query_handler] [b81be2] [2/8] get_embedding | 7367.2ms
+[2026-04-20 22:01:51] [INFO] [query_handler] [b81be2] keyword_route | schema=True (keyword/regex match)
+[2026-04-20 22:01:51] [INFO] [query_handler] [b81be2] route | collection=schema | is_schema=True
+[2026-04-20 22:01:51] [INFO] [query_handler] [b81be2] [3/8] retrieve | chunks_found=20 | 434.2ms
+[2026-04-20 22:01:54] [INFO] [query_handler] [b81be2] [4/8] rerank | chunks_after=3 | 2441.0ms
+[2026-04-20 22:02:04] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=62 | 10525.9ms
+[2026-04-20 22:02:04] [INFO] [query_handler] [b81be2] [5/8] generate_sql | sql_preview=SELECT COUNT(*) FROM risks WHERE status = 'mitigated' LIMIT 50 | 10526.7ms
+[2026-04-20 22:02:09] [INFO] [services.rag_services.database_service] db.execute | rows_returned=1 | 4125.5ms
+[2026-04-20 22:02:09] [INFO] [query_handler] [b81be2] [6/8] execute_query | rows=1 | error=False | 4328.3ms
+[2026-04-20 22:02:09] [INFO] [query_handler] [b81be2] [7/8] build_db_prompt | 2.0ms
+[2026-04-20 22:02:17] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=46 | 8272.0ms
+[2026-04-20 22:02:17] [INFO] [query_handler] [b81be2] [8/8] llm_generate | model=ollama | answer_len=46 | 8272.7ms
+[2026-04-20 22:02:17] [INFO] [query_handler] [b81be2] ✓ handle_query complete | confidence=low | total=55185.2ms
+[2026-04-20 22:02:17] [INFO] [request] ← POST /query | status=200 | total=61696.8ms
+[2026-04-20 22:03:00] [INFO] [request] → POST /query
+[2026-04-20 22:03:00] [INFO] [query_handler] [90cc79] [1/8] sanitize_query | query=what are the open risks right now? |0.0ms
+[2026-04-20 22:03:07] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=40 | 7077.3ms
+[2026-04-20 22:03:07] [INFO] [llm_service] rewrite_query | original=what are the open risks right now? | rewritten=What is the current count of open risks?
+[2026-04-20 22:03:07] [INFO] [query_handler] [90cc79] [1.5/8] rewrite_query | new_query=What is the current count of open risks? | 7078.5ms
+[2026-04-20 22:03:08] [INFO] [query_handler] [90cc79] [2/8] get_embedding | 32.7ms
+[2026-04-20 22:03:08] [INFO] [query_handler] [90cc79] keyword_route | schema=True (keyword/regex match)
+[2026-04-20 22:03:08] [INFO] [query_handler] [90cc79] route | collection=schema | is_schema=True
+[2026-04-20 22:03:08] [INFO] [query_handler] [90cc79] [3/8] retrieve | chunks_found=20 | 437.9ms
+[2026-04-20 22:03:10] [INFO] [query_handler] [90cc79] [4/8] rerank | chunks_after=3 | 2369.5ms
+[2026-04-20 22:03:20] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=78 | 9752.9ms
+[2026-04-20 22:03:20] [INFO] [query_handler] [90cc79] [5/8] generate_sql | sql_preview=SELECT COUNT(*) AS total_open_risks FROM risks WHERE status = 'open' LIMIT 50; | 9753.7ms
+[2026-04-20 22:03:21] [INFO] [services.rag_services.database_service] db.execute | rows_returned=1 | 600.2ms
+[2026-04-20 22:03:21] [INFO] [query_handler] [90cc79] [6/8] execute_query | rows=1 | error=False | 799.9ms
+[2026-04-20 22:03:21] [INFO] [query_handler] [90cc79] [7/8] build_db_prompt | 0.1ms
+[2026-04-20 22:03:34] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=74 | 12796.4ms
+[2026-04-20 22:03:34] [INFO] [query_handler] [90cc79] [8/8] llm_generate | model=ollama | answer_len=74 | 12797.0ms
+[2026-04-20 22:03:34] [INFO] [query_handler] [90cc79] ✓ handle_query complete | confidence=low | total=33276.6ms
+[2026-04-20 22:03:34] [INFO] [request] ← POST /query | status=200 | total=33280.5ms
+[2026-04-20 22:16:35] [INFO] [request] → POST /query
+[2026-04-20 22:16:35] [INFO] [query_handler] [254547] [1/8] sanitize_query | query=ok can u tell me details of the 2 risks that are open |0.2ms
+[2026-04-20 22:16:58] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=60 | 22545.2ms
+[2026-04-20 22:16:58] [INFO] [llm_service] rewrite_query | original=ok can u tell me details of the 2 risks that are open | rewritten=What are the details of the two open risks currently listed?
+[2026-04-20 22:16:58] [INFO] [query_handler] [254547] [1.5/8] rewrite_query | new_query=What are the details of the two open risks currently listed? | 22553.8ms
+[2026-04-20 22:17:00] [INFO] [query_handler] [254547] [2/8] get_embedding | 2280.7ms
+[2026-04-20 22:17:00] [INFO] [query_handler] [254547] keyword_route | schema=True (keyword/regex match)
+[2026-04-20 22:17:00] [INFO] [query_handler] [254547] route | collection=schema | is_schema=True
+[2026-04-20 22:17:01] [INFO] [query_handler] [254547] [3/8] retrieve | chunks_found=19 | 743.3ms
+[2026-04-20 22:17:03] [INFO] [query_handler] [254547] [4/8] rerank | chunks_after=3 | 2549.7ms
+[2026-04-20 22:17:23] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=187 | 20257.9ms
+[2026-04-20 22:17:23] [INFO] [query_handler] [254547] [5/8] generate_sql | sql_preview=SELECT r.title, r.risk_score, r.likelihood, r.impact, u.full_name AS owner FROM risks r JOIN users u | 20259.2ms
+[2026-04-20 22:17:24] [INFO] [services.rag_services.database_service] db.execute | rows_returned=2 | 671.0ms
+[2026-04-20 22:17:24] [INFO] [query_handler] [254547] [6/8] execute_query | rows=2 | error=False | 880.1ms
+[2026-04-20 22:17:24] [INFO] [query_handler] [254547] [7/8] build_db_prompt | 5.3ms
+[2026-04-20 22:17:57] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=400 | 33040.4ms
+[2026-04-20 22:17:57] [INFO] [query_handler] [254547] [8/8] llm_generate | model=ollama | answer_len=400 | 33042.0ms
+[2026-04-20 22:17:57] [INFO] [query_handler] [254547] ✓ handle_query complete | confidence=low | total=82375.0ms
+[2026-04-20 22:17:57] [INFO] [request] ← POST /query | status=200 | total=82422.6ms
