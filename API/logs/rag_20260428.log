@@ -116,26 +116,6 @@ ORDER BY r.risk_score DESC LIMIT 50]
 [2026-04-28 02:24:55] [INFO] [query_handler] [6e8790] [8/8] llm_generate | model=ollama | answer_len=42 | 11805.4ms
 [2026-04-28 02:24:55] [INFO] [query_handler] [6e8790] ✓ handle_query complete | confidence=high | total=65224.8ms
 [2026-04-28 02:24:55] [INFO] [request] ← POST /query | status=200 | total=73033.8ms
-[2026-04-28 02:27:51] [INFO] [request] → POST /query
-[2026-04-28 02:27:51] [INFO] [query_handler] [d394b2] [1/8] sanitize_query | query=List all open risks in the database |0.0ms
-[2026-04-28 02:27:58] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=35 | 6643.6ms
-[2026-04-28 02:27:58] [INFO] [llm_service] rewrite_query | original=List all open risks in the database | rewritten=List all open risks in the database
-[2026-04-28 02:27:58] [INFO] [query_handler] [d394b2] [1.5/8] rewrite_query | new_query=List all open risks in the database | 6645.1ms
-[2026-04-28 02:27:58] [INFO] [query_handler] [d394b2] [2/8] get_embedding | 99.8ms
-[2026-04-28 02:27:58] [INFO] [query_handler] [d394b2] keyword_route | schema=True (keyword/regex match)
-[2026-04-28 02:27:58] [INFO] [query_handler] [d394b2] route | collection=schema | is_schema=True
-[2026-04-28 02:27:59] [INFO] [query_handler] [d394b2] [3/8] retrieve | chunks_found=20 | 578.3ms
-[2026-04-28 02:28:01] [INFO] [query_handler] [d394b2] [4/8] rerank | chunks_after=3 | 2460.9ms
-[2026-04-28 02:28:32] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=251 | 30899.2ms
-[2026-04-28 02:28:32] [INFO] [query_handler] [d394b2] [5/8] generate_sql | sql_preview=SELECT r.title, r.risk_score, r.likelihood, r.impact, u.full_name AS owner, o.name AS org 
-FROM risk | 30900.1ms
-[2026-04-28 02:28:32] [INFO] [services.rag_services.database_service] db.execute | rows_returned=2 | 342.5ms
-[2026-04-28 02:28:33] [INFO] [query_handler] [d394b2] [6/8] execute_query | rows=2 | error=False | 438.8ms
-[2026-04-28 02:28:33] [INFO] [query_handler] [d394b2] [7/8] build_db_prompt | 2.8ms
-[2026-04-28 02:29:11] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=285 | 37989.9ms
-[2026-04-28 02:29:11] [INFO] [query_handler] [d394b2] [8/8] llm_generate | model=ollama | answer_len=285 | 37990.9ms
-[2026-04-28 02:29:11] [INFO] [query_handler] [d394b2] ✓ handle_query complete | confidence=high | total=79132.4ms
-[2026-04-28 02:29:11] [INFO] [request] ← POST /query | status=200 | total=79143.5ms
 [2026-04-28 02:38:57] [INFO] [request] → POST /query
 [2026-04-28 02:38:57] [INFO] [query_handler] [bfd196] [1/8] sanitize_query | query=How many controls are mapped to each framework, sorted from most to least? |1.2ms
 [2026-04-28 02:39:40] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=74 | 42604.2ms
@@ -156,144 +136,6 @@ FROM risk | 30900.1ms
 [2026-04-28 02:40:34] [INFO] [query_handler] [bfd196] [8/8] llm_generate | model=ollama | answer_len=166 | 20996.4ms
 [2026-04-28 02:40:34] [INFO] [query_handler] [bfd196] ✓ handle_query complete | confidence=low | total=96140.7ms
 [2026-04-28 02:40:34] [INFO] [request] ← POST /query | status=200 | total=96274.7ms
-[2026-04-28 02:46:11] [INFO] [request] → POST /query
-[2026-04-28 02:46:12] [INFO] [query_handler] [f37a2f] [1/8] sanitize_query | query=How many controls are mapped to each framework, sorted from most to least? |0.1ms
-[2026-04-28 02:46:48] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=74 | 36024.2ms
-[2026-04-28 02:46:48] [INFO] [llm_service] rewrite_query | original=How many controls are mapped to each framework, sorted from most to least? | rewritten=How many controls are mapped to each framework, sorted from most to least?
-[2026-04-28 02:46:48] [INFO] [query_handler] [f37a2f] [1.5/8] rewrite_query | new_query=How many controls are mapped to each framework, sorted from most to least? | 36046.0ms
-[2026-04-28 02:46:49] [INFO] [query_handler] [f37a2f] [2/8] get_embedding | 1099.2ms
-[2026-04-28 02:46:49] [INFO] [query_handler] [f37a2f] keyword_route | schema=True (keyword/regex match)
-[2026-04-28 02:46:49] [INFO] [query_handler] [f37a2f] route | collection=schema | is_schema=True
-[2026-04-28 02:46:49] [INFO] [query_handler] [f37a2f] [3/8] retrieve | chunks_found=13 | 613.6ms
-[2026-04-28 02:46:51] [INFO] [query_handler] [f37a2f] [4/8] rerank | chunks_after=3 | 2088.0ms
-[2026-04-28 02:47:20] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=306 | 28390.6ms
-[2026-04-28 02:47:20] [INFO] [query_handler] [f37a2f] [5/8] generate_sql | sql_preview=WITH FrameworkControlCount AS (
-    SELECT f.name AS framework_name, COUNT(c.control_id) AS control_ | 28392.4ms
-[2026-04-28 02:47:20] [INFO] [services.rag_services.database_service] db.execute | rows_returned=3 | 435.9ms
-[2026-04-28 02:47:20] [INFO] [query_handler] [f37a2f] [6/8] execute_query | rows=3 | error=False | 543.1ms
-[2026-04-28 02:47:20] [INFO] [query_handler] [f37a2f] [7/8] build_db_prompt | 4.7ms
-[2026-04-28 02:47:42] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=166 | 21674.8ms
-[2026-04-28 02:47:42] [INFO] [query_handler] [f37a2f] [8/8] llm_generate | model=ollama | answer_len=166 | 21675.9ms
-[2026-04-28 02:47:42] [INFO] [query_handler] [f37a2f] ✓ handle_query complete | confidence=low | total=90533.7ms
-[2026-04-28 02:47:42] [INFO] [request] ← POST /query | status=200 | total=90610.0ms
-[2026-04-28 02:50:02] [INFO] [request] → POST /query
-[2026-04-28 02:50:02] [INFO] [query_handler] [a669c2] [1/8] sanitize_query | query=List all findings that are linked to a mitigated risk but still have an open status themselves |0.1ms
-[2026-04-28 02:50:16] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=159 | 13481.1ms
-[2026-04-28 02:50:16] [INFO] [llm_service] rewrite_query | original=List all findings that are linked to a mitigated risk but still have an open status themselves | rewritten=List all findings that are linked to a mitigated risk but still have an open status themselves, base
-[2026-04-28 02:50:16] [INFO] [query_handler] [a669c2] [1.5/8] rewrite_query | new_query=List all findings that are linked to a mitigated risk but still have an open status themselves, based on the previous discussion about controls and frameworks. | 13483.6ms
-[2026-04-28 02:50:16] [INFO] [query_handler] [a669c2] [2/8] get_embedding | 135.7ms
-[2026-04-28 02:50:16] [INFO] [query_handler] [a669c2] keyword_route | schema=True (keyword/regex match)
-[2026-04-28 02:50:16] [INFO] [query_handler] [a669c2] route | collection=schema | is_schema=True
-[2026-04-28 02:50:16] [INFO] [query_handler] [a669c2] [3/8] retrieve | chunks_found=20 | 434.5ms
-[2026-04-28 02:50:19] [INFO] [query_handler] [a669c2] [4/8] rerank | chunks_after=3 | 2555.4ms
-[2026-04-28 02:50:49] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=239 | 29830.4ms
-[2026-04-28 02:50:49] [INFO] [query_handler] [a669c2] [5/8] generate_sql | sql_preview=WITH MitigatedRisks AS (
-    SELECT risk_id, control_id FROM risks WHERE status = 'mitigated'
-)
-SELE | 29831.6ms
-[2026-04-28 02:50:49] [ERROR] [services.rag_services.database_service] SQL execution error: (psycopg2.errors.UndefinedColumn) column f.risk_id does not exist
-LINE 6: JOIN MitigatedRisks r ON f.risk_id = r.risk_id
-                                 ^
-HINT:  Perhaps you meant to reference the column "r.risk_id".
-
-[SQL: WITH MitigatedRisks AS (
-    SELECT risk_id, control_id FROM risks WHERE status = 'mitigated'
-)
-SELECT f.finding_id, f.risk_id, f.status
-FROM audit_findings f
-JOIN MitigatedRisks r ON f.risk_id = r.risk_id
-WHERE f.status = 'open'
-LIMIT 50]
-(Background on this error at: https://sqlalche.me/e/20/f405)
-[2026-04-28 02:50:49] [INFO] [query_handler] [a669c2] [6/8] execute_query | rows=0 | error=True | 484.2ms
-[2026-04-28 02:50:49] [INFO] [query_handler] [a669c2] [7/8] build_db_prompt | 0.0ms
-[2026-04-28 02:50:59] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=42 | 9806.7ms
-[2026-04-28 02:50:59] [INFO] [query_handler] [a669c2] [8/8] llm_generate | model=ollama | answer_len=42 | 9807.7ms
-[2026-04-28 02:50:59] [INFO] [query_handler] [a669c2] ✓ handle_query complete | confidence=low | total=56741.8ms
-[2026-04-28 02:50:59] [INFO] [request] ← POST /query | status=200 | total=56760.7ms
-[2026-04-28 02:52:17] [INFO] [request] → POST /query
-[2026-04-28 02:52:17] [INFO] [query_handler] [e86845] [1/8] sanitize_query | query=Tell me about GDPR requirements and which frameworks we have mapped to it |0.0ms
-[2026-04-28 02:52:32] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=127 | 14838.0ms
-[2026-04-28 02:52:32] [INFO] [llm_service] rewrite_query | original=Tell me about GDPR requirements and which frameworks we have mapped to it | rewritten=What are the GDPR requirements and which of the previously mentioned frameworks (SOC 2, ISO 27001, H
-[2026-04-28 02:52:32] [INFO] [query_handler] [e86845] [1.5/8] rewrite_query | new_query=What are the GDPR requirements and which of the previously mentioned frameworks (SOC 2, ISO 27001, HIPAA) have we mapped to it? | 14839.6ms
-[2026-04-28 02:52:32] [INFO] [query_handler] [e86845] [2/8] get_embedding | 62.8ms
-[2026-04-28 02:52:32] [INFO] [query_handler] SemanticRouter | building intent centroids ...
-[2026-04-28 02:52:33] [INFO] [query_handler] SemanticRouter | centroids ready.
-[2026-04-28 02:52:33] [INFO] [query_handler] SemanticRouter | low confidence (both < 0.30) → defaulting to schema
-[2026-04-28 02:52:34] [INFO] [query_handler] [e86845] semantic_route | route=schema | schema_score=0.1949 | irs_score=0.1733
-[2026-04-28 02:52:34] [INFO] [query_handler] [e86845] route | collection=schema | is_schema=True
-[2026-04-28 02:52:34] [INFO] [query_handler] [e86845] [3/8] retrieve | chunks_found=20 | 730.9ms
-[2026-04-28 02:52:37] [INFO] [query_handler] [e86845] [4/8] rerank | chunks_after=3 | 2218.2ms
-[2026-04-28 02:53:13] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=325 | 36188.8ms
-[2026-04-28 02:53:13] [INFO] [query_handler] [e86845] [5/8] generate_sql | sql_preview=WITH gdpr_framework AS (
-    SELECT framework_id, name, version, description
-    FROM frameworks
-    | 36189.7ms
-[2026-04-28 02:53:13] [INFO] [services.rag_services.database_service] db.execute | rows_returned=0 | 342.9ms
-[2026-04-28 02:53:13] [INFO] [query_handler] [e86845] [6/8] execute_query | rows=0 | error=False | 440.9ms
-[2026-04-28 02:53:13] [INFO] [query_handler] [e86845] [7/8] build_db_prompt | 0.0ms
-[2026-04-28 02:53:24] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=42 | 10487.4ms
-[2026-04-28 02:53:24] [INFO] [query_handler] [e86845] [8/8] llm_generate | model=ollama | answer_len=42 | 10488.4ms
-[2026-04-28 02:53:24] [INFO] [query_handler] [e86845] ✓ handle_query complete | confidence=low | total=66216.6ms
-[2026-04-28 02:53:24] [INFO] [request] ← POST /query | status=200 | total=66222.6ms
-[2026-04-28 02:57:15] [INFO] [request] → POST /query
-[2026-04-28 02:57:15] [INFO] [query_handler] [b36720] [1/8] sanitize_query | query=What is the current status of our compliance frameworks? |0.1ms
-[2026-04-28 02:57:32] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=214 | 17009.6ms
-[2026-04-28 02:57:32] [INFO] [llm_service] rewrite_query | original=What is the current status of our compliance frameworks? | rewritten=What is the current status of our compliance frameworks, given that previously there were no finding
-[2026-04-28 02:57:32] [INFO] [query_handler] [b36720] [1.5/8] rewrite_query | new_query=What is the current status of our compliance frameworks, given that previously there were no findings linked to mitigated risks with an open status and no data was found for GDPR requirements and mapped frameworks? | 17011.8ms
-[2026-04-28 02:57:32] [INFO] [query_handler] [b36720] [2/8] get_embedding | 188.5ms
-[2026-04-28 02:57:32] [INFO] [query_handler] [b36720] keyword_route | schema=True (keyword/regex match)
-[2026-04-28 02:57:32] [INFO] [query_handler] [b36720] route | collection=schema | is_schema=True
-[2026-04-28 02:57:33] [INFO] [query_handler] [b36720] [3/8] retrieve | chunks_found=20 | 335.6ms
-[2026-04-28 02:57:35] [INFO] [query_handler] [b36720] [4/8] rerank | chunks_after=3 | 1959.1ms
-[2026-04-28 02:58:10] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=336 | 35190.0ms
-[2026-04-28 02:58:10] [INFO] [query_handler] [b36720] [5/8] generate_sql | sql_preview=WITH MitigatedRisks AS (
-    SELECT risk_id FROM risks WHERE status = 'mitigated'
-),
-OpenFindings AS | 35190.9ms
-[2026-04-28 02:58:11] [INFO] [services.rag_services.database_service] db.execute | rows_returned=2 | 1318.1ms
-[2026-04-28 02:58:11] [INFO] [query_handler] [b36720] [6/8] execute_query | rows=2 | error=False | 1410.8ms
-[2026-04-28 02:58:11] [INFO] [query_handler] [b36720] [7/8] build_db_prompt | 0.4ms
-[2026-04-28 02:58:22] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=42 | 10718.3ms
-[2026-04-28 02:58:22] [INFO] [query_handler] [b36720] [8/8] llm_generate | model=ollama | answer_len=42 | 10719.1ms
-[2026-04-28 02:58:22] [INFO] [query_handler] [b36720] ✓ handle_query complete | confidence=low | total=66826.9ms
-[2026-04-28 02:58:22] [INFO] [request] ← POST /query | status=200 | total=66844.2ms
-[2026-04-28 02:59:57] [INFO] [request] → POST /query
-[2026-04-28 02:59:57] [INFO] [query_handler] [75d464] [1/8] sanitize_query | query=Which organization has the highest total number of 'High' severity audit findings? |0.0ms
-[2026-04-28 03:00:07] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=82 | 9847.4ms
-[2026-04-28 03:00:07] [INFO] [llm_service] rewrite_query | original=Which organization has the highest total number of 'High' severity audit findings? | rewritten=Which organization has the highest total number of 'High' severity audit findings?
-[2026-04-28 03:00:07] [INFO] [query_handler] [75d464] [1.5/8] rewrite_query | new_query=Which organization has the highest total number of 'High' severity audit findings? | 9848.8ms
-[2026-04-28 03:00:07] [INFO] [query_handler] [75d464] [2/8] get_embedding | 57.9ms
-[2026-04-28 03:00:07] [INFO] [query_handler] [75d464] keyword_route | schema=True (keyword/regex match)
-[2026-04-28 03:00:07] [INFO] [query_handler] [75d464] route | collection=schema | is_schema=True
-[2026-04-28 03:00:07] [INFO] [query_handler] [75d464] [3/8] retrieve | chunks_found=20 | 599.0ms
-[2026-04-28 03:00:10] [INFO] [query_handler] [75d464] [4/8] rerank | chunks_after=3 | 2738.9ms
-[2026-04-28 03:00:44] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=311 | 33774.2ms
-[2026-04-28 03:00:44] [INFO] [query_handler] [75d464] [5/8] generate_sql | sql_preview=WITH HighSeverityFindings AS (
-    SELECT af.org_id, COUNT(*) AS high_count
-    FROM audit_findings  | 33775.2ms
-[2026-04-28 03:00:44] [ERROR] [services.rag_services.database_service] SQL execution error: (psycopg2.errors.UndefinedColumn) column af.org_id does not exist
-LINE 2:     SELECT af.org_id, COUNT(*) AS high_count
-                   ^
-
-[SQL: WITH HighSeverityFindings AS (
-    SELECT af.org_id, COUNT(*) AS high_count
-    FROM audit_findings af
-    WHERE af.severity = 'high'
-    GROUP BY af.org_id
-)
-SELECT o.name AS org_name, hf.high_count
-FROM HighSeverityFindings hf
-JOIN organizations o ON hf.org_id = o.org_id
-ORDER BY hf.high_count DESC
-LIMIT 50]
-(Background on this error at: https://sqlalche.me/e/20/f405)
-[2026-04-28 03:00:44] [INFO] [query_handler] [75d464] [6/8] execute_query | rows=0 | error=True | 432.3ms
-[2026-04-28 03:00:44] [INFO] [query_handler] [75d464] [7/8] build_db_prompt | 0.0ms
-[2026-04-28 03:00:54] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=42 | 9559.8ms
-[2026-04-28 03:00:54] [INFO] [query_handler] [75d464] [8/8] llm_generate | model=ollama | answer_len=42 | 9560.7ms
-[2026-04-28 03:00:54] [INFO] [query_handler] [75d464] ✓ handle_query complete | confidence=low | total=57075.4ms
-[2026-04-28 03:00:54] [INFO] [request] ← POST /query | status=200 | total=57080.5ms
 [2026-04-28 03:11:43] [INFO] [request] → POST /query
 [2026-04-28 03:11:43] [INFO] [query_handler] [c54de3] [1/8] sanitize_query | query=How many audit findings do we have, grouped by their severity level? |0.1ms
 [2026-04-28 03:11:53] [ERROR] [query_handler] [c54de3] ✗ handle_query failed (LLM Endpoint Error) | total=9117.0ms | error=Server error '500 Internal Server Error' for url 'http://localhost:11434/api/generate'
@@ -331,68 +173,88 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 [2026-04-28 03:23:54] [INFO] [query_handler] [4f01cc] [8/8] llm_generate | model=ollama | answer_len=166 | 18376.0ms
 [2026-04-28 03:23:55] [INFO] [query_handler] [4f01cc] ✓ handle_query complete | confidence=low | total=82828.2ms
 [2026-04-28 03:23:55] [INFO] [request] ← POST /query | status=200 | total=82896.1ms
-[2026-04-28 03:29:15] [INFO] [request] → POST /query
-[2026-04-28 03:29:15] [INFO] [query_handler] [bf9b95] [1/8] sanitize_query | query=Show me all users with the 'admin' role. |0.3ms
-[2026-04-28 03:29:53] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=113 | 37935.9ms
-[2026-04-28 03:29:53] [INFO] [llm_service] rewrite_query | original=Show me all users with the 'admin' role. | rewritten=Show me all users with the 'admin' role, considering the previous audit findings grouped by their se
-[2026-04-28 03:29:53] [INFO] [query_handler] [bf9b95] [1.5/8] rewrite_query | new_query=Show me all users with the 'admin' role, considering the previous audit findings grouped by their severity level. | 37965.9ms
-[2026-04-28 03:29:54] [INFO] [query_handler] [bf9b95] [2/8] get_embedding | 1423.1ms
-[2026-04-28 03:29:54] [INFO] [query_handler] [bf9b95] keyword_route | schema=True (keyword/regex match)
-[2026-04-28 03:29:54] [INFO] [query_handler] [bf9b95] route | collection=schema | is_schema=True
-[2026-04-28 03:29:55] [INFO] [query_handler] [bf9b95] [3/8] retrieve | chunks_found=20 | 746.7ms
-[2026-04-28 03:29:59] [INFO] [query_handler] [bf9b95] [4/8] rerank | chunks_after=3 | 3617.6ms
-[2026-04-28 03:31:17] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=603 | 78104.6ms
-[2026-04-28 03:31:17] [INFO] [query_handler] [bf9b95] [5/8] generate_sql | sql_preview=WITH admin_users AS (
-    SELECT id FROM users WHERE role = 'admin'
-), user_audit_findings AS (
-     | 78108.0ms
-[2026-04-28 03:31:17] [ERROR] [services.rag_services.database_service] SQL execution error: (psycopg2.errors.UndefinedColumn) column "id" does not exist
-LINE 2:     SELECT id FROM users WHERE role = 'admin'
-                   ^
-
-[SQL: WITH admin_users AS (
-    SELECT id FROM users WHERE role = 'admin'
-), user_audit_findings AS (
-    SELECT u.id AS user_id, af.severity, COUNT(*) AS finding_count
-    FROM admin_users u
-    JOIN audits a ON u.org_id = a.org_id
-    JOIN audit_findings af ON a.audit_id = af.audit_id
-    WHERE af.status != 'closed'
-    GROUP BY u.id, af.severity
+[2026-04-28 04:47:17] [INFO] [request] → POST /query
+[2026-04-28 04:47:17] [INFO] [query_handler] [5c112b] [1/8] sanitize_query | query=Show all users in Acme Corp |1.2ms
+[2026-04-28 04:47:33] [ERROR] [query_handler] [5c112b] ✗ handle_query failed (LLM Endpoint Error) | total=15865.6ms | error=Server error '500 Internal Server Error' for url 'http://localhost:11434/api/generate'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500
+Traceback (most recent call last):
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\API\handlers\rag_handlers\query_handler.py", line 311, in handle_query
+    query = self.llm.rewrite_query(chat_history, query, model=model)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\API\services\rag_services\llm_service.py", line 122, in rewrite_query
+    rewritten = self.generate(prompt, model=model, temperature=0.0, max_tokens=100)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\API\services\rag_services\llm_service.py", line 190, in generate
+    response.raise_for_status()
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_models.py", line 759, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Server error '500 Internal Server Error' for url 'http://localhost:11434/api/generate'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500
+[2026-04-28 04:47:33] [INFO] [request] ← POST /query | status=200 | total=15976.5ms
+[2026-04-28 04:47:47] [INFO] [request] → POST /query
+[2026-04-28 04:47:47] [INFO] [query_handler] [f7cc27] [1/8] sanitize_query | query=Show all users in Acme Corp |0.0ms
+[2026-04-28 04:47:56] [ERROR] [query_handler] [f7cc27] ✗ handle_query failed (LLM Endpoint Error) | total=8806.8ms | error=Server error '500 Internal Server Error' for url 'http://localhost:11434/api/generate'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500
+Traceback (most recent call last):
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\API\handlers\rag_handlers\query_handler.py", line 311, in handle_query
+    query = self.llm.rewrite_query(chat_history, query, model=model)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\API\services\rag_services\llm_service.py", line 122, in rewrite_query
+    rewritten = self.generate(prompt, model=model, temperature=0.0, max_tokens=100)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\API\services\rag_services\llm_service.py", line 190, in generate
+    response.raise_for_status()
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_models.py", line 759, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Server error '500 Internal Server Error' for url 'http://localhost:11434/api/generate'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500
+[2026-04-28 04:47:56] [INFO] [request] ← POST /query | status=200 | total=8819.1ms
+[2026-04-28 04:49:35] [INFO] [request] → POST /query
+[2026-04-28 04:49:35] [INFO] [query_handler] [dcde56] [1/8] sanitize_query | query=Show all users in Acme Corp |0.0ms
+[2026-04-28 04:50:04] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=27 | 29724.5ms
+[2026-04-28 04:50:04] [INFO] [llm_service] rewrite_query | original=Show all users in Acme Corp | rewritten=Show all users in Acme Corp
+[2026-04-28 04:50:04] [INFO] [query_handler] [dcde56] [1.5/8] rewrite_query | new_query=Show all users in Acme Corp | 29727.3ms
+[2026-04-28 04:50:05] [INFO] [query_handler] [dcde56] [2/8] get_embedding | 801.0ms
+[2026-04-28 04:50:05] [INFO] [query_handler] [dcde56] keyword_route | schema=True (keyword/regex match)
+[2026-04-28 04:50:05] [INFO] [query_handler] [dcde56] route | collection=schema | is_schema=True
+[2026-04-28 04:50:06] [INFO] [query_handler] [dcde56] [3/8] retrieve | chunks_found=13 | 842.4ms
+[2026-04-28 04:50:07] [INFO] [query_handler] [dcde56] [4/8] rerank | chunks_after=3 | 825.9ms
+[2026-04-28 04:50:25] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=148 | 17753.6ms
+[2026-04-28 04:50:25] [INFO] [query_handler] [dcde56] [5/8] generate_sql | sql_preview=WITH org AS (
+    SELECT org_id FROM organizations WHERE name = 'Acme Corp'
 )
-SELECT u.name, u.email, af.severity, SUM(af.finding_count) AS total_findings
-FROM users u
-JOIN user_audit_findings af ON u.id = af.user_id
-WHERE u.role = 'admin'
-GROUP BY u.name, u.email, af.severity
-ORDER BY af.severity DESC, total_findings DESC
-LIMIT 50]
-(Background on this error at: https://sqlalche.me/e/20/f405)
-[2026-04-28 03:31:17] [INFO] [query_handler] [bf9b95] [6/8] execute_query | rows=0 | error=True | 569.4ms
-[2026-04-28 03:31:17] [INFO] [query_handler] [bf9b95] [7/8] build_db_prompt | 0.2ms
-[2026-04-28 03:31:28] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=42 | 11122.9ms
-[2026-04-28 03:31:28] [INFO] [query_handler] [bf9b95] [8/8] llm_generate | model=ollama | answer_len=42 | 11123.7ms
-[2026-04-28 03:31:29] [INFO] [query_handler] [bf9b95] ✓ handle_query complete | confidence=low | total=133643.9ms
-[2026-04-28 03:31:29] [INFO] [request] ← POST /query | status=200 | total=133747.0ms
-[2026-04-28 03:32:57] [INFO] [request] → POST /query
-[2026-04-28 03:32:57] [INFO] [query_handler] [d7ec14] [1/8] sanitize_query | query=Which org is carrying the most risks right now? |1.1ms
-[2026-04-28 03:33:04] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=56 | 7115.6ms
-[2026-04-28 03:33:04] [INFO] [llm_service] rewrite_query | original=Which org is carrying the most risks right now? | rewritten=Which organization is currently carrying the most risks?
-[2026-04-28 03:33:04] [INFO] [query_handler] [d7ec14] [1.5/8] rewrite_query | new_query=Which organization is currently carrying the most risks? | 7117.6ms
-[2026-04-28 03:33:04] [INFO] [query_handler] [d7ec14] [2/8] get_embedding | 122.9ms
-[2026-04-28 03:33:04] [INFO] [query_handler] [d7ec14] keyword_route | schema=True (keyword/regex match)
-[2026-04-28 03:33:04] [INFO] [query_handler] [d7ec14] route | collection=schema | is_schema=True
-[2026-04-28 03:33:04] [INFO] [query_handler] [d7ec14] [3/8] retrieve | chunks_found=20 | 462.5ms
-[2026-04-28 03:33:07] [INFO] [query_handler] [d7ec14] [4/8] rerank | chunks_after=3 | 2953.6ms
-[2026-04-28 03:33:37] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=223 | 30091.3ms
-[2026-04-28 03:33:37] [INFO] [query_handler] [d7ec14] [5/8] generate_sql | sql_preview=WITH RiskCount AS (
-    SELECT org_id, COUNT(*) AS total_risks FROM risks GROUP BY org_id
-)
-SELECT o | 30092.7ms
-[2026-04-28 03:33:38] [INFO] [services.rag_services.database_service] db.execute | rows_returned=3 | 319.2ms
-[2026-04-28 03:33:38] [INFO] [query_handler] [d7ec14] [6/8] execute_query | rows=3 | error=False | 414.3ms
-[2026-04-28 03:33:38] [INFO] [query_handler] [d7ec14] [7/8] build_db_prompt | 5.6ms
-[2026-04-28 03:33:50] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=42 | 12573.7ms
-[2026-04-28 03:33:50] [INFO] [query_handler] [d7ec14] [8/8] llm_generate | model=ollama | answer_len=42 | 12574.7ms
-[2026-04-28 03:33:50] [INFO] [query_handler] [d7ec14] ✓ handle_query complete | confidence=low | total=53759.2ms
-[2026-04-28 03:33:50] [INFO] [request] ← POST /query | status=200 | total=53786.3ms
+SELECT * FROM users WH | 17756.1ms
+[2026-04-28 04:50:26] [INFO] [services.rag_services.database_service] db.execute | rows_returned=2 | 1216.4ms
+[2026-04-28 04:50:26] [INFO] [query_handler] [dcde56] [6/8] execute_query | rows=2 | error=False | 1316.9ms
+[2026-04-28 04:50:26] [INFO] [query_handler] [dcde56] [7/8] build_db_prompt | 5.0ms
+[2026-04-28 04:50:41] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=86 | 15180.5ms
+[2026-04-28 04:50:41] [INFO] [query_handler] [dcde56] [8/8] llm_generate | model=ollama | answer_len=86 | 15181.2ms
+[2026-04-28 04:50:41] [INFO] [query_handler] [dcde56] ✓ handle_query complete | confidence=low | total=66496.5ms
+[2026-04-28 04:50:41] [INFO] [request] ← POST /query | status=200 | total=66520.4ms
+[2026-04-28 05:30:49] [INFO] [request] → POST /query
+[2026-04-28 05:30:49] [INFO] [query_handler] [3e9f36] [1/8] sanitize_query | query=What is the average risk score per organization? |0.1ms
+[2026-04-28 05:31:02] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=85 | 12637.1ms
+[2026-04-28 05:31:02] [INFO] [llm_service] rewrite_query | original=What is the average risk score per organization? | rewritten=What is the average risk score per organization, considering the available risk data?
+[2026-04-28 05:31:02] [INFO] [query_handler] [3e9f36] [1.5/8] rewrite_query | new_query=What is the average risk score per organization, considering the available risk data? | 12639.7ms
+[2026-04-28 05:31:02] [INFO] [query_handler] [3e9f36] [2/8] get_embedding | 279.1ms
+[2026-04-28 05:31:02] [INFO] [query_handler] [3e9f36] keyword_route | schema=True (keyword/regex match)
+[2026-04-28 05:31:02] [INFO] [query_handler] [3e9f36] route | collection=schema | is_schema=True
+[2026-04-28 05:31:02] [INFO] [query_handler] [3e9f36] [3/8] retrieve | chunks_found=20 | 548.4ms
+[2026-04-28 05:31:07] [INFO] [query_handler] [3e9f36] [4/8] rerank | chunks_after=3 | 4111.1ms
+[2026-04-28 05:31:37] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=219 | 29991.6ms
+[2026-04-28 05:31:37] [INFO] [query_handler] [3e9f36] [5/8] generate_sql | sql_preview=WITH RiskSummary AS (
+    SELECT org_id, AVG(risk_score) AS avg_risk_score
+    FROM risks
+    GROUP  | 29995.2ms
+[2026-04-28 05:31:37] [INFO] [services.rag_services.database_service] db.execute | rows_returned=3 | 295.6ms
+[2026-04-28 05:31:37] [INFO] [query_handler] [3e9f36] [6/8] execute_query | rows=3 | error=False | 391.9ms
+[2026-04-28 05:31:37] [ERROR] [query_handler] [3e9f36] ✗ handle_query failed (Unknown Error) | total=47976.9ms | error=Type is not JSON serializable: decimal.Decimal
+Traceback (most recent call last):
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\API\handlers\rag_handlers\query_handler.py", line 384, in handle_query
+    prompt = self.llm.build_db_grounded_rag_prompt(chunks, db_results, query)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\API\services\rag_services\llm_service.py", line 162, in build_db_grounded_rag_prompt
+    db_repr = orjson.dumps(rows).decode("utf-8") if rows else "No results found."
+              ^^^^^^^^^^^^^^^^^^
+TypeError: Type is not JSON serializable: decimal.Decimal
+[2026-04-28 05:31:37] [INFO] [request] ← POST /query | status=200 | total=48031.5ms
