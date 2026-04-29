@@ -14,9 +14,9 @@ MAX_ROWS = 50
 
 class DatabaseService:
     def __init__(self):
-        self.host = "aws-1-eu-central-1.pooler.supabase.com"  # from Connect > Direct Connection
+        self.host = "db.brfsaqbjafutjpmurfwj.supabase.co"  # from Connect > Direct Connection
         self.port = 5432
-        self.user = "postgres.zychuijvaqwxdpcmdrfu"
+        self.user = "postgres"
         self.password = "XIT_rag123$"        # from Project Settings > Database
         self.database = "postgres"
 

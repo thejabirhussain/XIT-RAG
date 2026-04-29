@@ -1,0 +1,418 @@
+[2026-04-20 08:08:01] [INFO] [request] → GET /
+[2026-04-20 08:08:01] [INFO] [request] ← GET / | status=404 | total=2.1ms
+[2026-04-20 08:08:02] [INFO] [request] → GET /favicon.ico
+[2026-04-20 08:08:02] [INFO] [request] ← GET /favicon.ico | status=404 | total=0.9ms
+[2026-04-20 08:08:07] [INFO] [request] → GET /
+[2026-04-20 08:08:07] [INFO] [request] ← GET / | status=404 | total=1.5ms
+[2026-04-20 08:08:17] [INFO] [request] → GET /
+[2026-04-20 08:08:17] [INFO] [request] ← GET / | status=404 | total=1.4ms
+[2026-04-20 08:08:22] [INFO] [request] → GET /docs
+[2026-04-20 08:08:22] [INFO] [request] ← GET /docs | status=200 | total=1.4ms
+[2026-04-20 08:08:23] [INFO] [request] → GET /openapi.json
+[2026-04-20 08:08:23] [INFO] [request] ← GET /openapi.json | status=200 | total=85.0ms
+[2026-04-20 19:22:06] [INFO] [request] → POST /query
+[2026-04-20 19:22:15] [INFO] [query_handler] [b4a2f7] [1/8] sanitize_query | query=hi |0.7ms
+[2026-04-20 19:22:46] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | input_tokens~142 | output_tokens~20 | 31683.9ms
+[2026-04-20 19:22:46] [INFO] [llm_service] rewrite_query | original=hi | rewritten=What is the cause of the repeated HTTP 500 errors when I try to interact with you?
+[2026-04-20 19:22:46] [INFO] [query_handler] [b4a2f7] [1.5/8] rewrite_query | new_query=What is the cause of the repeated HTTP 500 errors when I try to interact with you? | 31686.1ms
+[2026-04-20 19:22:56] [INFO] [query_handler] [b4a2f7] [2/8] get_embedding | 10093.6ms
+[2026-04-20 19:22:56] [INFO] [query_handler] SemanticRouter | building intent centroids ...
+[2026-04-20 19:22:57] [INFO] [query_handler] SemanticRouter | centroids ready.
+[2026-04-20 19:22:57] [INFO] [query_handler] SemanticRouter | low confidence (both < 0.30) → defaulting to schema
+[2026-04-20 19:22:57] [INFO] [query_handler] [b4a2f7] semantic_route | route=schema | schema_score=0.0901 | irs_score=0.0745
+[2026-04-20 19:22:57] [INFO] [query_handler] [b4a2f7] route | collection=schema | is_schema=True
+[2026-04-20 19:23:01] [ERROR] [query_handler] [b4a2f7] ✗ handle_query failed (Unknown Error) | total=46857.0ms | error=[WinError 10061] No connection could be made because the target machine actively refused it
+Traceback (most recent call last):
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_transports\default.py", line 67, in map_httpcore_exceptions
+    yield
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_transports\default.py", line 231, in handle_request
+    resp = self._pool.handle_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpcore\_sync\connection_pool.py", line 256, in handle_request
+    raise exc from None
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpcore\_sync\connection_pool.py", line 236, in handle_request
+    response = connection.handle_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpcore\_sync\connection.py", line 101, in handle_request
+    raise exc
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpcore\_sync\connection.py", line 78, in handle_request
+    stream = self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpcore\_sync\connection.py", line 124, in _connect
+    stream = self._network_backend.connect_tcp(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpcore\_backends\sync.py", line 207, in connect_tcp
+    with map_exceptions(exc_map):
+  File "C:\Python312\Lib\contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpcore\_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectError: [WinError 10061] No connection could be made because the target machine actively refused it
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 106, in send_inner
+    response = self._client.send(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_client.py", line 915, in send
+    response = self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_client.py", line 943, in _send_handling_auth
+    response = self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_client.py", line 980, in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_client.py", line 1016, in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_transports\default.py", line 230, in handle_request
+    with map_httpcore_exceptions():
+  File "C:\Python312\Lib\contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_transports\default.py", line 84, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectError: [WinError 10061] No connection could be made because the target machine actively refused it
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\handlers\rag_handlers\query_handler.py", line 346, in handle_query
+    chunks = self.retrieval_service.retrieve(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\services\rag_services\retrieval_service.py", line 71, in retrieve
+    hits = self.qdrant_service.search(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\services\rag_services\qdrant_service.py", line 67, in search
+    return self.client.search(
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\qdrant_client.py", line 387, in search
+    return self._client.search(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\qdrant_remote.py", line 563, in search
+    search_result = self.http.points_api.search_points(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api\points_api.py", line 1616, in search_points
+    return self._build_for_search_points(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api\points_api.py", line 750, in _build_for_search_points
+    return self.api_client.request(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 79, in request
+    return self.send(request, type_)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 96, in send
+    response = self.middleware(request, self.send_inner)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 205, in __call__
+    return call_next(request)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 108, in send_inner
+    raise ResponseHandlingException(e)
+qdrant_client.http.exceptions.ResponseHandlingException: [WinError 10061] No connection could be made because the target machine actively refused it
+[2026-04-20 19:23:02] [INFO] [request] ← POST /query | status=200 | total=56416.1ms
+[2026-04-20 20:32:06] [INFO] [request] → POST /query
+[2026-04-20 20:32:06] [INFO] [query_handler] [4a6421] [1/8] sanitize_query | query=How many mitigated risks do we have? |3.2ms
+[2026-04-20 20:32:33] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | input_tokens~141 | output_tokens~16 | 26879.7ms
+[2026-04-20 20:32:33] [INFO] [llm_service] rewrite_query | original=How many mitigated risks do we have? | rewritten=The rewritten query remains:
+
+How many mitigated risks do we have?
+[2026-04-20 20:32:33] [INFO] [query_handler] [4a6421] [1.5/8] rewrite_query | new_query=The rewritten query remains:
+
+How many mitigated risks do we have? | 26917.8ms
+[2026-04-20 20:32:37] [INFO] [query_handler] [4a6421] [2/8] get_embedding | 3673.0ms
+[2026-04-20 20:32:37] [INFO] [query_handler] [4a6421] adaptive_top_k | schema=True | top_k=30
+[2026-04-20 20:32:37] [INFO] [query_handler] [4a6421] keyword_route | schema=True (keyword/regex match)
+[2026-04-20 20:32:37] [INFO] [query_handler] [4a6421] route | collection=schema | is_schema=True
+[2026-04-20 20:32:42] [ERROR] [query_handler] [4a6421] ✗ handle_query failed (Unknown Error) | total=35360.3ms | error=[WinError 10061] No connection could be made because the target machine actively refused it
+Traceback (most recent call last):
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_transports\default.py", line 67, in map_httpcore_exceptions
+    yield
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_transports\default.py", line 231, in handle_request
+    resp = self._pool.handle_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpcore\_sync\connection_pool.py", line 256, in handle_request
+    raise exc from None
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpcore\_sync\connection_pool.py", line 236, in handle_request
+    response = connection.handle_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpcore\_sync\connection.py", line 101, in handle_request
+    raise exc
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpcore\_sync\connection.py", line 78, in handle_request
+    stream = self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpcore\_sync\connection.py", line 124, in _connect
+    stream = self._network_backend.connect_tcp(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpcore\_backends\sync.py", line 207, in connect_tcp
+    with map_exceptions(exc_map):
+  File "C:\Python312\Lib\contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpcore\_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectError: [WinError 10061] No connection could be made because the target machine actively refused it
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 106, in send_inner
+    response = self._client.send(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_client.py", line 915, in send
+    response = self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_client.py", line 943, in _send_handling_auth
+    response = self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_client.py", line 980, in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_client.py", line 1016, in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_transports\default.py", line 230, in handle_request
+    with map_httpcore_exceptions():
+  File "C:\Python312\Lib\contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_transports\default.py", line 84, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectError: [WinError 10061] No connection could be made because the target machine actively refused it
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\handlers\rag_handlers\query_handler.py", line 346, in handle_query
+    chunks = self.retrieval_service.retrieve(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\services\rag_services\retrieval_service.py", line 71, in retrieve
+    hits = self.qdrant_service.search(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\services\rag_services\qdrant_service.py", line 67, in search
+    return self.client.search(
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\qdrant_client.py", line 387, in search
+    return self._client.search(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\qdrant_remote.py", line 563, in search
+    search_result = self.http.points_api.search_points(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api\points_api.py", line 1616, in search_points
+    return self._build_for_search_points(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api\points_api.py", line 750, in _build_for_search_points
+    return self.api_client.request(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 79, in request
+    return self.send(request, type_)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 96, in send
+    response = self.middleware(request, self.send_inner)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 205, in __call__
+    return call_next(request)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 108, in send_inner
+    raise ResponseHandlingException(e)
+qdrant_client.http.exceptions.ResponseHandlingException: [WinError 10061] No connection could be made because the target machine actively refused it
+[2026-04-20 20:32:42] [INFO] [request] ← POST /query | status=200 | total=36264.7ms
+[2026-04-20 21:16:00] [INFO] [request] → POST /query
+[2026-04-20 21:16:08] [INFO] [query_handler] [b310c7] [1/8] sanitize_query | query=How many mitigated risks do we have? |0.4ms
+[2026-04-20 21:16:32] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | input_tokens~182 | output_tokens~36 | 24249.2ms
+[2026-04-20 21:16:32] [INFO] [llm_service] rewrite_query | original=How many mitigated risks do we have? | rewritten=An unexpected error occurred while processing the previous requests to determine the number of mitig
+[2026-04-20 21:16:32] [INFO] [query_handler] [b310c7] [1.5/8] rewrite_query | new_query=An unexpected error occurred while processing the previous requests to determine the number of mitigated risks. Can you please retry your question? | 24251.2ms
+[2026-04-20 21:16:38] [INFO] [query_handler] [b310c7] [2/8] get_embedding | 6041.5ms
+[2026-04-20 21:16:38] [INFO] [query_handler] [b310c7] adaptive_top_k | schema=True | top_k=30
+[2026-04-20 21:16:38] [INFO] [query_handler] [b310c7] keyword_route | schema=True (keyword/regex match)
+[2026-04-20 21:16:38] [INFO] [query_handler] [b310c7] route | collection=schema | is_schema=True
+[2026-04-20 21:16:42] [ERROR] [query_handler] [b310c7] ✗ handle_query failed (Unknown Error) | total=34318.5ms | error=[WinError 10061] No connection could be made because the target machine actively refused it
+Traceback (most recent call last):
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_transports\default.py", line 67, in map_httpcore_exceptions
+    yield
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_transports\default.py", line 231, in handle_request
+    resp = self._pool.handle_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpcore\_sync\connection_pool.py", line 256, in handle_request
+    raise exc from None
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpcore\_sync\connection_pool.py", line 236, in handle_request
+    response = connection.handle_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpcore\_sync\connection.py", line 101, in handle_request
+    raise exc
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpcore\_sync\connection.py", line 78, in handle_request
+    stream = self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpcore\_sync\connection.py", line 124, in _connect
+    stream = self._network_backend.connect_tcp(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpcore\_backends\sync.py", line 207, in connect_tcp
+    with map_exceptions(exc_map):
+  File "C:\Python312\Lib\contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpcore\_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectError: [WinError 10061] No connection could be made because the target machine actively refused it
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 106, in send_inner
+    response = self._client.send(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_client.py", line 915, in send
+    response = self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_client.py", line 943, in _send_handling_auth
+    response = self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_client.py", line 980, in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_client.py", line 1016, in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_transports\default.py", line 230, in handle_request
+    with map_httpcore_exceptions():
+  File "C:\Python312\Lib\contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_transports\default.py", line 84, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectError: [WinError 10061] No connection could be made because the target machine actively refused it
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\handlers\rag_handlers\query_handler.py", line 346, in handle_query
+    chunks = self.retrieval_service.retrieve(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\services\rag_services\retrieval_service.py", line 71, in retrieve
+    hits = self.qdrant_service.search(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\services\rag_services\qdrant_service.py", line 67, in search
+    return self.client.search(
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\qdrant_client.py", line 387, in search
+    return self._client.search(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\qdrant_remote.py", line 563, in search
+    search_result = self.http.points_api.search_points(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api\points_api.py", line 1616, in search_points
+    return self._build_for_search_points(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api\points_api.py", line 750, in _build_for_search_points
+    return self.api_client.request(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 79, in request
+    return self.send(request, type_)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 96, in send
+    response = self.middleware(request, self.send_inner)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 205, in __call__
+    return call_next(request)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 108, in send_inner
+    raise ResponseHandlingException(e)
+qdrant_client.http.exceptions.ResponseHandlingException: [WinError 10061] No connection could be made because the target machine actively refused it
+[2026-04-20 21:16:43] [INFO] [request] ← POST /query | status=200 | total=42783.0ms
+[2026-04-20 21:18:16] [INFO] [request] → POST /query
+[2026-04-20 21:18:23] [INFO] [query_handler] [167405] [1/8] sanitize_query | query=How many mitigated risks do we have? |0.6ms
+[2026-04-20 21:18:38] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | input_tokens~224 | output_tokens~71 | 15055.0ms
+[2026-04-20 21:18:38] [INFO] [llm_service] rewrite_query | original=How many mitigated risks do we have? | rewritten=The previous attempts to retrieve the information were unsuccessful due to an unexpected error, and 
+[2026-04-20 21:18:38] [INFO] [query_handler] [167405] [1.5/8] rewrite_query | new_query=The previous attempts to retrieve the information were unsuccessful due to an unexpected error, and it's unclear if the issue is with the request itself or the system's ability to process it. Can you please clarify what you're looking for when asking about the number of mitigated risks? | 15056.1ms
+[2026-04-20 21:18:41] [INFO] [query_handler] [167405] [2/8] get_embedding | 3369.6ms
+[2026-04-20 21:18:41] [INFO] [query_handler] [167405] adaptive_top_k | schema=True | top_k=30
+[2026-04-20 21:18:41] [INFO] [query_handler] [167405] keyword_route | schema=True (keyword/regex match)
+[2026-04-20 21:18:41] [INFO] [query_handler] [167405] route | collection=schema | is_schema=True
+[2026-04-20 21:18:45] [ERROR] [query_handler] [167405] ✗ handle_query failed (Unknown Error) | total=22440.1ms | error=[WinError 10061] No connection could be made because the target machine actively refused it
+Traceback (most recent call last):
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_transports\default.py", line 67, in map_httpcore_exceptions
+    yield
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_transports\default.py", line 231, in handle_request
+    resp = self._pool.handle_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpcore\_sync\connection_pool.py", line 256, in handle_request
+    raise exc from None
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpcore\_sync\connection_pool.py", line 236, in handle_request
+    response = connection.handle_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpcore\_sync\connection.py", line 101, in handle_request
+    raise exc
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpcore\_sync\connection.py", line 78, in handle_request
+    stream = self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpcore\_sync\connection.py", line 124, in _connect
+    stream = self._network_backend.connect_tcp(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpcore\_backends\sync.py", line 207, in connect_tcp
+    with map_exceptions(exc_map):
+  File "C:\Python312\Lib\contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpcore\_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectError: [WinError 10061] No connection could be made because the target machine actively refused it
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 106, in send_inner
+    response = self._client.send(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_client.py", line 915, in send
+    response = self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_client.py", line 943, in _send_handling_auth
+    response = self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_client.py", line 980, in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_client.py", line 1016, in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_transports\default.py", line 230, in handle_request
+    with map_httpcore_exceptions():
+  File "C:\Python312\Lib\contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\httpx\_transports\default.py", line 84, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectError: [WinError 10061] No connection could be made because the target machine actively refused it
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\handlers\rag_handlers\query_handler.py", line 346, in handle_query
+    chunks = self.retrieval_service.retrieve(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\services\rag_services\retrieval_service.py", line 71, in retrieve
+    hits = self.qdrant_service.search(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\services\rag_services\qdrant_service.py", line 67, in search
+    return self.client.search(
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\qdrant_client.py", line 387, in search
+    return self._client.search(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\qdrant_remote.py", line 563, in search
+    search_result = self.http.points_api.search_points(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api\points_api.py", line 1616, in search_points
+    return self._build_for_search_points(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api\points_api.py", line 750, in _build_for_search_points
+    return self.api_client.request(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 79, in request
+    return self.send(request, type_)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 96, in send
+    response = self.middleware(request, self.send_inner)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 205, in __call__
+    return call_next(request)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maryum Urooj Ahmed\Desktop\XIT-RAG\.venv\Lib\site-packages\qdrant_client\http\api_client.py", line 108, in send_inner
+    raise ResponseHandlingException(e)
+qdrant_client.http.exceptions.ResponseHandlingException: [WinError 10061] No connection could be made because the target machine actively refused it
+[2026-04-20 21:18:45] [INFO] [request] ← POST /query | status=200 | total=28868.8ms
