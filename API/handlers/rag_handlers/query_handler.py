@@ -292,7 +292,7 @@ class QueryHandler:
         top_k: Optional[int] = None,
         top_n: Optional[int] = None,
         cutoff: Optional[float] = None,
-        model: str = "ollama",
+        model: str = "remote",
     ):
         overall_start = time.perf_counter()
         request_id = uuid.uuid4().hex[:6]
