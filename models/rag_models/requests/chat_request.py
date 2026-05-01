@@ -13,4 +13,4 @@ class ChatRequest(BaseModel):
         None, description="Optional filters for retrieval"
     )
     json: bool = Field(False, description="Return JSON response format")
-    model: str = Field("ollama", description="Model selection: 'ollama' or 'gemini'")
+    model: str = Field("ollama", description="Model selection: 'ollama', 'gemini', or 'groq' (qwen-qwq-32b via Groq API)")
