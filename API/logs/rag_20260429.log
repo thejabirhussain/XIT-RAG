@@ -42,3 +42,28 @@ Traceback (most recent call last):
 httpx.HTTPStatusError: Server error '500 Internal Server Error' for url 'http://localhost:11434/api/generate'
 For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500
 [2026-04-29 18:44:38] [INFO] [request] ← POST /query | status=200 | total=15280.2ms
+[2026-04-29 21:00:02] [INFO] [request] → POST /query
+[2026-04-29 21:00:12] [INFO] [query_handler] [e34652] [1/8] sanitize_query | query=List all open risks in the database |0.5ms
+[2026-04-29 21:00:46] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=178 | 33384.7ms
+[2026-04-29 21:00:46] [INFO] [llm_service] rewrite_query | original=List all open risks in the database | rewritten=The user's latest question is already fully self-contained and does not require additional context f
+[2026-04-29 21:00:46] [INFO] [query_handler] [e34652] [1.5/8] rewrite_query | new_query=The user's latest question is already fully self-contained and does not require additional context from the history, so it remains unchanged:
+
+List all open risks in the database | 33390.5ms
+[2026-04-29 21:01:01] [INFO] [query_handler] [e34652] [2/8] get_embedding | 15501.5ms
+[2026-04-29 21:01:01] [INFO] [query_handler] [e34652] keyword_route | schema=True (keyword/regex match)
+[2026-04-29 21:01:01] [INFO] [query_handler] [e34652] route | collection=schema | is_schema=True
+[2026-04-29 21:01:02] [INFO] [query_handler] [e34652] [3/8] retrieve | chunks_found=20 | 724.1ms
+[2026-04-29 21:01:03] [INFO] [query_handler] [e34652] [4/8] rerank | chunks_after=3 | 1524.0ms
+[2026-04-29 21:01:17] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=99 | 13668.6ms
+[2026-04-29 21:01:17] [INFO] [query_handler] [e34652] [5/8] generate_sql | sql_preview=SELECT r.title, r.risk_score, r.likelihood, r.impact FROM risks r WHERE r.status = 'open' LIMIT 50; | 13669.4ms
+[2026-04-29 21:01:37] [ERROR] [services.rag_services.database_service] SQL execution error: (psycopg2.OperationalError) connection to server at "aws-1-eu-central-1.pooler.supabase.com" (3.71.225.44), port 5432 failed: server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2026-04-29 21:01:37] [INFO] [query_handler] [e34652] [6/8] execute_query | rows=0 | error=True | 19851.1ms
+[2026-04-29 21:01:37] [INFO] [query_handler] [e34652] [7/8] build_db_prompt | 0.1ms
+[2026-04-29 21:01:49] [INFO] [llm_service] ollama.generate | model=llama3.1:8b | output_len=46 | 12370.4ms
+[2026-04-29 21:01:49] [INFO] [query_handler] [e34652] [8/8] llm_generate | model=ollama | answer_len=46 | 12371.1ms
+[2026-04-29 21:01:49] [INFO] [query_handler] [e34652] ✓ handle_query complete | confidence=low | total=97061.5ms
+[2026-04-29 21:01:49] [INFO] [request] ← POST /query | status=200 | total=107224.6ms
