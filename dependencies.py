@@ -9,8 +9,9 @@ load_dotenv()
 
 QDRANT_URL = os.getenv("QDRANT_URL")
 QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
-OLLAMA_HOST = os.getenv("OLLAMA_HOST", "http://localhost:11434")
+OLLAMA_HOST = os.getenv("OLLAMA_HOST") or os.getenv("OLLAMA_BASE_URL") or "http://localhost:11434"
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 # Handlers
 
@@ -43,7 +44,11 @@ def get_embedding_service() -> EmbeddingService:
 
 @lru_cache()
 def get_llm_service() -> LLMService:
-    return LLMService(ollama_host=OLLAMA_HOST, gemini_api_key=GEMINI_API_KEY)
+    return LLMService(
+        ollama_host=OLLAMA_HOST,
+        gemini_api_key=GEMINI_API_KEY,
+        groq_api_key=GROQ_API_KEY,
+    )
 
 @lru_cache()
 def get_qdrant_service() -> QdrantService:

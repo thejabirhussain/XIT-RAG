@@ -27,3 +27,4 @@ pymysql
 sqlglot
 SQLAlchemy>=2.0.0
 pandas
+groq>=0.9.0

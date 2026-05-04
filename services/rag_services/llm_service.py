@@ -4,17 +4,21 @@ from typing import Any, Optional
 import hashlib
 
 import google.generativeai as genai
+from groq import Groq
 import time
 import logging
 logger = logging.getLogger("llm_service")
 
 OLLAMA_MODEL = "llama3.1:8b"
 GEMINI_MODEL = "gemini-2.5-flash"  # SDK will add 'models/' prefix
+GROQ_MODEL   = "qwen/qwen3-32b"      # Qwen3 32B via Groq — latest supported version
 MAX_SCHEMA_CHUNK_CHARS = 800
 
 # ── Cost & Inference Optimization ────────────────────────────────────────────
 GEMINI_INPUT_COST_PER_1M  = 0.15   # USD — gemini-2.5-flash input per 1M tokens
 GEMINI_OUTPUT_COST_PER_1M = 0.60   # USD — gemini-2.5-flash output per 1M tokens
+GROQ_INPUT_COST_PER_1M    = 0.12   # USD — qwen-qwq-32b input per 1M tokens (Groq pricing)
+GROQ_OUTPUT_COST_PER_1M   = 0.30   # USD — qwen-qwq-32b output per 1M tokens (Groq pricing)
 
 # In-memory response cache: hash(prompt+model) → (response_text, timestamp)
 _response_cache: dict[str, tuple[str, float]] = {}
@@ -95,7 +99,7 @@ SQL_GENERATION_PROMPT = """SYSTEM:
 You are a read-only MySQL 8.0 query assistant. Generate ONLY a single valid SELECT statement.
 
 ABSOLUTE RULES — any violation means your output will be discarded and the query blocked:
-1. Output ONLY a bare valid SQL statement (SELECT or WITH ... SELECT). No markdown, no explanation, no comments.
+1. Output ONLY a bare valid SQL statement (SELECT or WITH ... SELECT). No markdown, no explanation, no comments, and NO reasoning blocks (like <think> tags).
 2. CTEs (WITH ...) are explicitly permitted and encouraged to minimize performance bottlenecks for complex queries.
 3. NEVER generate: INSERT, UPDATE, DELETE, DROP, ALTER, TRUNCATE, RENAME, CREATE,
    GRANT, REVOKE, CALL, EXEC, LOAD DATA, INTO OUTFILE, SHOW, INFORMATION_SCHEMA access.
@@ -136,13 +140,22 @@ ASSISTANT INSTRUCTIONS:
 """
 
 class LLMService:
-    def __init__(self, ollama_host: str, gemini_api_key: Optional[str] = None):
+    def __init__(
+        self,
+        ollama_host: str,
+        gemini_api_key: Optional[str] = None,
+        groq_api_key: Optional[str] = None,
+    ):
         self.client = httpx.Client(base_url=ollama_host, timeout=120.0)
         self.model_name = OLLAMA_MODEL
         self.gemini_api_key = gemini_api_key
         if self.gemini_api_key:
             genai.configure(api_key=self.gemini_api_key)
             self.gemini_model = genai.GenerativeModel(GEMINI_MODEL)
+        # ── Groq (qwen-qwq-32b) ────────────────────────────────────────────
+        self.groq_api_key = groq_api_key
+        self.groq_client = Groq(api_key=groq_api_key) if groq_api_key else None
+        self.groq_model = GROQ_MODEL
 
     def rewrite_query(self, chat_history: list[dict[str, str]], user_query: str, model: str = "ollama") -> str:
         if not chat_history:
@@ -182,7 +195,7 @@ class LLMService:
         ctx_lines = [chunk.get("text", "")[:MAX_SCHEMA_CHUNK_CHARS] for chunk in chunks]
         ctx_block = "\n\n".join(ctx_lines)
         prompt = SQL_GENERATION_PROMPT.format(schema_context=ctx_block, query=user_query)
-        sql = self.generate(prompt, model=model, temperature=0.0, max_tokens=300)
+        sql = self.generate(prompt, model=model, temperature=0.0, max_tokens=1000)
         # Strip potential markdown formatting if the LLM misbehaves
         sql = sql.replace("```sql", "").replace("```", "").strip()
         return sql
@@ -217,8 +230,19 @@ class LLMService:
 
         if model == "gemini" and self.gemini_api_key:
             result = self._generate_gemini(prompt, **kwargs)
+        elif model == "groq" and self.groq_client:   # ← NEW: Qwen via Groq
+            result = self._generate_groq(prompt, **kwargs)
         else:
             result = self._generate_ollama(prompt, **kwargs)
+
+        # ── Post-processing: Strip reasoning blocks (e.g. <think>...</think>) ──
+        if result and "<think>" in result:
+            import re
+            if "</think>" in result:
+                result = re.sub(r"<think>.*?</think>", "", result, flags=re.DOTALL).strip()
+            else:
+                # Truncated thought — strip from <think> to end
+                result = re.sub(r"<think>.*", "", result, flags=re.DOTALL).strip()
 
         if use_cache and result:
             _set_cached(cache_key, result)
@@ -280,3 +304,47 @@ class LLMService:
             return text
         except Exception as e:
             return f"Error generating response from Gemini: {str(e)}"
+
+    def _generate_groq(self, prompt: str, **kwargs: Any) -> str:
+        """
+        Calls Groq's hosted qwen-qwq-32b model via the official Groq SDK
+        (OpenAI-compatible chat-completions interface).
+        qwq-32b is a reasoning model — it responds only through chat completions,
+        NOT the /completions endpoint, so the prompt is sent as a 'user' message.
+        """
+        try:
+            t = time.perf_counter()
+            completion = self.groq_client.chat.completions.create(
+                model=self.groq_model,
+                messages=[{"role": "user", "content": prompt}],
+                temperature=kwargs.get("temperature", 0.0),
+                max_tokens=kwargs.get("max_tokens", 1000),
+                stream=False,
+            )
+            text = completion.choices[0].message.content or ""
+            text = text.strip()
+
+            # ── Cost tracking ──────────────────────────────────────────────
+            usage = completion.usage
+            if usage:
+                input_tokens  = usage.prompt_tokens
+                output_tokens = usage.completion_tokens
+            else:
+                input_tokens  = _estimate_tokens(prompt)
+                output_tokens = _estimate_tokens(text)
+
+            estimated_cost = (
+                (input_tokens  / 1_000_000) * GROQ_INPUT_COST_PER_1M +
+                (output_tokens / 1_000_000) * GROQ_OUTPUT_COST_PER_1M
+            )
+            _cost_tracker["total_usd"] += estimated_cost
+            logger.info(
+                "groq.generate | model=%s | input_tokens=%d | output_tokens=%d | cost~$%.6f | total_cost~$%.4f | %.1fms",
+                self.groq_model, input_tokens, output_tokens,
+                estimated_cost, _cost_tracker["total_usd"],
+                (time.perf_counter() - t) * 1000,
+            )
+            return text
+        except Exception as e:
+            logger.error("groq.generate | ERROR | %s", e)
+            return f"Error generating response from Groq (qwen-qwq-32b): {str(e)}"
