@@ -1,0 +1,151 @@
+[2026-05-01 19:08:55] [INFO] [request] → POST /query
+[2026-05-01 19:09:04] [INFO] [query_handler] [45cb33] [1/8] sanitize_query | query=List all open risks in the database |0.4ms
+[2026-05-01 19:09:48] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=35 | 44862.2ms
+[2026-05-01 19:09:49] [INFO] [llm_service] rewrite_query | original=List all open risks in the database | rewritten=List all open risks in the database
+[2026-05-01 19:09:49] [INFO] [query_handler] [45cb33] [1.5/8] rewrite_query | new_query=List all open risks in the database | 44871.2ms
+[2026-05-01 19:10:00] [INFO] [query_handler] [45cb33] [2/8] get_embedding | 11977.0ms
+[2026-05-01 19:10:00] [INFO] [query_handler] [45cb33] keyword_route | schema=True (keyword/regex match)
+[2026-05-01 19:10:00] [INFO] [query_handler] [45cb33] route | collection=schema | is_schema=True
+[2026-05-01 19:10:02] [INFO] [query_handler] [45cb33] [3/8] retrieve | chunks_found=20 | 1017.3ms
+[2026-05-01 19:10:04] [INFO] [query_handler] [45cb33] [4/8] rerank | chunks_after=3 | 2773.1ms
+[2026-05-01 19:10:46] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=251 | 42168.8ms
+[2026-05-01 19:10:46] [INFO] [query_handler] [45cb33] [5/8] generate_sql | sql_preview=SELECT r.title, r.risk_score, r.likelihood, r.impact, u.full_name AS owner, o.name AS org 
+FROM risk | 42169.5ms
+[2026-05-01 19:11:06] [ERROR] [services.rag_services.database_service] SQL execution error: (psycopg2.OperationalError) connection to server at "aws-1-eu-central-1.pooler.supabase.com" (3.71.225.44), port 5432 failed: server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2026-05-01 19:11:06] [INFO] [query_handler] [45cb33] [6/8] execute_query | rows=0 | error=True | 19836.6ms
+[2026-05-01 19:11:06] [INFO] [query_handler] [45cb33] [7/8] build_db_prompt | 0.1ms
+[2026-05-01 19:11:30] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=42 | 23301.2ms
+[2026-05-01 19:11:30] [INFO] [query_handler] [45cb33] [8/8] llm_generate | model=ollama | answer_len=42 | 23301.9ms
+[2026-05-01 19:11:30] [INFO] [query_handler] [45cb33] ✓ handle_query complete | confidence=high | total=145966.5ms
+[2026-05-01 19:11:30] [INFO] [request] ← POST /query | status=200 | total=155008.0ms
+[2026-05-01 20:34:35] [INFO] [request] → POST /query
+[2026-05-01 20:34:35] [INFO] [query_handler] [e0946d] [1/8] sanitize_query | query=List all open risks in the database |1.1ms
+[2026-05-01 20:35:07] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=35 | 31636.8ms
+[2026-05-01 20:35:07] [INFO] [llm_service] rewrite_query | original=List all open risks in the database | rewritten=List all open risks in the database
+[2026-05-01 20:35:07] [INFO] [query_handler] [e0946d] [1.5/8] rewrite_query | new_query=List all open risks in the database | 31664.8ms
+[2026-05-01 20:35:08] [INFO] [query_handler] [e0946d] [2/8] get_embedding | 902.2ms
+[2026-05-01 20:35:08] [INFO] [query_handler] [e0946d] keyword_route | schema=True (keyword/regex match)
+[2026-05-01 20:35:08] [INFO] [query_handler] [e0946d] route | collection=schema | is_schema=True
+[2026-05-01 20:35:09] [INFO] [query_handler] [e0946d] [3/8] retrieve | chunks_found=20 | 972.1ms
+[2026-05-01 20:35:13] [INFO] [query_handler] [e0946d] [4/8] rerank | chunks_after=3 | 4662.4ms
+[2026-05-01 20:35:52] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=251 | 38531.0ms
+[2026-05-01 20:35:52] [INFO] [query_handler] [e0946d] [5/8] generate_sql | sql_preview=SELECT r.title, r.risk_score, r.likelihood, r.impact, u.full_name AS owner, o.name AS org 
+FROM risk | 38533.0ms
+[2026-05-01 20:36:12] [ERROR] [services.rag_services.database_service] SQL execution error: (psycopg2.OperationalError) connection to server at "aws-1-eu-central-1.pooler.supabase.com" (3.71.225.44), port 5432 failed: server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2026-05-01 20:36:12] [INFO] [query_handler] [e0946d] [6/8] execute_query | rows=0 | error=True | 19953.9ms
+[2026-05-01 20:36:12] [INFO] [query_handler] [e0946d] [7/8] build_db_prompt | 1.1ms
+[2026-05-01 20:36:25] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=42 | 12860.6ms
+[2026-05-01 20:36:25] [INFO] [query_handler] [e0946d] [8/8] llm_generate | model=ollama | answer_len=42 | 12861.4ms
+[2026-05-01 20:36:25] [INFO] [query_handler] [e0946d] ✓ handle_query complete | confidence=high | total=109601.7ms
+[2026-05-01 20:36:25] [INFO] [request] ← POST /query | status=200 | total=109790.0ms
+[2026-05-01 20:39:51] [INFO] [request] → POST /query
+[2026-05-01 20:39:51] [INFO] [query_handler] [642a2a] [1/8] sanitize_query | query=List all open risks in the database |0.5ms
+[2026-05-01 20:39:58] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=35 | 6428.9ms
+[2026-05-01 20:39:58] [INFO] [llm_service] rewrite_query | original=List all open risks in the database | rewritten=List all open risks in the database
+[2026-05-01 20:39:58] [INFO] [query_handler] [642a2a] [1.5/8] rewrite_query | new_query=List all open risks in the database | 6433.4ms
+[2026-05-01 20:39:58] [INFO] [query_handler] [642a2a] [2/8] get_embedding | 914.5ms
+[2026-05-01 20:39:58] [INFO] [query_handler] [642a2a] keyword_route | schema=True (keyword/regex match)
+[2026-05-01 20:39:58] [INFO] [query_handler] [642a2a] route | collection=schema | is_schema=True
+[2026-05-01 20:39:59] [INFO] [query_handler] [642a2a] [3/8] retrieve | chunks_found=20 | 928.5ms
+[2026-05-01 20:40:04] [INFO] [query_handler] [642a2a] [4/8] rerank | chunks_after=3 | 4646.5ms
+[2026-05-01 20:40:38] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=251 | 34324.9ms
+[2026-05-01 20:40:38] [INFO] [query_handler] [642a2a] [5/8] generate_sql | sql_preview=SELECT r.title, r.risk_score, r.likelihood, r.impact, u.full_name AS owner, o.name AS org 
+FROM risk | 34327.2ms
+[2026-05-01 20:40:41] [INFO] [services.rag_services.database_service] db.execute | rows_returned=2 | 2191.2ms
+[2026-05-01 20:40:41] [INFO] [query_handler] [642a2a] [6/8] execute_query | rows=2 | error=False | 2292.2ms
+[2026-05-01 20:40:41] [INFO] [query_handler] [642a2a] [7/8] build_db_prompt | 6.4ms
+[2026-05-01 20:41:14] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=285 | 33429.8ms
+[2026-05-01 20:41:14] [INFO] [query_handler] [642a2a] [8/8] llm_generate | model=ollama | answer_len=285 | 33430.5ms
+[2026-05-01 20:41:14] [INFO] [query_handler] [642a2a] ✓ handle_query complete | confidence=high | total=83000.1ms
+[2026-05-01 20:41:14] [INFO] [request] ← POST /query | status=200 | total=83038.9ms
+[2026-05-01 20:41:48] [INFO] [request] → POST /query
+[2026-05-01 20:41:48] [INFO] [query_handler] [9490b0] [1/8] sanitize_query | query=any other risks that are not open? |0.0ms
+[2026-05-01 20:41:56] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=70 | 8327.4ms
+[2026-05-01 20:41:56] [INFO] [llm_service] rewrite_query | original=any other risks that are not open? | rewritten=Are there any other risks in the database that are not currently open?
+[2026-05-01 20:41:56] [INFO] [query_handler] [9490b0] [1.5/8] rewrite_query | new_query=Are there any other risks in the database that are not currently open? | 8328.4ms
+[2026-05-01 20:41:56] [INFO] [query_handler] [9490b0] [2/8] get_embedding | 90.4ms
+[2026-05-01 20:41:56] [INFO] [query_handler] [9490b0] keyword_route | schema=True (keyword/regex match)
+[2026-05-01 20:41:56] [INFO] [query_handler] [9490b0] route | collection=schema | is_schema=True
+[2026-05-01 20:41:56] [INFO] [query_handler] [9490b0] [3/8] retrieve | chunks_found=18 | 323.4ms
+[2026-05-01 20:41:58] [INFO] [query_handler] [9490b0] [4/8] rerank | chunks_after=3 | 1918.0ms
+[2026-05-01 20:42:22] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=160 | 23377.8ms
+[2026-05-01 20:42:22] [INFO] [query_handler] [9490b0] [5/8] generate_sql | sql_preview=WITH closed_risks AS (
+    SELECT risk_id, status
+    FROM risks
+    WHERE status IN ('mitigated', ' | 23378.5ms
+[2026-05-01 20:42:22] [INFO] [services.rag_services.database_service] db.execute | rows_returned=1 | 354.2ms
+[2026-05-01 20:42:22] [INFO] [query_handler] [9490b0] [6/8] execute_query | rows=1 | error=False | 449.7ms
+[2026-05-01 20:42:22] [INFO] [query_handler] [9490b0] [7/8] build_db_prompt | 0.1ms
+[2026-05-01 20:42:46] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=112 | 24316.6ms
+[2026-05-01 20:42:46] [INFO] [query_handler] [9490b0] [8/8] llm_generate | model=ollama | answer_len=112 | 24317.2ms
+[2026-05-01 20:42:46] [INFO] [query_handler] [9490b0] ✓ handle_query complete | confidence=low | total=58813.6ms
+[2026-05-01 20:42:46] [INFO] [request] ← POST /query | status=200 | total=58818.3ms
+[2026-05-01 21:40:31] [INFO] [request] → POST /query
+[2026-05-01 21:40:31] [INFO] [query_handler] [4283e5] [1/8] sanitize_query | query=Which department has the highest average customer satisfaction score for products that were launched in the last 18 months, excluding discontinued items? |0.3ms
+[2026-05-01 21:41:07] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=153 | 36451.6ms
+[2026-05-01 21:41:07] [INFO] [llm_service] rewrite_query | original=Which department has the highest average customer satisfaction score for products that were launched | rewritten=Which department has the highest average customer satisfaction score for products that were launched
+[2026-05-01 21:41:07] [INFO] [query_handler] [4283e5] [1.5/8] rewrite_query | new_query=Which department has the highest average customer satisfaction score for products that were launched in the last 18 months, excluding discontinued items? | 36462.6ms
+[2026-05-01 21:41:08] [INFO] [query_handler] [4283e5] [2/8] get_embedding | 1105.0ms
+[2026-05-01 21:41:08] [INFO] [query_handler] SemanticRouter | building intent centroids ...
+[2026-05-01 21:41:10] [INFO] [query_handler] SemanticRouter | centroids ready.
+[2026-05-01 21:41:10] [INFO] [query_handler] [4283e5] semantic_route | route=schema | schema_score=0.3509 | irs_score=0.0088
+[2026-05-01 21:41:10] [INFO] [query_handler] [4283e5] route | collection=schema | is_schema=True
+[2026-05-01 21:41:11] [INFO] [query_handler] [4283e5] [3/8] retrieve | chunks_found=4 | 803.1ms
+[2026-05-01 21:41:11] [INFO] [query_handler] [4283e5] [4/8] rerank | chunks_after=3 | 638.7ms
+[2026-05-01 21:41:40] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=360 | 28941.6ms
+[2026-05-01 21:41:40] [INFO] [query_handler] [4283e5] [5/8] generate_sql | sql_preview=SELECT d.department_name, AVG(rs.satisfaction_score) AS avg_satisfaction FROM product_reviews rs JOI | 28943.4ms
+[2026-05-01 21:41:41] [ERROR] [services.rag_services.database_service] SQL execution error: (psycopg2.errors.SyntaxError) syntax error at or near "18"
+LINE 1: ... p.launch_date >= DATE_SUB(CURRENT_DATE, INTERVAL 18 MONTH) ...
+                                                             ^
+
+[SQL: SELECT d.department_name, AVG(rs.satisfaction_score) AS avg_satisfaction FROM product_reviews rs JOIN products p ON rs.product_id = p.product_id JOIN departments d ON p.department_id = d.department_id WHERE p.launch_date >= DATE_SUB(CURRENT_DATE, INTERVAL 18 MONTH) AND p.discontinued = FALSE GROUP BY d.department_name ORDER BY avg_satisfaction DESC LIMIT 50]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+[2026-05-01 21:41:41] [INFO] [query_handler] [4283e5] [6/8] execute_query | rows=0 | error=True | 1298.6ms
+[2026-05-01 21:41:41] [INFO] [query_handler] [4283e5] [7/8] build_db_prompt | 0.2ms
+[2026-05-01 21:41:49] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=42 | 7752.2ms
+[2026-05-01 21:41:49] [INFO] [query_handler] [4283e5] [8/8] llm_generate | model=ollama | answer_len=42 | 7753.4ms
+[2026-05-01 21:41:49] [INFO] [query_handler] [4283e5] ✓ handle_query complete | confidence=low | total=78422.4ms
+[2026-05-01 21:41:49] [INFO] [request] ← POST /query | status=200 | total=78506.5ms
+[2026-05-02 07:07:36] [INFO] [request] → POST /query
+[2026-05-02 07:07:47] [WARNING] [huggingface_hub.utils._http] '(ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')), '(Request ID: 4ae570fa-ff60-490f-8d04-262d08924646)')' thrown while requesting HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json
+[2026-05-02 07:07:47] [WARNING] [huggingface_hub.utils._http] Retrying in 1s [Retry 1/5].
+[2026-05-02 07:07:55] [INFO] [query_handler] [d5b4a0] [1/8] sanitize_query | query=Show me all published policies |0.8ms
+[2026-05-02 07:08:39] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=30 | 44711.3ms
+[2026-05-02 07:08:39] [INFO] [llm_service] rewrite_query | original=Show me all published policies | rewritten=Show me all published policies
+[2026-05-02 07:08:39] [INFO] [query_handler] [d5b4a0] [1.5/8] rewrite_query | new_query=Show me all published policies | 44735.7ms
+[2026-05-02 07:09:03] [INFO] [query_handler] [d5b4a0] [2/8] get_embedding | 24003.6ms
+[2026-05-02 07:09:03] [INFO] [query_handler] [d5b4a0] keyword_route | schema=True (keyword/regex match)
+[2026-05-02 07:09:03] [INFO] [query_handler] [d5b4a0] route | collection=schema | is_schema=True
+[2026-05-02 07:09:04] [INFO] [query_handler] [d5b4a0] [3/8] retrieve | chunks_found=20 | 895.4ms
+[2026-05-02 07:09:07] [INFO] [query_handler] [d5b4a0] [4/8] rerank | chunks_after=3 | 2617.6ms
+[2026-05-02 07:09:34] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=218 | 26754.9ms
+[2026-05-02 07:09:34] [INFO] [query_handler] [d5b4a0] [5/8] generate_sql | sql_preview=WITH active_policies AS (
+    SELECT policy_id, name, description, review_date, owner_user_id, contr | 26755.9ms
+[2026-05-02 07:09:36] [ERROR] [services.rag_services.database_service] SQL execution error: (psycopg2.errors.SyntaxError) syntax error at or near "LIMIT"
+LINE 9: LIMIT 50
+        ^
+
+[SQL: WITH active_policies AS (
+    SELECT policy_id, name, description, review_date, owner_user_id, control_id, org_id
+    FROM policies
+    WHERE status = 'active'
+)
+SELECT *
+FROM active_policies
+WHERE org_id = ?
+LIMIT 50]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+[2026-05-02 07:09:36] [INFO] [query_handler] [d5b4a0] [6/8] execute_query | rows=0 | error=True | 2242.9ms
+[2026-05-02 07:09:36] [INFO] [query_handler] [d5b4a0] [7/8] build_db_prompt | 0.2ms
+[2026-05-02 07:09:49] [INFO] [llm_service] ollama.generate | model=qwen2.5:14b | output_len=42 | 13339.5ms
+[2026-05-02 07:09:49] [INFO] [query_handler] [d5b4a0] [8/8] llm_generate | model=ollama | answer_len=42 | 13340.4ms
+[2026-05-02 07:09:49] [INFO] [query_handler] [d5b4a0] ✓ handle_query complete | confidence=low | total=114632.9ms
+[2026-05-02 07:09:49] [INFO] [request] ← POST /query | status=200 | total=132729.7ms
