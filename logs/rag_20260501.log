@@ -3202,3 +3202,8 @@ FROM au | 6373.7ms
 [2026-05-01 22:33:24] [INFO] [query_handler] [42d18d] [6/8] execute_query | rows=0 | error=True | 204.2ms
 [2026-05-01 22:33:24] [INFO] [query_handler] [42d18d] [7/8] build_db_prompt | 0.0ms
 [2026-05-01 22:33:24] [INFO] [groq._base_client] Retrying request to /openai/v1/chat/completions in 3.000000 seconds
+[2026-05-01 22:33:27] [INFO] [groq._base_client] Retrying request to /openai/v1/chat/completions in 5.000000 seconds
+[2026-05-01 22:33:33] [INFO] [llm_service] groq.generate | model=qwen/qwen3-32b | input_tokens=668 | output_tokens=597 | cost~$0.000259 | total_cost~$0.0053 | 9600.6ms
+[2026-05-01 22:33:33] [INFO] [query_handler] [42d18d] [8/8] llm_generate | model=groq | answer_len=377 | 9601.7ms
+[2026-05-01 22:33:33] [INFO] [query_handler] [42d18d] ✓ handle_query complete | confidence=low | total=21415.2ms
+[2026-05-01 22:33:33] [INFO] [request] ← POST /query | status=200 | total=21418.7ms

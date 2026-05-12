@@ -13,17 +13,19 @@ MAX_ROWS = 50
 
 class DatabaseService:
     def __init__(self):
-        self.host = os.getenv("MYSQL_HOST", "sql.freedb.tech")
-        self.port = int(os.getenv("MYSQL_PORT", 3306))
-        self.user = os.getenv("MYSQL_USER", "freedb_maryum")
-        self.password = os.getenv("MYSQL_PASSWORD", "CWzM8d549E#6WhS")
-        self.database = os.getenv("MYSQL_DB", "freedb_RAGPOC2")
+        # ── Prefer DATABASE_URL for PostgreSQL/Supabase ────────────────────
+        self.db_url = os.getenv("DATABASE_URL")
         
-        # Connect to MySQL using PyMySQL driver via SQLAlchemy
-        # Ensure password containing special characters is handled correctly by SQLAlchemy url encoding
-        safe_password = quote_plus(str(self.password))
-        
-        self.db_url = f"mysql+pymysql://{self.user}:{safe_password}@{self.host}:{self.port}/{self.database}"
+        if not self.db_url:
+            # ── Fallback to MySQL ──────────────────────────────────────────
+            self.host = os.getenv("MYSQL_HOST", "sql.freedb.tech")
+            self.port = int(os.getenv("MYSQL_PORT", 3306))
+            self.user = os.getenv("MYSQL_USER", "freedb_maryum")
+            self.password = os.getenv("MYSQL_PASSWORD", "CWzM8d549E#6WhS")
+            self.database = os.getenv("MYSQL_DB", "freedb_RAGPOC2")
+            
+            safe_password = quote_plus(str(self.password))
+            self.db_url = f"mysql+pymysql://{self.user}:{safe_password}@{self.host}:{self.port}/{self.database}"
         
         # Connection pool configurations mapped securely
         pool_size = int(os.getenv("DB_POOL_SIZE", "5"))
