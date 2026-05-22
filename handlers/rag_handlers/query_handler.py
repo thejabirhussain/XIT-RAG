@@ -6,10 +6,11 @@ import re
 import uuid
 import httpx
 import pandas as pd
+import asyncio
 
 logger = logging.getLogger("query_handler")
 
-from models import ChatResponse, Source
+from models import ChatResponse, Source, CompareResponse, CompareModelResponse
 from services.rag_services.retrieval_service import TOP_K, TOP_N, SIMILARITY_CUTOFF
 
 COLLECTION_NAME = "irs_rag_v1"
@@ -518,3 +519,270 @@ class QueryHandler:
                 generated_sql=None,
                 active_collection=None,
             )
+
+    def _process_single_model(
+        self,
+        model_key: str,
+        query: str,
+        chunks: list,
+        is_schema: bool,
+        target_collection: str,
+    ) -> CompareModelResponse:
+        t_start = time.perf_counter()
+        
+        if model_key == "llama_7b":
+            actual_model = "llama_7b"
+            model_display_name = "Llama 7B"
+        elif model_key == "qwen_14b":
+            actual_model = "qwen_14b"
+            model_display_name = "Qwen 14B"
+        elif model_key == "qwen_32b":
+            actual_model = "qwen_32b"
+            model_display_name = "Qwen 32B"
+        else:
+            actual_model = "ollama"
+            model_display_name = "Ollama"
+
+        sql_query = None
+        db_results = None
+        response_db_results = None
+        response_total_records = None
+        response_export_id = None
+        prompt = ""
+        logs = []
+
+        try:
+            logs.append(f"Initialized processing for model: {model_display_name}")
+            if is_schema:
+                logs.append("Query matches database entities. Starting SQL generation...")
+                t_sql = time.perf_counter()
+                sql_query = self.llm.generate_sql_query(chunks, query, model=actual_model)
+                logs.append(f"SQL Generation finished (took {(time.perf_counter() - t_sql)*1000:.1f}ms). Query:\n{sql_query}")
+                
+                # Safety checks
+                sql_upper = sql_query.strip().upper()
+                if not (sql_upper.startswith("SELECT") or sql_upper.startswith("WITH")):
+                    logs.append("SQL execution blocked: did not start with SELECT or WITH statement.")
+                    db_results = {"error": "Blocked execution of unsafe or non-retrieval SQL query."}
+                else:
+                    logs.append("Executing query against live database schema...")
+                    t_db = time.perf_counter()
+                    db_results = self.database_service.execute_query(sql_query)
+                    row_count = len(db_results.get("results", [])) if "results" in db_results else 0
+                    had_error = "error" in db_results
+                    logs.append(f"DB execution finished (took {(time.perf_counter() - t_db)*1000:.1f}ms). Rows returned: {row_count}. Error: {had_error}")
+                
+                prompt = self.llm.build_db_grounded_rag_prompt(chunks, db_results, query)
+            else:
+                logs.append("Query classified as document search. Building standard RAG prompt...")
+                prompt = self.llm.build_rag_prompt(chunks, query)
+
+            logs.append("Calling LLM generator...")
+            t_gen = time.perf_counter()
+            answer_text = self.llm.generate(prompt, model=actual_model, temperature=0.0, max_tokens=1000)
+            logs.append(f"LLM Generation completed (took {(time.perf_counter() - t_gen)*1000:.1f}ms)")
+
+            similarities = []
+            source_models = []
+            for chunk in chunks:
+                section_val = chunk.get("section_heading")
+                if not section_val:
+                    table = chunk.get("table", "")
+                    sec = chunk.get("section", "")
+                    if table or sec:
+                        section_val = f"{table} - {sec}".strip(" -")
+                    else:
+                        section_val = ""
+                raw_score = chunk.get("score", 0.0)
+                sim = float(min(max(raw_score, 0.0), 1.0))
+                similarities.append(sim)
+                
+                source_models.append(
+                    Source(
+                        url=chunk.get("url", "") or "https://schema.local/schema_for_vectordb.pdf",
+                        title=chunk.get("title", "") or chunk.get("source", "") or "Schema PDF",
+                        section=section_val,
+                        snippet=chunk.get("text", "")[:300],
+                        char_start=chunk.get("char_start", 0),
+                        char_end=chunk.get("char_end", 0),
+                        score=sim,
+                    )
+                )
+
+            avg_similarity = np.mean(similarities) if similarities else 0.0
+            if avg_similarity >= 0.8:
+                confidence = "high"
+            elif avg_similarity >= 0.5:
+                confidence = "medium"
+            else:
+                confidence = "low"
+
+            if is_schema and db_results and "results" in db_results:
+                rows = db_results["results"]
+                response_total_records = len(rows)
+                if response_total_records >= DB_RESULTS_THRESHOLD:
+                    export_id = uuid.uuid4().hex[:10]
+                    _export_cache[export_id] = {
+                        "rows": rows,
+                        "created_at": time.time(),
+                    }
+                    response_export_id = export_id
+                    logs.append(f"Result count {response_total_records} >= threshold. Cached download CSV export ID: {export_id}")
+                else:
+                    response_db_results = rows
+
+            elapsed_ms = (time.perf_counter() - t_start) * 1000
+            
+            # Simple token estimation
+            input_tokens = len(prompt) // 4
+            output_tokens = len(answer_text) // 4
+            token_usage = {
+                "prompt_tokens": input_tokens,
+                "completion_tokens": output_tokens,
+                "total_tokens": input_tokens + output_tokens,
+            }
+
+            return CompareModelResponse(
+                answer_text=answer_text,
+                sources=source_models,
+                confidence=confidence,
+                query_embedding_similarity=similarities,
+                generated_sql=sql_query,
+                active_collection=target_collection,
+                db_results=response_db_results,
+                total_records=response_total_records,
+                export_id=response_export_id,
+                model_name=model_display_name,
+                elapsed_ms=round(elapsed_ms, 1),
+                token_usage=token_usage,
+                prompt_sent=prompt,
+                logs="\n".join(logs),
+            )
+
+        except Exception as e:
+            elapsed_ms = (time.perf_counter() - t_start) * 1000
+            logs.append(f"Exception encountered during execution: {str(e)}")
+            return CompareModelResponse(
+                answer_text=f"An error occurred while generating the response: {str(e)}",
+                sources=[],
+                confidence="low",
+                query_embedding_similarity=[],
+                generated_sql=sql_query,
+                active_collection=target_collection,
+                db_results=None,
+                total_records=None,
+                export_id=None,
+                model_name=model_display_name,
+                elapsed_ms=round(elapsed_ms, 1),
+                token_usage=None,
+                prompt_sent=prompt,
+                logs="\n".join(logs),
+            )
+
+    async def handle_compare(
+        self,
+        query: str,
+        chat_history: Optional[list[dict[str, str]]] = None,
+        filters: Optional[dict] = None,
+        top_k: Optional[int] = None,
+        top_n: Optional[int] = None,
+        cutoff: Optional[float] = None,
+    ) -> CompareResponse:
+        request_id = uuid.uuid4().hex[:6]
+        logger.info("[%s] Starting handle_compare | query=%s", request_id, query)
+
+        query = sanitize_query(query)
+        if not query:
+            empty_resp = CompareModelResponse(
+                answer_text="The query provided is empty or invalid.",
+                sources=[],
+                confidence="low",
+                query_embedding_similarity=[],
+                model_name="N/A",
+                elapsed_ms=0.0
+            )
+            return CompareResponse(
+                query="",
+                responses={
+                    "llama_7b": empty_resp,
+                    "qwen_14b": empty_resp,
+                    "qwen_32b": empty_resp
+                }
+            )
+
+        # 1. Rewrite Query based on chat history (use default model once for rewriting)
+        if chat_history:
+            t = time.perf_counter()
+            query = self.llm.rewrite_query(chat_history, query, model="ollama")
+            logger.info("[%s] rewrite_query completed | query=%s | %.1fms", request_id, query, (time.perf_counter() - t) * 1000)
+
+        # 2. Embed query
+        query_embedding = self.embedding_provider.get_embedding(query)
+
+        # 3. Classify route (schema vs irs)
+        is_schema = is_schema_query(query)
+        top_k = top_k or TOP_K
+        top_n = top_n or TOP_N
+        cutoff = cutoff or SIMILARITY_CUTOFF
+
+        if is_schema and top_k == TOP_K:
+            from services.rag_services.retrieval_service import SCHEMA_TOP_K
+            top_k = SCHEMA_TOP_K
+
+        if not is_schema:           
+            sem_route, schema_score, irs_score = self.semantic_router.classify(query_embedding)
+            is_schema = (sem_route == "schema")
+            logger.info("[%s] semantic_route | route=%s | schema=%.4f | irs=%.4f", request_id, sem_route, schema_score, irs_score)
+        else:
+            logger.info("[%s] keyword_route | schema=True", request_id)
+        
+        target_collection = SCHEMA_COLLECTION if is_schema else self.collection_name
+        logger.info("[%s] target_collection=%s", request_id, target_collection)
+
+        # 4. Retrieve chunks
+        t = time.perf_counter()
+        chunks = self.retrieval_service.retrieve(
+            target_collection,
+            query_embedding,
+            top_k,
+            cutoff,
+            filters,
+        )
+        logger.info("[%s] retrieval completed | chunks=%d | %.1fms", request_id, len(chunks), (time.perf_counter() - t) * 1000)
+
+        # 5. Rerank chunks
+        if chunks:
+            if len(chunks) > top_n:
+                chunks = self.retrieval_service.rerank(query, chunks, top_n)
+            else:
+                chunks = chunks[:top_n]
+
+        # 6. Execute all three models concurrently in separate threads
+        # We run the synchronous processing methods inside thread pools using asyncio.to_thread
+        t_concurrency = time.perf_counter()
+        
+        models_to_run = ["llama_7b", "qwen_14b", "qwen_32b"]
+        tasks = [
+            asyncio.to_thread(
+                self._process_single_model,
+                model_key,
+                query,
+                chunks,
+                is_schema,
+                target_collection
+            )
+            for model_key in models_to_run
+        ]
+        
+        results = await asyncio.gather(*tasks)
+        elapsed_concurrency = (time.perf_counter() - t_concurrency) * 1000
+        logger.info("[%s] Concurrency batch completed in %.1fms", request_id, elapsed_concurrency)
+
+        responses_map = {}
+        for model_key, result in zip(models_to_run, results):
+            responses_map[model_key] = result
+
+        return CompareResponse(
+            query=query,
+            responses=responses_map
+        )

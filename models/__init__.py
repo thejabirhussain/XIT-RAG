@@ -12,6 +12,8 @@ from .rag_models import (
     ChatResponse,
     AdminStats,
     Source,
+    CompareResponse,
+    CompareModelResponse,
 )
 
 __all__ = [
@@ -26,5 +28,7 @@ __all__ = [
     "ChatResponse",
     "AdminStats",
     "Source",
+    "CompareResponse",
+    "CompareModelResponse",
 ]
 

@@ -228,7 +228,26 @@ class LLMService:
                 logger.info("llm.generate | CACHE HIT | model=%s | prompt_tokens~%d", model, _estimate_tokens(prompt))
                 return cached
 
-        if model == "gemini" and self.gemini_api_key:
+        # Map semantic comparison models to specific API endpoints / providers
+        if model == "llama_7b":
+            if self.groq_client:
+                result = self._generate_groq(prompt, model_override="llama-3.1-8b-instant", **kwargs)
+            else:
+                result = self._generate_ollama(prompt, **kwargs)
+        elif model == "qwen_14b":
+            if self.groq_client:
+                # Call Groq with openai/gpt-oss-20b as a fast 14B/20B scale model
+                result = self._generate_groq(prompt, model_override="openai/gpt-oss-20b", **kwargs)
+            elif self.gemini_api_key and "placeholder" not in self.gemini_api_key.lower():
+                result = self._generate_gemini(prompt, **kwargs)
+            else:
+                result = self._generate_ollama(prompt, **kwargs)
+        elif model == "qwen_32b":
+            if self.groq_client:
+                result = self._generate_groq(prompt, model_override="qwen/qwen3-32b", **kwargs)
+            else:
+                result = self._generate_ollama(prompt, **kwargs)
+        elif model == "gemini" and self.gemini_api_key:
             result = self._generate_gemini(prompt, **kwargs)
         elif model == "groq" and self.groq_client:   # ← NEW: Qwen via Groq
             result = self._generate_groq(prompt, **kwargs)
@@ -305,17 +324,18 @@ class LLMService:
         except Exception as e:
             return f"Error generating response from Gemini: {str(e)}"
 
-    def _generate_groq(self, prompt: str, **kwargs: Any) -> str:
+    def _generate_groq(self, prompt: str, model_override: Optional[str] = None, **kwargs: Any) -> str:
         """
-        Calls Groq's hosted qwen-qwq-32b model via the official Groq SDK
+        Calls Groq's hosted qwen-qwq-32b model (or model_override) via the official Groq SDK
         (OpenAI-compatible chat-completions interface).
         qwq-32b is a reasoning model — it responds only through chat completions,
         NOT the /completions endpoint, so the prompt is sent as a 'user' message.
         """
         try:
             t = time.perf_counter()
+            target_model = model_override or self.groq_model
             completion = self.groq_client.chat.completions.create(
-                model=self.groq_model,
+                model=target_model,
                 messages=[{"role": "user", "content": prompt}],
                 temperature=kwargs.get("temperature", 0.0),
                 max_tokens=kwargs.get("max_tokens", 1000),
@@ -340,11 +360,11 @@ class LLMService:
             _cost_tracker["total_usd"] += estimated_cost
             logger.info(
                 "groq.generate | model=%s | input_tokens=%d | output_tokens=%d | cost~$%.6f | total_cost~$%.4f | %.1fms",
-                self.groq_model, input_tokens, output_tokens,
+                target_model, input_tokens, output_tokens,
                 estimated_cost, _cost_tracker["total_usd"],
                 (time.perf_counter() - t) * 1000,
             )
             return text
         except Exception as e:
             logger.error("groq.generate | ERROR | %s", e)
-            return f"Error generating response from Groq (qwen-qwq-32b): {str(e)}"
+            return f"Error generating response from Groq ({target_model if 'target_model' in locals() else 'unknown'}): {str(e)}"

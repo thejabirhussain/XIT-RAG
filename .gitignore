@@ -13,6 +13,10 @@ verify_models.py
 
 */.env
 
+logs/
+*.log
+
+
 
 
 

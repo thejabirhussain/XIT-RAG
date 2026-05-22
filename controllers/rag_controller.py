@@ -7,7 +7,7 @@ from fastapi.security.api_key import APIKeyHeader
 from fastapi.responses import StreamingResponse
 import pandas as pd
 
-from models import ChatRequest, ChatResponse, AdminStats, IngestionRequest
+from models import ChatRequest, ChatResponse, AdminStats, IngestionRequest, CompareResponse
 from handlers import QueryHandler, IngestionHandler, StatsHandler
 from handlers.rag_handlers.query_handler import _export_cache
 from dependencies import get_query_handler, get_ingestion_handler, get_stats_handler
@@ -25,6 +25,23 @@ async def query(
             chat_history=request.chat_history,
             filters=request.filters, 
             model=request.model
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
+        )
+
+
+@router.post("/query/compare", response_model=CompareResponse)
+async def query_compare(
+    request: ChatRequest,
+    handler: QueryHandler = Depends(get_query_handler)
+):
+    try:
+        return await handler.handle_compare(
+            query=request.query,
+            chat_history=request.chat_history,
+            filters=request.filters,
         )
     except Exception as e:
         raise HTTPException(

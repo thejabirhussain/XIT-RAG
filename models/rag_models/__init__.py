@@ -5,7 +5,7 @@ from .crawled_page import CrawledPage
 from .vector_chunk import VectorChunk
 
 from .requests import ChatRequest, IngestionRequest, ReindexRequest
-from .responses import ChatResponse, AdminStats, Source
+from .responses import ChatResponse, AdminStats, Source, CompareResponse, CompareModelResponse
 
 __all__ = [
     "Chunk",
@@ -19,4 +19,6 @@ __all__ = [
     "ChatResponse",
     "AdminStats",
     "Source",
+    "CompareResponse",
+    "CompareModelResponse",
 ]
